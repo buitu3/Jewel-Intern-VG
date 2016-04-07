@@ -37,12 +37,15 @@ public class ChainedUnitsScanner : MonoBehaviour {
     void Awake()
     {
         Instance = this;
+
+
     }
 
     void Start()
     {
         // Init scanUnit Array 
         _scanUnitARR = new ScanUnit[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
+
         for (int YIndex = 0; YIndex < PuzzleGenerator.Instance._rows; YIndex++)
         {
             for (int XIndex = 0; XIndex < PuzzleGenerator.Instance._columns; XIndex++)
@@ -73,6 +76,7 @@ public class ChainedUnitsScanner : MonoBehaviour {
 
     public void scanAll()
     {
+        updateScanARR();
         chainedUnits = false;
 
         // Scan whole puzzle for chained Units
@@ -82,17 +86,17 @@ public class ChainedUnitsScanner : MonoBehaviour {
             {
                 scanHorizontalThreeChainedSwap(XIndex, YIndex);
                 scanVerticalThreeChainedSwap(XIndex, YIndex);
-
-                // If there are chained Units
-                if (chainedUnits)
-                {
-                    StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
-                }
-                else
-                {
-                    GameController.Instance.currentState = GameController.GameState.idle;
-                }
             }
+        }
+        // If there are chained Units
+        if (chainedUnits)
+        {
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
+            //PuzzleGenerator.Instance.reOrganizePuzzle();
+        }
+        else
+        {
+            GameController.Instance.currentState = GameController.GameState.idle;
         }
     }
 
@@ -114,13 +118,20 @@ public class ChainedUnitsScanner : MonoBehaviour {
         if (chainedUnits)
         {
             StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
+            //PuzzleGenerator.Instance.reOrganizePuzzle();
         }
         else
         {
+            // Swap Units back
+            yield return new WaitForSeconds(0.1f);
+            InputHandler.SwapType swapType = InputHandler.Instance.checkLocalUnits(focusedUnit, otherUnit);
+            InputHandler.Instance.swapUnits(focusedUnit, otherUnit, swapType);
+            yield return new WaitForSeconds(InputHandler.Instance.swapTime);
             GameController.Instance.currentState = GameController.GameState.idle;
         }
     }
 
+    #region Scan chained unit methods
     void scanHorizontalThreeChainedSwap(int XIndex, int YIndex) 
     {
         int scanUnitValue = _scanUnitARR[XIndex, YIndex]._value;
@@ -139,10 +150,10 @@ public class ChainedUnitsScanner : MonoBehaviour {
                 _scanUnitARR[XIndex    , YIndex]._isChained = true;
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex]);
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
-                Destroy(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex]);
+                Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                //PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex].SetActive(false);
                 //PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].SetActive(false);
-                //PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-                //PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
+                //PuzzleGenerator.Instance._unitARR[XIndex    , YIndex].SetActive(false);
 
                 chainedUnits = true;
             }
@@ -163,6 +174,9 @@ public class ChainedUnitsScanner : MonoBehaviour {
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex]);
+                //PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].SetActive(false);
+                //PuzzleGenerator.Instance._unitARR[XIndex   , YIndex].SetActive(false);
+                //PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
 
                 chainedUnits = true;
             }
@@ -180,9 +194,12 @@ public class ChainedUnitsScanner : MonoBehaviour {
                 _scanUnitARR[XIndex    , YIndex]._isChained = true;
                 _scanUnitARR[XIndex + 1, YIndex]._isChained = true;
                 _scanUnitARR[XIndex + 2, YIndex]._isChained = true;
-                Destroy(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex]);
+                Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex]);
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex]);
+                //PuzzleGenerator.Instance._unitARR[XIndex    , YIndex].SetActive(false);
+                //PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
+                //PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex].SetActive(false);
 
                 chainedUnits = true;
             }
@@ -208,7 +225,10 @@ public class ChainedUnitsScanner : MonoBehaviour {
                 _scanUnitARR[XIndex, YIndex   ]._isChained = true;
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 2]);
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1]);
-                Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex   ]);
+                Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 2].SetActive(false);
+                //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].SetActive(false);
+                //PuzzleGenerator.Instance._unitARR[XIndex, YIndex   ].SetActive(false);
 
                 chainedUnits = true;
             }
@@ -227,8 +247,11 @@ public class ChainedUnitsScanner : MonoBehaviour {
                 _scanUnitARR[XIndex, YIndex   ]._isChained = true;
                 _scanUnitARR[XIndex, YIndex + 1]._isChained = true;
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1]);
-                Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex   ]);
+                Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
+                //PuzzleGenerator.Instance._unitARR[XIndex , YIndex - 1].SetActive(false);
+                //PuzzleGenerator.Instance._unitARR[XIndex , YIndex   ].SetActive(false);
+                //PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].SetActive(false);
 
                 chainedUnits = true;
             }
@@ -249,10 +272,13 @@ public class ChainedUnitsScanner : MonoBehaviour {
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
                 Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2]);
+                //PuzzleGenerator.Instance._unitARR[XIndex , YIndex].SetActive(false);
+                //PuzzleGenerator.Instance._unitARR[XIndex , YIndex + 1].SetActive(false);
+                //PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2].SetActive(false);
 
                 chainedUnits = true;
             }
         }
     }
-
+    #endregion
 }

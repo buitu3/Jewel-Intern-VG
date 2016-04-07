@@ -33,8 +33,9 @@ public class PuzzleGenerator : MonoBehaviour {
     //private float YStartPos = -3.7f;
     private float XPadding = 0.73f;
     private float YPadding = 0.73f;
+    private float regenYpos = 8f;
 
-    private float unitDropTime = 0.6f;
+    private float unitDropTime = 0.8f;
 
     //==============================================
     // Unity Methods
@@ -45,7 +46,7 @@ public class PuzzleGenerator : MonoBehaviour {
         Instance = this;
     }
 
-    void Start()
+    IEnumerator Start()
     {
         unitHolder = new GameObject("Units Holder").transform;
         unitBGHolder = new GameObject("Units BG Holder").transform;
@@ -64,19 +65,24 @@ public class PuzzleGenerator : MonoBehaviour {
             {
                 Vector2 spawnPos = new Vector2(startingSpawnPos.position.x + XIndex * XPadding,
                                                 startingSpawnPos.position.y + YIndex * YPadding);
+
+                // Store position of each unit in the puzzle
+                _unitPosARR[XIndex, YIndex] = spawnPos;
+
+                // Init Jewel BG
                 GameObject UnitBG = Instantiate(UnitBGPreb, spawnPos, Quaternion.identity) as GameObject;
                 UnitBG.transform.SetParent(unitBGHolder);
 
                 //int unitType = Random.Range(0, Unit.Length - 1);
                 //Instantiate(Unit[unitType], spawnPos, Quaternion.identity);
                 initUnit(spawnPos, XIndex, YIndex, _valueARR[XIndex, YIndex], 0);
-
-                // Store position of each unit in the puzzle
-                _unitPosARR[XIndex, YIndex] = spawnPos;
             }
         }
-
+        yield return new WaitForEndOfFrame();
+        // Scan whole puzzle for chained Units
+        ChainedUnitsScanner.Instance.scanAll();
     }
+
 
     //==============================================
     // Methods
@@ -94,6 +100,12 @@ public class PuzzleGenerator : MonoBehaviour {
         unitInfo._YIndex = YIndex;
         unitInfo._value = value;
         unitInfo._unitEff = specialEff;
+
+        //If this is regen Unit,move to it's original pos
+        if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
+        {
+            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(Ease.InQuad);
+        }
     }
 
     private int[,] generateValueMatrix()
@@ -129,14 +141,12 @@ public class PuzzleGenerator : MonoBehaviour {
                     if (nullObjectCount > 0)
                     {
                         Vector3 targetPos = _unitPosARR[XIndex, YIndex - nullObjectCount];
-                        StartCoroutine(moveUnit(_unitARR[XIndex, YIndex], targetPos));
+                        StartCoroutine(dropUnit(_unitARR[XIndex, YIndex], targetPos));
 
                         // Update Unit info
                         _unitARR[XIndex, YIndex - nullObjectCount] = _unitARR[XIndex, YIndex];
                         _unitARR[XIndex, YIndex - nullObjectCount].GetComponent<UnitInfo>()._YIndex -= nullObjectCount;
 
-                        // Regen Units
-                        //initUnit(_unitPosARR[XIndex, YIndex], XIndex, YIndex, Random.Range(0, Unit.Length - 1), 0);
                     }
                 }
             }
@@ -144,17 +154,18 @@ public class PuzzleGenerator : MonoBehaviour {
             {
                 for (int i = 0; i < nullObjectCount; i++)
                 {
-                    initUnit(_unitPosARR[XIndex, _rows - i-1], XIndex, _rows - i - 1, Random.Range(0, Unit.Length - 1), 0);
+                    Vector2 regenUnitSpawnPos = new Vector2(_unitPosARR[XIndex, _rows - i - 1].x, regenYpos + i * YPadding);
+                    initUnit(regenUnitSpawnPos, XIndex, _rows - i - 1, Random.Range(0, Unit.Length - 1), 0);
+                    //initUnit(_unitPosARR[XIndex, _rows - i - 1], XIndex, _rows - i - 1, Random.Range(0, Unit.Length - 1), 0);
+
                 }
             }
         }
-        // Update ScanUnitARr
-        ChainedUnitsScanner.Instance.updateScanARR();
-        yield return new WaitForSeconds(unitDropTime + 0.1f);
+        yield return new WaitForSeconds(unitDropTime + 0.5f);
         ChainedUnitsScanner.Instance.scanAll();
     }
 
-    private IEnumerator moveUnit(GameObject Unit, Vector2 targetPos)
+    private IEnumerator dropUnit(GameObject Unit, Vector2 targetPos)
     {
         yield return new WaitForSeconds(0.1f);
         Unit.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.OutBounce);

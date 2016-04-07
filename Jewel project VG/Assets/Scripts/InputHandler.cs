@@ -20,9 +20,9 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
     private GameObject focusedUnit;
     private LayerMask unitLayer;
 
-    public float swapTime = 0.4f;
+    public float swapTime = 0.3f;
 
-    private enum SwapType
+    public enum SwapType
     {
         up = 0,
         down,
@@ -101,7 +101,7 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
             //    + PuzzleGenerator.Instance._unitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex].GetComponent<UnitInfo>()._YIndex + " : "
             //    + PuzzleGenerator.Instance._unitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex].GetComponent<UnitInfo>()._value);
 
-            //print(ChainedUnitsScanner.Instance._scanUnitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex]._value);
+            print(ChainedUnitsScanner.Instance._scanUnitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex]._isChained);
 
             //print(PuzzleGenerator.Instance._valueARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex]);
         }
@@ -148,7 +148,7 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
     // Methods
     //==============================================
 
-    SwapType checkLocalUnits(GameObject currentUnit, GameObject nextUnit)
+    public SwapType checkLocalUnits(GameObject currentUnit, GameObject nextUnit)
     {
         UnitInfo currentUnitInfo = currentUnit.GetComponent<UnitInfo>();
         UnitInfo nextUnitInfo = nextUnit.GetComponent<UnitInfo>();
@@ -188,7 +188,7 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
         }
     }
 
-    void swapUnits(GameObject Unit, GameObject otherUnit, SwapType swapType)
+    public void swapUnits(GameObject Unit, GameObject otherUnit, SwapType swapType)
     {
         // Swap two Units position
         Vector2 tempPos = Unit.transform.position;
@@ -224,37 +224,5 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
         otherUnitInfo._XIndex = tempXIndex;
         otherUnitInfo._YIndex = tempYIndex;
         otherUnitInfo._unitEff = tempUnitEff;
-
-        // Update swapped Unit Info
-        //switch (swapType)
-        //{
-        //    case SwapType.up:
-        //        {
-
-        //        }
-        //        break;
-
-        //    case SwapType.down:
-        //        {
-
-        //        }
-        //        break;
-
-        //    case SwapType.left:
-        //        {
-
-        //        }
-        //        break;
-
-        //    case SwapType.right:
-        //        {
-
-        //        }
-        //        break;
-
-        //    default:
-        //        print("Wrong swap name");
-        //        break;
-        //}
     }
 }
