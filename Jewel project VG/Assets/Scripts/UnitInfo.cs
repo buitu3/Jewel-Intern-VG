@@ -21,6 +21,10 @@ public class UnitInfo : MonoBehaviour
     //[HideInInspector]
     public SpecialEff _unitEff;
 
+    public GameObject HorizontalLightningEff;
+    public GameObject VerticalLightningEff;
+    public GameObject ExplosiveSparkEff;
+
     public enum SpecialEff
     {
         noEff = 0,

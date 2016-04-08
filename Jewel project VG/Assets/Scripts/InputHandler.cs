@@ -93,15 +93,15 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
 
             // Get the Unit if camray hit
             GameObject _unit = unitHit.collider.gameObject;
-            print(_unit.GetComponent<UnitInfo>()._XIndex + " : "
-                + _unit.GetComponent<UnitInfo>()._YIndex + " : "
-                + _unit.GetComponent<UnitInfo>()._value);
+            //print(_unit.GetComponent<UnitInfo>()._XIndex + " : "
+            //    + _unit.GetComponent<UnitInfo>()._YIndex + " : "
+            //    + _unit.GetComponent<UnitInfo>()._value);
 
             //print(PuzzleGenerator.Instance._unitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex].GetComponent<UnitInfo>()._XIndex + " : "
             //    + PuzzleGenerator.Instance._unitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex].GetComponent<UnitInfo>()._YIndex + " : "
             //    + PuzzleGenerator.Instance._unitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex].GetComponent<UnitInfo>()._value);
 
-            print(ChainedUnitsScanner.Instance._scanUnitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex]._isChained);
+            //print(ChainedUnitsScanner.Instance._scanUnitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex]._isChained);
 
             //print(PuzzleGenerator.Instance._valueARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex]);
         }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 
 public class PuzzleGenerator : MonoBehaviour {
@@ -26,8 +27,11 @@ public class PuzzleGenerator : MonoBehaviour {
     public GameObject[,] _unitARR;
     public Vector2[,] _unitPosARR;
 
+    private List<GameObject>[] _poolARR;
+
     private Transform unitHolder;
     private Transform unitBGHolder;
+    private Transform poolObjectHolder;
 
     //private float XStartPos = -2.6f;
     //private float YStartPos = -3.7f;
@@ -36,6 +40,8 @@ public class PuzzleGenerator : MonoBehaviour {
     private float regenYpos = 8f;
 
     private float unitDropTime = 0.8f;
+
+    private int poolSize;
 
     //==============================================
     // Unity Methods
@@ -50,13 +56,50 @@ public class PuzzleGenerator : MonoBehaviour {
     {
         unitHolder = new GameObject("Units Holder").transform;
         unitBGHolder = new GameObject("Units BG Holder").transform;
+        poolObjectHolder = new GameObject("Pool Object Holder").transform;
 
         // Init valueArr
         _valueARR = generateValueMatrix();
         // Init unitArr
         _unitARR = new GameObject[_columns, _rows];
-        //Init unitPosArr
+        // Init unitPosArr
         _unitPosARR = new Vector2[_columns, _rows];
+
+        // Init all Object pools
+        _poolARR = new List<GameObject>[Unit.Length];
+        Vector2 poolPos = new Vector2(-20, -20);
+        poolSize = _rows * _columns;
+        for (int i = 0; i < _poolARR.Length; i++)
+        {
+            _poolARR[i] = new List<GameObject>();
+            for (int j = 0; j < poolSize; j++)
+            {
+                GameObject jewel = Instantiate(Unit[i], poolPos, Quaternion.identity) as GameObject;
+                jewel.SetActive(false);
+                _poolARR[i].Add(jewel);
+                jewel.transform.SetParent(poolObjectHolder);
+            }
+        }
+
+        // Fake unit value for testing
+        for (int i = 0; i < _columns; i++)
+        {
+            for (int j = 0; j < _rows; j++)
+            {
+                _valueARR[i, j] = 0;
+            }
+        }
+        _valueARR[1, 1] = 2;
+        _valueARR[2, 1] = 3;
+        _valueARR[3, 1] = 3;
+        _valueARR[1, 2] = 3;
+        _valueARR[2, 2] = 2;
+        _valueARR[3, 2] = 2;
+        _valueARR[1, 3] = 2;
+        _valueARR[2, 3] = 3;
+        _valueARR[3, 3] = 3;
+        _valueARR[0, 2] = 2;
+
 
         // Init Jewel Puzzle and BG
         for (int YIndex = 0; YIndex < _rows; YIndex++)
@@ -78,9 +121,12 @@ public class PuzzleGenerator : MonoBehaviour {
                 initUnit(spawnPos, XIndex, YIndex, _valueARR[XIndex, YIndex], 0);
             }
         }
-        yield return new WaitForEndOfFrame();
+
+        GameController.Instance.currentState = GameController.GameState.scanningUnit;
+        yield return new WaitForSeconds(1f);
         // Scan whole puzzle for chained Units
-        ChainedUnitsScanner.Instance.scanAll();
+        //ChainedUnitsScanner.Instance.scanAll();
+        GameController.Instance.currentState = GameController.GameState.idle;
     }
 
 
@@ -91,7 +137,8 @@ public class PuzzleGenerator : MonoBehaviour {
     public void initUnit(Vector2 spawnPos, int XIndex, int YIndex, int value, UnitInfo.SpecialEff specialEff)
     {
         // Instantiate the unit
-        _unitARR[XIndex, YIndex] = Instantiate(Unit[value], spawnPos, Quaternion.identity) as GameObject;
+        //_unitARR[XIndex, YIndex] = Instantiate(Unit[value], spawnPos, Quaternion.identity) as GameObject;
+        _unitARR[XIndex, YIndex] = getJewel(value, spawnPos);
         _unitARR[XIndex, YIndex].transform.SetParent(unitHolder);
 
         // Set infomation for this unit
@@ -106,6 +153,24 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(Ease.InQuad);
         }
+    }
+
+    public GameObject getJewel(int value, Vector2 spawnPos)
+    {
+        GameObject jewel = null;
+
+        for (int i = 0; i < poolSize; i++)
+        {
+            jewel = _poolARR[value][i];
+            if (!jewel.activeSelf)
+            {
+                jewel.transform.position = spawnPos;
+                jewel.SetActive(true);
+                break;
+            }               
+        }
+
+        return jewel;
     }
 
     private int[,] generateValueMatrix()
