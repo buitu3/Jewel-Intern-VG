@@ -100,6 +100,8 @@ public class PuzzleGenerator : MonoBehaviour {
         _valueARR[3, 3] = 3;
         _valueARR[0, 2] = 2;
 
+        _valueARR[1, 0] = 6;
+        // --------------------------------------------
 
         // Init Jewel Puzzle and BG
         for (int YIndex = 0; YIndex < _rows; YIndex++)
@@ -124,8 +126,25 @@ public class PuzzleGenerator : MonoBehaviour {
 
         GameController.Instance.currentState = GameController.GameState.scanningUnit;
         yield return new WaitForSeconds(1f);
+
+        // Fake unit value for testing
+
+        //_unitARR[1, 0].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.vLightning;
+        upgradeUnit(1, 0, _unitARR[1, 0].GetComponent<UnitInfo>()._value, UnitInfo.SpecialEff.vLightning);
+
+        // --------------------------------------------
+
+        //----------------------------------------------------------------------------------
+        // Remember to return when done tesing
+        //----------------------------------------------------------------------------------
+
         // Scan whole puzzle for chained Units
         //ChainedUnitsScanner.Instance.scanAll();
+
+        //----------------------------------------------------------------------------------
+        //
+        //----------------------------------------------------------------------------------
+
         GameController.Instance.currentState = GameController.GameState.idle;
     }
 
@@ -136,7 +155,7 @@ public class PuzzleGenerator : MonoBehaviour {
 
     public void initUnit(Vector2 spawnPos, int XIndex, int YIndex, int value, UnitInfo.SpecialEff specialEff)
     {
-        // Instantiate the unit
+        // Get unit from pool
         //_unitARR[XIndex, YIndex] = Instantiate(Unit[value], spawnPos, Quaternion.identity) as GameObject;
         _unitARR[XIndex, YIndex] = getJewel(value, spawnPos);
         _unitARR[XIndex, YIndex].transform.SetParent(unitHolder);
@@ -148,11 +167,35 @@ public class PuzzleGenerator : MonoBehaviour {
         unitInfo._value = value;
         unitInfo._unitEff = specialEff;
 
+        // Enable specialEff image if this is SpecialEff unit
+        switch (specialEff)
+        {
+            case UnitInfo.SpecialEff.vLightning:
+                {
+                    unitInfo.VerticalLightningEff.SetActive(true);
+                    break;
+                }
+        }
+
         //If this is regen Unit,move to it's original pos
         if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
         {
             _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(Ease.InQuad);
         }
+    }
+
+    public void upgradeUnit(int XIndex, int YIndex, int value, UnitInfo.SpecialEff specialEff)
+    {
+        // If Destroy all jewel is expect to be created, it's specialEff should be noEff
+        if (value == Unit.Length && specialEff != UnitInfo.SpecialEff.noEff)
+        {
+            specialEff = UnitInfo.SpecialEff.noEff;
+        }
+
+        ChainedUnitsScanner.Instance.disableUnit(XIndex, YIndex);
+        initUnit(PuzzleGenerator.Instance._unitPosARR[XIndex, YIndex], XIndex, YIndex, value, specialEff);
+        ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._value = value;
+        ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = false;
     }
 
     public GameObject getJewel(int value, Vector2 spawnPos)
