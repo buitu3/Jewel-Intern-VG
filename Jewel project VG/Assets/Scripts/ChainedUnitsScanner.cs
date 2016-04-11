@@ -96,12 +96,16 @@ public class ChainedUnitsScanner : MonoBehaviour {
         }
         else
         {
-            StartCoroutine(scanUnitsAfterSwap(new GameObject(), new GameObject()));
             GameController.Instance.currentState = GameController.GameState.idle;
         }
     }
     
-    // Scan two swapped Units
+    /// <summary>
+    /// Scan two swapped units
+    /// </summary>
+    /// <param name="The highlighted unit"></param>
+    /// <param name="The other unit"></param>
+    /// <returns></returns>
     public IEnumerator scanUnitsAfterSwap(GameObject focusedUnit, GameObject otherUnit)
     {
         yield return new WaitForSeconds(InputHandler.Instance.swapTime);
@@ -150,17 +154,43 @@ public class ChainedUnitsScanner : MonoBehaviour {
         }
     }
     
+    /// <summary>
+    /// Disable unit and it's effect and update scanARR
+    /// </summary>
+    /// <param name="XIndex"></param>
+    /// <param name="YIndex"></param>
     public void disableUnit(int XIndex, int YIndex)
     {
-        PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
+        GameObject unit = PuzzleGenerator.Instance._unitARR[XIndex, YIndex];
+        unit.SetActive(false);
         _scanUnitARR[XIndex, YIndex]._isChained = true;
+
+        switch(unit.GetComponent<UnitInfo>()._unitEff)
+        {
+            case (UnitInfo.SpecialEff.hLightning):
+                {
+                    unit.GetComponent<UnitInfo>().HorizontalLightningEff.SetActive(false);
+                    break;
+                }
+            case (UnitInfo.SpecialEff.vLightning):
+                {
+                    unit.GetComponent<UnitInfo>().VerticalLightningEff.SetActive(false);
+                    break;
+                }
+            case (UnitInfo.SpecialEff.explode):
+                {
+                    unit.GetComponent<UnitInfo>().ExplosiveSparkEff.SetActive(false);
+                    break;
+                }
+            default: break;
+        }
     }
 
     void destroyAllUnitsOfType(int type)
     {
         List<int> unitsXIndex = new List<int>();
         List<int> unitsYIndex = new List<int>();
-
+        
         for (int YIndex = 0; YIndex < PuzzleGenerator.Instance._rows; YIndex++)
         {
             for (int XIndex = 0; XIndex < PuzzleGenerator.Instance._columns; XIndex++)
@@ -179,7 +209,7 @@ public class ChainedUnitsScanner : MonoBehaviour {
         destroyUnits(unitsXIndex, unitsYIndex);
     }
 
-    void destroyAllUnitOfCol(int col)
+    void destroyAllUnitsOfColumn(int col)
     {
         List<int> unitsXIndex = new List<int>();
         List<int> unitsYIndex = new List<int>();
@@ -196,20 +226,59 @@ public class ChainedUnitsScanner : MonoBehaviour {
         destroyUnits(unitsXIndex, unitsYIndex);
     }
 
+    void destroyAllUnitsOfRow(int row)
+    {
+        List<int> unitsXIndex = new List<int>();
+        List<int> unitsYIndex = new List<int>();
+
+        for (int XIndex = 0; XIndex < PuzzleGenerator.Instance._columns; XIndex++)
+        {
+            if (!_scanUnitARR[XIndex, row]._isChained)
+            {
+                //disableUnit(col, YIndex);
+                unitsXIndex.Add(XIndex);
+                unitsYIndex.Add(row);
+            }
+        }
+        destroyUnits(unitsXIndex, unitsYIndex);
+    }
+
+    void destroyAllLocalUnits(int XIndex,int YIndex)
+    {
+        List<int> unitsXIndex = new List<int>();
+        List<int> unitsYIndex = new List<int>();
+
+        
+
+        destroyUnits(unitsXIndex, unitsYIndex);
+    }
+
+    /// <summary>
+    /// Check each unit specialEff to call the suitable destroy type
+    /// </summary>
+    /// <param name="unitsXIndex"></param>
+    /// <param name="unitsYIndex"></param>
     void destroyUnits(List<int> unitsXIndex, List<int> unitsYIndex)
     {
         //if (_scanUnitARR[targetXIndex, targetYIndex]._value == PuzzleGenerator.Instance.Unit.Length)
         //{
         //    destroyAllUnitsOfType(_scanUnitARR[localsXIndex[0], localsYIndex[0]]._value);
         //}
-        for (int i = 0; i < unitsYIndex.Count - 1; i++)
+        for (int i = 0; i < unitsYIndex.Count; i++)
         {
-            print(i);           
             switch (PuzzleGenerator.Instance._unitARR[unitsXIndex[i], unitsYIndex[i]].GetComponent<UnitInfo>()._unitEff)
             {
                 case UnitInfo.SpecialEff.vLightning:
                     {
-                        destroyAllUnitOfCol(unitsXIndex[i]);
+                        disableUnit(unitsXIndex[i], unitsYIndex[i]);
+                        destroyAllUnitsOfColumn(unitsXIndex[i]);
+                        break;
+                    }
+
+                case UnitInfo.SpecialEff.hLightning:
+                    {
+                        disableUnit(unitsXIndex[i], unitsYIndex[i]);
+                        destroyAllUnitsOfRow(unitsYIndex[i]);
                         break;
                     }
 
@@ -219,17 +288,26 @@ public class ChainedUnitsScanner : MonoBehaviour {
                         break;
                     }
 
+                default: break;
             }
-
         }
     }
 
     // Scan unit that is located in the specific index
+    /// <summary>
+    /// Scan each swapped or regenerated units to find out it's chained types
+    /// If it's belong to special chained types, upgrade it based on chained type
+    /// Then call method to destroy all other units in this unit's chain
+    /// </summary>
+    /// <param name="XIndex"></param>
+    /// <param name="YIndex"></param>
     void scanUnit(int XIndex, int YIndex)
     {
         //scanHorizontalThreeChainedSwap(XIndex, YIndex);
         //scanVerticalThreeChainedSwap(XIndex, YIndex);
-        
+        List<int> unitsXIndex = new List<int>();
+        List<int> unitsYIndex = new List<int>();
+
         // Horizontal 5 chained
         if (isRightHorizontalThreeChained(XIndex, YIndex) && isLeftHorizontalThreeChained(XIndex, YIndex))
         {
@@ -245,7 +323,7 @@ public class ChainedUnitsScanner : MonoBehaviour {
             PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
             PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex].SetActive(false);
 
-            // Init special Unit
+            // Upgrade special Unit
             PuzzleGenerator.Instance.upgradeUnit(XIndex, YIndex, PuzzleGenerator.Instance.Unit.Length - 1, UnitInfo.SpecialEff.noEff);
 
             chainedUnits = true;
@@ -424,19 +502,25 @@ public class ChainedUnitsScanner : MonoBehaviour {
         // Right T 5 Chained
         if (isMiddleVerticalThreeChained(XIndex, YIndex) && isRightHorizontalThreeChained(XIndex, YIndex))
         {
-            _scanUnitARR[XIndex   , YIndex - 1]._isChained = true;
-            _scanUnitARR[XIndex   , YIndex]._isChained = true;
-            _scanUnitARR[XIndex + 1, YIndex]._isChained = true;
-            _scanUnitARR[XIndex + 2, YIndex]._isChained = true;
-            _scanUnitARR[XIndex, YIndex + 1]._isChained = true;
-            PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].SetActive(false);
-            PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-            PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
-            PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex].SetActive(false);
-            PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].SetActive(false);
+            //_scanUnitARR[XIndex   , YIndex - 1]._isChained = true;
+            //_scanUnitARR[XIndex   , YIndex]._isChained = true;
+            //_scanUnitARR[XIndex + 1, YIndex]._isChained = true;
+            //_scanUnitARR[XIndex + 2, YIndex]._isChained = true;
+            //_scanUnitARR[XIndex, YIndex + 1]._isChained = true;
+            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].SetActive(false);
+            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
+            //PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
+            //PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex].SetActive(false);
+            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].SetActive(false);
 
             // Init special Unit
             PuzzleGenerator.Instance.upgradeUnit(XIndex, YIndex, PuzzleGenerator.Instance.Unit.Length - 1, UnitInfo.SpecialEff.noEff);
+
+            unitsXIndex.Add(XIndex    ); unitsYIndex.Add(YIndex - 1);
+            unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex    );
+            unitsXIndex.Add(XIndex + 2); unitsYIndex.Add(YIndex    );
+            unitsXIndex.Add(XIndex    ); unitsYIndex.Add(YIndex + 1);
+            destroyUnits(unitsXIndex, unitsYIndex);
 
             chainedUnits = true;
             return;

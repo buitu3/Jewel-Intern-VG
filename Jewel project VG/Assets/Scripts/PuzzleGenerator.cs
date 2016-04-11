@@ -130,7 +130,8 @@ public class PuzzleGenerator : MonoBehaviour {
         // Fake unit value for testing
 
         //_unitARR[1, 0].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.vLightning;
-        upgradeUnit(1, 0, _unitARR[1, 0].GetComponent<UnitInfo>()._value, UnitInfo.SpecialEff.vLightning);
+        upgradeUnit(1, 0, _unitARR[1, 0].GetComponent<UnitInfo>()._value, UnitInfo.SpecialEff.hLightning);
+        upgradeUnit(3, 2, _unitARR[3, 2].GetComponent<UnitInfo>()._value, UnitInfo.SpecialEff.vLightning);
 
         // --------------------------------------------
 
@@ -175,6 +176,17 @@ public class PuzzleGenerator : MonoBehaviour {
                     unitInfo.VerticalLightningEff.SetActive(true);
                     break;
                 }
+            case UnitInfo.SpecialEff.hLightning:
+                {
+                    unitInfo.HorizontalLightningEff.SetActive(true);
+                    break;
+                }
+            case UnitInfo.SpecialEff.explode:
+                {
+                    unitInfo.ExplosiveSparkEff.SetActive(true);
+                    break;
+                }
+            default: break;
         }
 
         //If this is regen Unit,move to it's original pos

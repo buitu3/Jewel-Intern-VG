@@ -217,12 +217,12 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
 
         int tempXIndex = unitInfo._XIndex;
         int tempYIndex = unitInfo._YIndex;
-        UnitInfo.SpecialEff tempUnitEff = unitInfo._unitEff;
+        //UnitInfo.SpecialEff tempUnitEff = unitInfo._unitEff;
         unitInfo._XIndex = otherUnitInfo._XIndex;
         unitInfo._YIndex = otherUnitInfo._YIndex;
-        unitInfo._unitEff = otherUnitInfo._unitEff;
+        //unitInfo._unitEff = otherUnitInfo._unitEff;
         otherUnitInfo._XIndex = tempXIndex;
         otherUnitInfo._YIndex = tempYIndex;
-        otherUnitInfo._unitEff = tempUnitEff;
+        //otherUnitInfo._unitEff = tempUnitEff;
     }
 }
