@@ -104,6 +104,8 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
             //print(ChainedUnitsScanner.Instance._scanUnitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex]._isChained);
 
             //print(PuzzleGenerator.Instance._valueARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex]);
+
+            //ChainedUnitsScanner.Instance.destroyAllLocalUnits(_unit.GetComponent<UnitInfo>()._XIndex, _unit.GetComponent<UnitInfo>()._YIndex);
         }
     }
 
@@ -194,9 +196,6 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
         Vector2 tempPos = Unit.transform.position;
         Unit.transform.DOMove(otherUnit.transform.position, swapTime).SetEase(Ease.InQuad);
         otherUnit.transform.DOMove(tempPos, swapTime).SetEase(Ease.InQuad);
-
-        //t.SetEase()
-        
 
         // Unfocus focusedUnit and change state
         unitHighlight.SetActive(false);

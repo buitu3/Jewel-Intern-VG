@@ -82,23 +82,28 @@ public class PuzzleGenerator : MonoBehaviour {
         }
 
         // Fake unit value for testing
-        for (int i = 0; i < _columns; i++)
-        {
-            for (int j = 0; j < _rows; j++)
-            {
-                _valueARR[i, j] = 0;
-            }
-        }
+        //for (int i = 0; i < _columns; i++)
+        //{
+        //    for (int j = 0; j < _rows; j++)
+        //    {
+        //        _valueARR[i, j] = 0;
+        //    }
+        //}
+        //for (int j = 0; j < _rows; j++)
+        //{
+        //    _valueARR[7, j] = 2;
+        //}
         _valueARR[1, 1] = 2;
-        _valueARR[2, 1] = 3;
-        _valueARR[3, 1] = 3;
+        _valueARR[2, 1] = 2;
+        _valueARR[3, 1] = 2;
         _valueARR[1, 2] = 3;
         _valueARR[2, 2] = 2;
-        _valueARR[3, 2] = 2;
-        _valueARR[1, 3] = 2;
-        _valueARR[2, 3] = 3;
+        _valueARR[3, 2] = 3;
+        _valueARR[1, 3] = 3;
+        _valueARR[2, 3] = 2;
         _valueARR[3, 3] = 3;
-        _valueARR[0, 2] = 2;
+        _valueARR[2, 4] = 2;
+        //_valueARR[5, 2] = 2;
 
         _valueARR[1, 0] = 6;
         // --------------------------------------------
@@ -130,8 +135,9 @@ public class PuzzleGenerator : MonoBehaviour {
         // Fake unit value for testing
 
         //_unitARR[1, 0].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.vLightning;
-        upgradeUnit(1, 0, _unitARR[1, 0].GetComponent<UnitInfo>()._value, UnitInfo.SpecialEff.hLightning);
-        upgradeUnit(3, 2, _unitARR[3, 2].GetComponent<UnitInfo>()._value, UnitInfo.SpecialEff.vLightning);
+        upgradeUnit(1, 0, UnitInfo.SpecialEff.hLightning);
+        //upgradeUnit(3, 2, UnitInfo.SpecialEff.hLightning);
+        upgradeUnit(0, 2, UnitInfo.SpecialEff.vLightning);
 
         // --------------------------------------------
 
@@ -196,13 +202,31 @@ public class PuzzleGenerator : MonoBehaviour {
         }
     }
 
-    public void upgradeUnit(int XIndex, int YIndex, int value, UnitInfo.SpecialEff specialEff)
+    /// <summary>
+    /// Upgrade this Unit into Special destroy all type
+    /// </summary>
+    /// <param name="XIndex"></param>
+    /// <param name="YIndex"></param>
+    /// <param name="value"></param>
+    /// <param name="specialEff"></param>
+    public void upgradeToDestroyAllUnit(int XIndex, int YIndex)
     {
-        // If Destroy all jewel is expect to be created, it's specialEff should be noEff
-        if (value == Unit.Length && specialEff != UnitInfo.SpecialEff.noEff)
-        {
-            specialEff = UnitInfo.SpecialEff.noEff;
-        }
+        ChainedUnitsScanner.Instance.disableUnit(XIndex, YIndex);
+        initUnit(PuzzleGenerator.Instance._unitPosARR[XIndex, YIndex], XIndex, YIndex, Unit.Length - 1, UnitInfo.SpecialEff.noEff);
+        ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._value = Unit.Length - 1;
+        ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = false;
+    }
+
+    /// <summary>
+    /// Add Special eff into this Unit
+    /// </summary>
+    /// <param name="XIndex"></param>
+    /// <param name="YIndex"></param>
+    /// <param name="value"></param>
+    /// <param name="specialEff"></param>
+    public void upgradeUnit(int XIndex, int YIndex, UnitInfo.SpecialEff specialEff)
+    {
+        int value = _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value;
 
         ChainedUnitsScanner.Instance.disableUnit(XIndex, YIndex);
         initUnit(PuzzleGenerator.Instance._unitPosARR[XIndex, YIndex], XIndex, YIndex, value, specialEff);
@@ -244,6 +268,8 @@ public class PuzzleGenerator : MonoBehaviour {
 
     public IEnumerator reOrganizePuzzle()
     {
+        yield return new WaitForSeconds(1f);
+
         // Make Units fall down after destroy state
         for (int XIndex = 0; XIndex < _columns; XIndex++)
         {
