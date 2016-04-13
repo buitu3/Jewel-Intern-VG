@@ -94,15 +94,17 @@ public class PuzzleGenerator : MonoBehaviour {
         //    _valueARR[7, j] = 2;
         //}
         _valueARR[1, 1] = 2;
-        _valueARR[2, 1] = 2;
-        _valueARR[3, 1] = 2;
-        _valueARR[1, 2] = 3;
-        _valueARR[2, 2] = 2;
-        _valueARR[3, 2] = 3;
-        _valueARR[1, 3] = 3;
-        _valueARR[2, 3] = 2;
-        _valueARR[3, 3] = 3;
-        _valueARR[2, 4] = 2;
+        _valueARR[2, 1] = 5;
+        _valueARR[3, 1] = 6;
+        _valueARR[1, 2] = 5;
+        _valueARR[2, 2] = 1;
+        _valueARR[3, 2] = 4;
+        _valueARR[1, 3] = 7;
+        _valueARR[2, 3] = 4;
+        _valueARR[3, 3] = 4;
+        _valueARR[4, 4] = 4;
+
+        //_valueARR[4, 2] = 3;
         //_valueARR[5, 2] = 2;
 
         _valueARR[1, 0] = 6;
@@ -132,10 +134,10 @@ public class PuzzleGenerator : MonoBehaviour {
         GameController.Instance.currentState = GameController.GameState.scanningUnit;
         yield return new WaitForSeconds(1f);
 
-        // Fake unit value for testing
+        // ----------Fake unit value for testing ------------------
 
         //_unitARR[1, 0].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.vLightning;
-        upgradeUnit(1, 0, UnitInfo.SpecialEff.hLightning);
+        upgradeUnit(2, 3, UnitInfo.SpecialEff.explode);
         //upgradeUnit(3, 2, UnitInfo.SpecialEff.hLightning);
         upgradeUnit(0, 2, UnitInfo.SpecialEff.vLightning);
 
@@ -152,7 +154,20 @@ public class PuzzleGenerator : MonoBehaviour {
         //
         //----------------------------------------------------------------------------------
 
-        GameController.Instance.currentState = GameController.GameState.idle;
+        // ----------Fake for testing ------------------
+
+        List<GameObject> unitsList = new List<GameObject>();
+        for (int XIndex = 0; XIndex < _columns; XIndex++)
+        {
+            for (int YIndex = 0; YIndex < _rows; YIndex++)
+            {
+                unitsList.Add(_unitARR[XIndex, YIndex]);
+            }
+        }
+        StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
+        // --------------------------------------------
+
+        //GameController.Instance.currentState = GameController.GameState.idle;
     }
 
 
@@ -268,7 +283,7 @@ public class PuzzleGenerator : MonoBehaviour {
 
     public IEnumerator reOrganizePuzzle()
     {
-        yield return new WaitForSeconds(1f);
+        //yield return new WaitForSeconds(1f);
 
         // Make Units fall down after destroy state
         for (int XIndex = 0; XIndex < _columns; XIndex++)
@@ -303,12 +318,29 @@ public class PuzzleGenerator : MonoBehaviour {
                     Vector2 regenUnitSpawnPos = new Vector2(_unitPosARR[XIndex, _rows - i - 1].x, regenYpos + i * YPadding);
                     initUnit(regenUnitSpawnPos, XIndex, _rows - i - 1, Random.Range(0, Unit.Length - 1), 0);
                     //initUnit(_unitPosARR[XIndex, _rows - i - 1], XIndex, _rows - i - 1, Random.Range(0, Unit.Length - 1), 0);
-
                 }
             }
         }
         yield return new WaitForSeconds(unitDropTime + 0.5f);
-        ChainedUnitsScanner.Instance.scanAll();
+
+        // Temporaty disable --------------
+
+        //ChainedUnitsScanner.Instance.scanAll();
+
+        // --------------------------------
+
+        // ----------Fake for testing ------------------
+
+        List<GameObject> unitsList = new List<GameObject>();
+        for (int XIndex = 0; XIndex < _columns; XIndex++)
+        {
+            for (int YIndex = 0; YIndex < _rows; YIndex++)
+            {
+                unitsList.Add(_unitARR[XIndex, YIndex]);
+            }
+        }
+        StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
+        // --------------------------------------------
     }
 
     private IEnumerator dropUnit(GameObject Unit, Vector2 targetPos)
