@@ -1,20 +1,22 @@
 fileFormatVersion: 2
-guid: 51fd7978bea1b9844b1352423285ad5d
+guid: 4b91732bc61f8fc4ba25cee01f4ae26e
+timeCreated: 1460522604
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: 10
-    21300002: 20
-    21300004: 30
-    21300006: 40
-    21300008: 50
-    21300010: 60
-    21300012: 70
-    21300014: 80
-    21300016: 90
-    21300018: 100
-    21300020: 110
-    21300022: 120
-    21300024: 130
+    21300000: ic_normal_score_effect_0
+    21300002: ic_normal_score_effect_1
+    21300004: ic_normal_score_effect_2
+    21300006: ic_normal_score_effect_3
+    21300008: ic_normal_score_effect_4
+    21300010: ic_normal_score_effect_5
+    21300012: ic_normal_score_effect_6
+    21300014: ic_normal_score_effect_7
+    21300016: ic_normal_score_effect_8
+    21300018: ic_normal_score_effect_9
+    21300020: ic_normal_score_effect_10
+    21300022: ic_normal_score_effect_11
+    21300024: ic_normal_score_effect_12
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -30,18 +32,18 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-  isReadable: 1
+  isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
   cubemapConvolution: 0
   cubemapConvolutionSteps: 7
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
-  textureFormat: -1
-  maxTextureSize: 1024
+  textureFormat: -2
+  maxTextureSize: 512
   textureSettings:
     filterMode: -1
-    aniso: 1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -49,7 +51,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -57,254 +59,246 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
-  textureType: 5
-  buildTargetSettings:
-  - buildTarget: iPhone
-    maxTextureSize: 1024
-    textureFormat: -2
-    compressionQuality: 50
-    allowsAlphaSplitting: 0
-  - buildTarget: Android
-    maxTextureSize: 1024
-    textureFormat: 4
-    compressionQuality: 50
-    allowsAlphaSplitting: 0
+  textureType: 8
+  buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: 10
+    - name: ic_normal_score_effect_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 276
-        width: 61
-        height: 49
+        x: 3
+        y: 274
+        width: 63
+        height: 51
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -29.5, y: 24.5}
-        - {x: -30.5, y: 23.5}
-        - {x: -30.5, y: -21.5}
-        - {x: -26.5, y: -24.5}
-        - {x: 26.5, y: -24.5}
-        - {x: 30.5, y: -20.5}
-        - {x: 30.5, y: 17.5}
-        - {x: 23.5, y: 24.5}
-    - name: 20
+      - - {x: -31.5, y: 25.5}
+        - {x: -31.5, y: -24.5}
+        - {x: -27.5, y: -25.5}
+        - {x: 27.5, y: -25.5}
+        - {x: 31.5, y: -17.5}
+        - {x: 31.5, y: 25.5}
+    - name: ic_normal_score_effect_1
       rect:
         serializedVersion: 2
-        x: 104
-        y: 276
-        width: 65
-        height: 49
+        x: 103
+        y: 274
+        width: 67
+        height: 51
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -25.5, y: 24.5}
-        - {x: -32.5, y: 18.5}
-        - {x: -32.5, y: -22.5}
-        - {x: -30.5, y: -24.5}
-        - {x: 29.5, y: -24.5}
-        - {x: 32.5, y: -22.5}
-        - {x: 32.5, y: 20.5}
-        - {x: 31.5, y: 24.5}
-    - name: 30
+      - - {x: 26.5, y: 25.5}
+        - {x: -33.5, y: 25.5}
+        - {x: -33.5, y: -25.5}
+        - {x: 24.5, y: -25.5}
+        - {x: 33.5, y: -17.5}
+        - {x: 33.5, y: 20.5}
+    - name: ic_normal_score_effect_2
       rect:
         serializedVersion: 2
-        x: 208
-        y: 276
-        width: 65
-        height: 49
+        x: 207
+        y: 274
+        width: 68
+        height: 51
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -32.5, y: 24.5}
-        - {x: -32.5, y: -24.5}
-        - {x: 31.5, y: -24.5}
-        - {x: 32.5, y: -20.5}
-        - {x: 32.5, y: 23.5}
-        - {x: 31.5, y: 24.5}
-    - name: 40
+      - - {x: -25, y: 25.5}
+        - {x: -34, y: 20.5}
+        - {x: -34, y: -25.5}
+        - {x: 34, y: -25.5}
+        - {x: 34, y: 18.5}
+        - {x: 25, y: 25.5}
+    - name: ic_normal_score_effect_3
       rect:
         serializedVersion: 2
         x: 0
-        y: 207
-        width: 65
-        height: 49
+        y: 206
+        width: 66
+        height: 51
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -19.5, y: 24.5}
-        - {x: -32.5, y: 7.5}
-        - {x: -32.5, y: -21.5}
-        - {x: -30.5, y: -24.5}
-        - {x: 31.5, y: -24.5}
-        - {x: 32.5, y: -23.5}
-        - {x: 32.5, y: 17.5}
-        - {x: 24.5, y: 24.5}
-    - name: 50
+      - - {x: -19, y: 25.5}
+        - {x: -33, y: 7.5}
+        - {x: -33, y: -24.5}
+        - {x: -28, y: -25.5}
+        - {x: 31, y: -25.5}
+        - {x: 33, y: -23.5}
+        - {x: 33, y: 21.5}
+        - {x: 25, y: 25.5}
+    - name: ic_normal_score_effect_4
       rect:
         serializedVersion: 2
-        x: 104
-        y: 207
-        width: 65
-        height: 49
+        x: 103
+        y: 206
+        width: 67
+        height: 51
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -32.5, y: -24.5}
-        - {x: 30.5, y: -24.5}
-        - {x: 32.5, y: -23.5}
-        - {x: 32.5, y: 24.5}
-        - {x: -28.5, y: 24.5}
-        - {x: -32.5, y: 19.5}
-    - name: 60
+      - - {x: -31.5, y: 25.5}
+        - {x: -33.5, y: 16.5}
+        - {x: -33.5, y: -25.5}
+        - {x: 33.5, y: -25.5}
+        - {x: 33.5, y: 20.5}
+        - {x: 26.5, y: 25.5}
+    - name: ic_normal_score_effect_5
       rect:
         serializedVersion: 2
-        x: 209
-        y: 207
-        width: 64
-        height: 49
+        x: 208
+        y: 206
+        width: 67
+        height: 51
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -21, y: 24.5}
-        - {x: -32, y: 18.5}
-        - {x: -32, y: -22.5}
-        - {x: -29, y: -24.5}
-        - {x: 28, y: -24.5}
-        - {x: 32, y: -22.5}
-        - {x: 32, y: 17.5}
-        - {x: 25, y: 24.5}
-    - name: 70
+      - - {x: -33.5, y: -25.5}
+        - {x: 27.5, y: -25.5}
+        - {x: 33.5, y: -23.5}
+        - {x: 33.5, y: 23.5}
+        - {x: 32.5, y: 25.5}
+        - {x: -27.5, y: 25.5}
+        - {x: -33.5, y: 14.5}
+    - name: ic_normal_score_effect_6
       rect:
         serializedVersion: 2
-        x: 1
-        y: 138
-        width: 64
-        height: 49
+        x: 0
+        y: 137
+        width: 66
+        height: 51
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: 32, y: 19.5}
-        - {x: 28, y: 24.5}
-        - {x: -32, y: 24.5}
-        - {x: -32, y: -24.5}
-        - {x: 23, y: -24.5}
-        - {x: 31, y: -18.5}
-        - {x: 32, y: -16.5}
-    - name: 80
+      - - {x: -33, y: 25.5}
+        - {x: -33, y: -20.5}
+        - {x: -29, y: -25.5}
+        - {x: 25, y: -25.5}
+        - {x: 33, y: -16.5}
+        - {x: 33, y: 19.5}
+        - {x: 24, y: 25.5}
+    - name: ic_normal_score_effect_7
       rect:
         serializedVersion: 2
-        x: 105
-        y: 138
-        width: 64
-        height: 49
+        x: 103
+        y: 137
+        width: 67
+        height: 51
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -32, y: 24.5}
-        - {x: -32, y: -24.5}
-        - {x: 31, y: -24.5}
-        - {x: 32, y: -21.5}
-        - {x: 32, y: 24.5}
-    - name: 90
+      - - {x: -30.5, y: 25.5}
+        - {x: -33.5, y: 16.5}
+        - {x: -33.5, y: -23.5}
+        - {x: -31.5, y: -25.5}
+        - {x: 28.5, y: -25.5}
+        - {x: 33.5, y: -20.5}
+        - {x: 33.5, y: 17.5}
+        - {x: 31.5, y: 25.5}
+    - name: ic_normal_score_effect_8
       rect:
         serializedVersion: 2
-        x: 209
-        y: 138
-        width: 64
-        height: 49
+        x: 207
+        y: 137
+        width: 68
+        height: 51
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -26, y: 24.5}
-        - {x: -32, y: 17.5}
-        - {x: -32, y: -22.5}
-        - {x: -29, y: -24.5}
-        - {x: 26, y: -24.5}
-        - {x: 32, y: -17.5}
-        - {x: 32, y: 24.5}
-    - name: 100
+      - - {x: -26, y: 25.5}
+        - {x: -34, y: 14.5}
+        - {x: -34, y: -25.5}
+        - {x: 34, y: -25.5}
+        - {x: 34, y: 20.5}
+        - {x: 33, y: 25.5}
+    - name: ic_normal_score_effect_9
       rect:
         serializedVersion: 2
-        x: 4
-        y: 71
-        width: 87
-        height: 49
+        x: 3
+        y: 67
+        width: 89
+        height: 52
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -43.5, y: 24.5}
-        - {x: -43.5, y: -24.5}
-        - {x: 43.5, y: -24.5}
-        - {x: 43.5, y: 21.5}
-        - {x: 41.5, y: 24.5}
-    - name: 110
+      - - {x: -44.5, y: 26}
+        - {x: -44.5, y: -23}
+        - {x: -43.5, y: -26}
+        - {x: 44.5, y: -26}
+        - {x: 44.5, y: 26}
+    - name: ic_normal_score_effect_10
       rect:
         serializedVersion: 2
-        x: 108
-        y: 69
-        width: 87
-        height: 49
+        x: 107
+        y: 67
+        width: 90
+        height: 52
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -11.5, y: -24.5}
-        - {x: 37.5, y: -24.5}
-        - {x: 43.5, y: -18.5}
-        - {x: 43.5, y: 24.5}
-        - {x: -43.5, y: 24.5}
-        - {x: -43.5, y: -24.5}
-        - {x: -15.5, y: -24.5}
-        - {x: -13.5, y: -16.5}
-        - {x: -13.5, y: -19.5}
-    - name: 120
+      - - {x: 42, y: 26}
+        - {x: -45, y: 26}
+        - {x: -45, y: -23}
+        - {x: -34, y: -26}
+        - {x: -17, y: -26}
+        - {x: -15, y: -20}
+        - {x: -14, y: -16}
+        - {x: -14, y: -19}
+        - {x: -13, y: -26}
+        - {x: 41, y: -26}
+        - {x: 45, y: -17}
+        - {x: 45, y: 12}
+        - {x: 43, y: 21}
+    - name: ic_normal_score_effect_11
       rect:
         serializedVersion: 2
-        x: 212
-        y: 69
-        width: 88
-        height: 49
+        x: 211
+        y: 67
+        width: 89
+        height: 52
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -44, y: 24.5}
-        - {x: -44, y: -17.5}
-        - {x: -40, y: -24.5}
-        - {x: 37, y: -24.5}
-        - {x: 44, y: -20.5}
-        - {x: 44, y: 17.5}
-        - {x: 38, y: 24.5}
-    - name: 130
+      - - {x: -42.5, y: 26}
+        - {x: -44.5, y: 22}
+        - {x: -44.5, y: -9}
+        - {x: -38.5, y: -26}
+        - {x: 38.5, y: -26}
+        - {x: 44.5, y: -22}
+        - {x: 44.5, y: 20}
+        - {x: 42.5, y: 26}
+    - name: ic_normal_score_effect_12
       rect:
         serializedVersion: 2
-        x: 4
+        x: 3
         y: 0
-        width: 87
-        height: 49
+        width: 89
+        height: 51
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -43.5, y: 24.5}
-        - {x: -43.5, y: -4.5}
-        - {x: -39.5, y: -24.5}
-        - {x: 40.5, y: -24.5}
-        - {x: 43.5, y: -22.5}
-        - {x: 43.5, y: 21.5}
-        - {x: 42.5, y: 24.5}
+      - - {x: -44.5, y: 25.5}
+        - {x: -44.5, y: -10.5}
+        - {x: -38.5, y: -25.5}
+        - {x: 37.5, y: -25.5}
+        - {x: 44.5, y: -21.5}
+        - {x: 44.5, y: 20.5}
+        - {x: 33.5, y: 25.5}
     outline: []
   spritePackingTag: 
   userData: 

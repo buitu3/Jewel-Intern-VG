@@ -38,6 +38,11 @@ public class ChainedUnitsScanner : MonoBehaviour
 
     public ScanUnit[,] _scanUnitARR;
 
+    private Transform specialEffHolder;
+
+    private List<GameObject>[] _specialEffPoolARR;
+    private int specialEffPoolSize;
+
     private bool chainedUnits;
 
     private float destroyAllDelay;
@@ -54,6 +59,8 @@ public class ChainedUnitsScanner : MonoBehaviour
 
     void Start()
     {
+        specialEffHolder = new GameObject("Special Effs Holder").transform;
+
         // Init scanUnit Array 
         _scanUnitARR = new ScanUnit[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
 
@@ -66,6 +73,23 @@ public class ChainedUnitsScanner : MonoBehaviour
         }
 
         destroyAllDelay = lightningDestroyAllClip.length;
+
+        // Init special Eff pool
+        _specialEffPoolARR = new List<GameObject>[unitDestroyEff.Length];
+        Vector2 poolPos = new Vector2(-20, -20);
+        specialEffPoolSize = PuzzleGenerator.Instance._rows * PuzzleGenerator.Instance._columns;
+        for (int i = 0; i < _specialEffPoolARR.Length; i++)
+        {
+            _specialEffPoolARR[i] = new List<GameObject>();
+            for (int j = 0; j < specialEffPoolSize; j++)
+            {
+                GameObject destroyEff = Instantiate(unitDestroyEff[i], poolPos, Quaternion.identity) as GameObject;
+                destroyEff.SetActive(false);
+                _specialEffPoolARR[i].Add(destroyEff);
+                destroyEff.transform.SetParent(specialEffHolder);
+            }
+        }
+
     }
 
     //==============================================
@@ -134,6 +158,8 @@ public class ChainedUnitsScanner : MonoBehaviour
             //destroyAllUnitsOfType(otherUnitInfo._value);
             StartCoroutine(destroyAllUnitsOfType(otherUnitInfo._value));
             disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+
+            yield return new WaitForSeconds(0.6f);
             StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
         }
         else if (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
@@ -141,6 +167,8 @@ public class ChainedUnitsScanner : MonoBehaviour
             //destroyAllUnitsOfType(focusedUnitInfo._value);
             StartCoroutine(destroyAllUnitsOfType(focusedUnitInfo._value));
             disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+
+            yield return new WaitForSeconds(0.6f);
             StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
         }
         else
@@ -155,6 +183,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             // If there are chained units
             if (chainedUnits)
             {
+                yield return new WaitForSeconds(0.6f);
                 StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
                 //PuzzleGenerator.Instance.reOrganizePuzzle();
             }
@@ -201,7 +230,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             scanThreeUnitsChainedType(unitsXIndex[i], unitsYIndex[i]);
         }
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.6f);
 
         // If there are chained units
         if (chainedUnits)
@@ -268,17 +297,24 @@ public class ChainedUnitsScanner : MonoBehaviour
                     unitsXIndex.Add(XIndex);
                     unitsYIndex.Add(YIndex);
 
-                    Instantiate(AllUnitsTypeDestroyEff, PuzzleGenerator.Instance._unitPosARR[XIndex, YIndex], Quaternion.identity);
-                    yield return new WaitForSeconds(0.02f);
+                    //Instantiate(AllUnitsTypeDestroyEff, PuzzleGenerator.Instance._unitPosARR[XIndex, YIndex], Quaternion.identity);
+                    //yield return new WaitForSeconds(0.02f);
                     //delayTime += 0.02f;
                 }
             }
         }
+
         destroyUnits(unitsXIndex, unitsYIndex);
+
+        for (int i = 0; i < unitsXIndex.Count; i++)
+        {
+            Instantiate(AllUnitsTypeDestroyEff, PuzzleGenerator.Instance._unitPosARR[unitsXIndex[i], unitsYIndex[i]], Quaternion.identity);
+            yield return new WaitForSeconds(0.02f);
+        }
 
     }
 
-    void destroyAllUnitsOfColumn(int col)
+    void destroyAllUnitsOfColumn(int col, int YTarget)
     {
         List<int> unitsXIndex = new List<int>();
         List<int> unitsYIndex = new List<int>();
@@ -292,12 +328,14 @@ public class ChainedUnitsScanner : MonoBehaviour
                 unitsYIndex.Add(YIndex);
             }
         }
-        destroyUnits(unitsXIndex, unitsYIndex);
+        //destroyUnits(unitsXIndex, unitsYIndex);
+        PuzzleGenerator.Instance._unitARR[col, YTarget].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.noEff;
+        destroyUnits(col, YTarget, unitsXIndex, unitsYIndex, _scanUnitARR[col, YTarget]._value, UnitInfo.SpecialEff.noEff);
 
         Instantiate(VLightningDestroyEff, new Vector2(PuzzleGenerator.Instance._unitPosARR[col, 0].x, 0f), VLightningDestroyEff.transform.rotation);
     }
 
-    void destroyAllUnitsOfRow(int row)
+    void destroyAllUnitsOfRow(int XTarget, int row)
     {
         List<int> unitsXIndex = new List<int>();
         List<int> unitsYIndex = new List<int>();
@@ -311,97 +349,99 @@ public class ChainedUnitsScanner : MonoBehaviour
                 unitsYIndex.Add(row);
             }
         }
-        destroyUnits(unitsXIndex, unitsYIndex);
+        //destroyUnits(unitsXIndex, unitsYIndex);
+        PuzzleGenerator.Instance._unitARR[XTarget, row].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.noEff;
+        destroyUnits(XTarget, row, unitsXIndex, unitsYIndex, _scanUnitARR[XTarget, row]._value, UnitInfo.SpecialEff.noEff);
 
         Instantiate(HLightningDestroyEff, new Vector2(0f, PuzzleGenerator.Instance._unitPosARR[0, row].y), HLightningDestroyEff.transform.rotation);
     }
 
-    void destroyAllLocalUnits(int XIndex, int YIndex)
+    void destroyAllLocalUnits(int XTarget, int YTarget)
     {
         List<int> unitsXIndex = new List<int>();
         List<int> unitsYIndex = new List<int>();
 
-        if (XIndex > 0 && XIndex < PuzzleGenerator.Instance._columns - 1 && YIndex > 0 && YIndex < PuzzleGenerator.Instance._rows - 1)
+        if (XTarget > 0 && XTarget < PuzzleGenerator.Instance._columns - 1 && YTarget > 0 && YTarget < PuzzleGenerator.Instance._rows - 1)
         {
             print("middle");
-            if (!_scanUnitARR[XIndex - 1, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex + 1, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex - 1, YIndex]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex); }
-            if (!_scanUnitARR[XIndex + 1, YIndex]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex); }
-            if (!_scanUnitARR[XIndex - 1, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex + 1); }
-            if (!_scanUnitARR[XIndex, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex + 1); }
-            if (!_scanUnitARR[XIndex + 1, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex + 1); }
+            if (!_scanUnitARR[XTarget - 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget + 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget - 1, YTarget]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget); }
+            if (!_scanUnitARR[XTarget + 1, YTarget]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget); }
+            if (!_scanUnitARR[XTarget - 1, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget + 1); }
+            if (!_scanUnitARR[XTarget, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget + 1); }
+            if (!_scanUnitARR[XTarget + 1, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget + 1); }
         }
-        else if (XIndex == 0 && YIndex == 0)
+        else if (XTarget == 0 && YTarget == 0)
         {
             print("bottom left");
-            if (!_scanUnitARR[XIndex + 1, YIndex]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex); }
-            if (!_scanUnitARR[XIndex, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex + 1); }
-            if (!_scanUnitARR[XIndex + 1, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex + 1); }
+            if (!_scanUnitARR[XTarget + 1, YTarget]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget); }
+            if (!_scanUnitARR[XTarget, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget + 1); }
+            if (!_scanUnitARR[XTarget + 1, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget + 1); }
         }
-        else if (XIndex == 0 && YIndex == PuzzleGenerator.Instance._rows - 1)
+        else if (XTarget == 0 && YTarget == PuzzleGenerator.Instance._rows - 1)
         {
             print("top left");
-            if (!_scanUnitARR[XIndex, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex + 1, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex + 1, YIndex]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex); }
+            if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget + 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget + 1, YTarget]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget); }
         }
-        else if (XIndex == PuzzleGenerator.Instance._columns - 1 && YIndex == PuzzleGenerator.Instance._rows - 1)
+        else if (XTarget == PuzzleGenerator.Instance._columns - 1 && YTarget == PuzzleGenerator.Instance._rows - 1)
         {
             print("top right");
-            if (!_scanUnitARR[XIndex - 1, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex - 1, YIndex]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex); }
+            if (!_scanUnitARR[XTarget - 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget - 1, YTarget]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget); }
         }
-        else if (XIndex == PuzzleGenerator.Instance._columns - 1 && YIndex == 0)
+        else if (XTarget == PuzzleGenerator.Instance._columns - 1 && YTarget == 0)
         {
             print("bottom right");
-            if (!_scanUnitARR[XIndex - 1, YIndex]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex); }
-            if (!_scanUnitARR[XIndex - 1, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex + 1); }
-            if (!_scanUnitARR[XIndex, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex + 1); }
+            if (!_scanUnitARR[XTarget - 1, YTarget]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget); }
+            if (!_scanUnitARR[XTarget - 1, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget + 1); }
+            if (!_scanUnitARR[XTarget, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget + 1); }
         }
-        else if (XIndex == 0)
+        else if (XTarget == 0)
         {
             print("left");
-            if (!_scanUnitARR[XIndex, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex + 1, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex + 1, YIndex]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex); }
-            if (!_scanUnitARR[XIndex, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex + 1); }
-            if (!_scanUnitARR[XIndex + 1, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex + 1); }
+            if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget + 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget + 1, YTarget]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget); }
+            if (!_scanUnitARR[XTarget, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget + 1); }
+            if (!_scanUnitARR[XTarget + 1, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget + 1); }
         }
-        else if (XIndex == PuzzleGenerator.Instance._columns - 1)
+        else if (XTarget == PuzzleGenerator.Instance._columns - 1)
         {
             print("right");
-            if (!_scanUnitARR[XIndex - 1, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex - 1, YIndex]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex); }
-            if (!_scanUnitARR[XIndex - 1, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex + 1); }
-            if (!_scanUnitARR[XIndex, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex + 1); }
+            if (!_scanUnitARR[XTarget - 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget - 1, YTarget]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget); }
+            if (!_scanUnitARR[XTarget - 1, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget + 1); }
+            if (!_scanUnitARR[XTarget, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget + 1); }
         }
-        else if (YIndex == 0)
+        else if (YTarget == 0)
         {
             print("bottom");
-            if (!_scanUnitARR[XIndex - 1, YIndex]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex); }
-            if (!_scanUnitARR[XIndex + 1, YIndex]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex); }
-            if (!_scanUnitARR[XIndex - 1, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex + 1); }
-            if (!_scanUnitARR[XIndex, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex + 1); }
-            if (!_scanUnitARR[XIndex + 1, YIndex + 1]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex + 1); }
+            if (!_scanUnitARR[XTarget - 1, YTarget]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget); }
+            if (!_scanUnitARR[XTarget + 1, YTarget]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget); }
+            if (!_scanUnitARR[XTarget - 1, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget + 1); }
+            if (!_scanUnitARR[XTarget, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget + 1); }
+            if (!_scanUnitARR[XTarget + 1, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget + 1); }
         }
-        else if (YIndex == PuzzleGenerator.Instance._rows - 1)
+        else if (YTarget == PuzzleGenerator.Instance._rows - 1)
         {
             print("top");
-            if (!_scanUnitARR[XIndex - 1, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex + 1, YIndex - 1]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex - 1); }
-            if (!_scanUnitARR[XIndex - 1, YIndex]._isChained) { unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex); }
-            if (!_scanUnitARR[XIndex + 1, YIndex]._isChained) { unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex); }
+            if (!_scanUnitARR[XTarget - 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget + 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget - 1); }
+            if (!_scanUnitARR[XTarget - 1, YTarget]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget); }
+            if (!_scanUnitARR[XTarget + 1, YTarget]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget); }
         }
 
-        PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.noEff;
-        destroyUnits(XIndex, YIndex, unitsXIndex, unitsYIndex, _scanUnitARR[XIndex, YIndex]._value, UnitInfo.SpecialEff.noEff);
+        PuzzleGenerator.Instance._unitARR[XTarget, YTarget].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.noEff;
+        destroyUnits(XTarget, YTarget, unitsXIndex, unitsYIndex, _scanUnitARR[XTarget, YTarget]._value, UnitInfo.SpecialEff.noEff);
 
-        Instantiate(ExplodeDestroyEff, PuzzleGenerator.Instance._unitPosARR[XIndex, YIndex], Quaternion.identity);
+        Instantiate(ExplodeDestroyEff, PuzzleGenerator.Instance._unitPosARR[XTarget, YTarget], Quaternion.identity);
     }
 
     #endregion
@@ -425,13 +465,13 @@ public class ChainedUnitsScanner : MonoBehaviour
             {
                 case UnitInfo.SpecialEff.vLightning:
                     {
-                        destroyAllUnitsOfColumn(unitsXIndex[i]);
+                        destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
                         break;
                     }
 
                 case UnitInfo.SpecialEff.hLightning:
                     {
-                        destroyAllUnitsOfRow(unitsYIndex[i]);
+                        destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
                         break;
                     }
 
@@ -478,13 +518,13 @@ public class ChainedUnitsScanner : MonoBehaviour
             {
                 case UnitInfo.SpecialEff.vLightning:
                     {
-                        destroyAllUnitsOfColumn(Xtarget);
+                        destroyAllUnitsOfColumn(Xtarget, Ytarget);
                         break;
                     }
 
                 case UnitInfo.SpecialEff.hLightning:
                     {
-                        destroyAllUnitsOfRow(Ytarget);
+                        destroyAllUnitsOfRow(Xtarget, Ytarget);
                         break;
                     }
 
@@ -509,13 +549,13 @@ public class ChainedUnitsScanner : MonoBehaviour
                 {
                     case UnitInfo.SpecialEff.vLightning:
                         {
-                            destroyAllUnitsOfColumn(Xtarget);
+                            destroyAllUnitsOfColumn(Xtarget, Ytarget);
                             break;
                         }
 
                     case UnitInfo.SpecialEff.hLightning:
                         {
-                            destroyAllUnitsOfRow(Ytarget);
+                            destroyAllUnitsOfRow(Xtarget, Ytarget);
                             break;
                         }
 
@@ -538,36 +578,42 @@ public class ChainedUnitsScanner : MonoBehaviour
             {
                 PuzzleGenerator.Instance.upgradeToDestroyAllUnit(Xtarget, Ytarget);
             }
+            else if (targetNextEff != UnitInfo.SpecialEff.noEff)
+            {
+                PuzzleGenerator.Instance.upgradeUnit(Xtarget, Ytarget, targetNextEff);
+            }
             else
             {
-                if (targetNextEff != UnitInfo.SpecialEff.noEff)
-                {
-                    PuzzleGenerator.Instance.upgradeUnit(Xtarget, Ytarget, targetNextEff);
-                }
+                //Instantiate(unitDestroyEff[_scanUnitARR[Xtarget, Ytarget]._value],
+                //                    PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget],
+                //                    Quaternion.identity);
+                createDestroyEff(_scanUnitARR[Xtarget, Ytarget]._value, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
             }
 
             // Then destroy all other unit that are in chain
             for (int i = 0; i < unitsYIndex.Count; i++)
             {
                 disableUnit(unitsXIndex[i], unitsYIndex[i]);
-                if (PuzzleGenerator.Instance._unitARR[unitsXIndex[i], unitsYIndex[i]].GetComponent<UnitInfo>()._value
+                UnitInfo unitInfo = PuzzleGenerator.Instance._unitARR[unitsXIndex[i], unitsYIndex[i]].GetComponent<UnitInfo>();
+
+                if (unitInfo._value
                     == PuzzleGenerator.Instance.Unit.Length - 1)
                 {
                     StartCoroutine(destroyAllUnitsOfType(PuzzleGenerator.Instance._unitARR[Xtarget, Ytarget].GetComponent<UnitInfo>()._value));
                 }
                 else
                 {
-                    switch (PuzzleGenerator.Instance._unitARR[unitsXIndex[i], unitsYIndex[i]].GetComponent<UnitInfo>()._unitEff)
+                    switch (unitInfo._unitEff)
                     {
                         case UnitInfo.SpecialEff.vLightning:
                             {
-                                destroyAllUnitsOfColumn(unitsXIndex[i]);
+                                destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
                                 break;
                             }
 
                         case UnitInfo.SpecialEff.hLightning:
                             {
-                                destroyAllUnitsOfRow(unitsYIndex[i]);
+                                destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
                                 break;
                             }
 
@@ -579,12 +625,16 @@ public class ChainedUnitsScanner : MonoBehaviour
 
                         case UnitInfo.SpecialEff.noEff:
                             {
+                                //Instantiate(unitDestroyEff[unitInfo._value], 
+                                //    PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex], 
+                                //    Quaternion.identity);
+                                createDestroyEff(unitInfo._value, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
                                 break;
                             }
 
                         default: break;
                     }
-                }                
+                }
             }
         }
     }
@@ -1515,7 +1565,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             {
                 return true;
             }
-        }      
+        }
         return false;
     }
 
@@ -1857,4 +1907,21 @@ public class ChainedUnitsScanner : MonoBehaviour
         }
     }
     #endregion
+
+    public void createDestroyEff(int value, Vector2 spawnPos)
+    {
+        GameObject destroyEff = null;
+
+        for (int i = 0; i < specialEffPoolSize; i++)
+        {
+            destroyEff = _specialEffPoolARR[value][i];
+            if (!destroyEff.activeSelf)
+            {
+                destroyEff.transform.position = spawnPos;
+                destroyEff.SetActive(true);
+                break;
+            }
+        }
+        // destroyEff;
+    }
 }

@@ -99,7 +99,7 @@ public class PuzzleGenerator : MonoBehaviour {
         _valueARR[1, 2] = 5;
         _valueARR[2, 2] = 1;
         _valueARR[3, 2] = 4;
-        _valueARR[1, 3] = 7;
+        _valueARR[2, 5] = 7;
         _valueARR[2, 3] = 4;
         _valueARR[3, 3] = 4;
         _valueARR[4, 4] = 4;
@@ -137,7 +137,7 @@ public class PuzzleGenerator : MonoBehaviour {
         // ----------Fake unit value for testing ------------------
 
         //_unitARR[1, 0].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.vLightning;
-        upgradeUnit(2, 3, UnitInfo.SpecialEff.explode);
+        upgradeUnit(2, 3, UnitInfo.SpecialEff.vLightning);
         //upgradeUnit(3, 2, UnitInfo.SpecialEff.hLightning);
         upgradeUnit(0, 2, UnitInfo.SpecialEff.vLightning);
 
@@ -284,6 +284,7 @@ public class PuzzleGenerator : MonoBehaviour {
     public IEnumerator reOrganizePuzzle()
     {
         //yield return new WaitForSeconds(1f);
+        List<GameObject> unitsList = new List<GameObject>();
 
         // Make Units fall down after destroy state
         for (int XIndex = 0; XIndex < _columns; XIndex++)
@@ -308,15 +309,21 @@ public class PuzzleGenerator : MonoBehaviour {
                         _unitARR[XIndex, YIndex - nullObjectCount] = _unitARR[XIndex, YIndex];
                         _unitARR[XIndex, YIndex - nullObjectCount].GetComponent<UnitInfo>()._YIndex -= nullObjectCount;
 
+                        // Add this unit to list to scan again
+                        unitsList.Add(_unitARR[XIndex, YIndex - nullObjectCount]);
                     }
                 }
             }
+            // Regen units
             if (nullObjectCount > 0)
             {
                 for (int i = 0; i < nullObjectCount; i++)
                 {
                     Vector2 regenUnitSpawnPos = new Vector2(_unitPosARR[XIndex, _rows - i - 1].x, regenYpos + i * YPadding);
                     initUnit(regenUnitSpawnPos, XIndex, _rows - i - 1, Random.Range(0, Unit.Length - 1), 0);
+
+                    // Add this unit to list to scan again
+                    unitsList.Add(_unitARR[XIndex, _rows - i - 1]);
                     //initUnit(_unitPosARR[XIndex, _rows - i - 1], XIndex, _rows - i - 1, Random.Range(0, Unit.Length - 1), 0);
                 }
             }
@@ -331,14 +338,14 @@ public class PuzzleGenerator : MonoBehaviour {
 
         // ----------Fake for testing ------------------
 
-        List<GameObject> unitsList = new List<GameObject>();
-        for (int XIndex = 0; XIndex < _columns; XIndex++)
-        {
-            for (int YIndex = 0; YIndex < _rows; YIndex++)
-            {
-                unitsList.Add(_unitARR[XIndex, YIndex]);
-            }
-        }
+
+        //for (int XIndex = 0; XIndex < _columns; XIndex++)
+        //{
+        //    for (int YIndex = 0; YIndex < _rows; YIndex++)
+        //    {
+        //        unitsList.Add(_unitARR[XIndex, YIndex]);
+        //    }
+        //}
         StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
         // --------------------------------------------
     }
