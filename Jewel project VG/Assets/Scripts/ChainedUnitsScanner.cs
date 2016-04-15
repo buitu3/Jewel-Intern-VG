@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -33,6 +34,8 @@ public class ChainedUnitsScanner : MonoBehaviour
     public GameObject ExplodeDestroyEff;
     public GameObject AllUnitsTypeDestroyEff;
     public GameObject[] unitDestroyEff;
+    public Text unitScoreText;
+    public Canvas scoreTextCanvas;
 
     public AnimationClip lightningDestroyAllClip;
 
@@ -42,6 +45,12 @@ public class ChainedUnitsScanner : MonoBehaviour
 
     private List<GameObject>[] _specialEffPoolARR;
     private int specialEffPoolSize;
+
+    private List<Text> unitScoreTextPool;
+    private int unitScoreTextPoolSize;
+
+    private int bonusPoint = 0;
+    private int maxBonusPoint = 130;
 
     private bool chainedUnits;
 
@@ -90,6 +99,20 @@ public class ChainedUnitsScanner : MonoBehaviour
             }
         }
 
+        // Init unitScoreText Pool
+        unitScoreTextPool = new List<Text>();
+        unitScoreTextPoolSize = PuzzleGenerator.Instance._rows * PuzzleGenerator.Instance._columns;
+        for (int i = 0; i < unitScoreTextPoolSize; i++)
+        {
+            Text scoreText = Instantiate(unitScoreText, poolPos, Quaternion.identity) as Text;
+            scoreText.gameObject.SetActive(false);
+            unitScoreTextPool.Add(scoreText);
+            scoreText.transform.SetParent(scoreTextCanvas.transform, false);
+        }
+
+        //Text a = Instantiate(unitScoreText, new Vector2(0, 0), Quaternion.identity) as Text;
+        //a.text = "130";
+        //a.transform.SetParent(scoreTextCanvas.transform, false);
     }
 
     //==============================================
@@ -151,6 +174,8 @@ public class ChainedUnitsScanner : MonoBehaviour
         UnitInfo focusedUnitInfo = focusedUnit.GetComponent<UnitInfo>();
         UnitInfo otherUnitInfo = otherUnit.GetComponent<UnitInfo>();
 
+        bonusPoint = 0;
+
         // Check if swapped unit is the special "Destroy all" type
         // If true destroy all jewels that has the same type with the other swapped unit
         if (focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
@@ -183,7 +208,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             // If there are chained units
             if (chainedUnits)
             {
-                yield return new WaitForSeconds(0.6f);
+                yield return new WaitForSeconds(0.4f);
                 StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
                 //PuzzleGenerator.Instance.reOrganizePuzzle();
             }
@@ -230,7 +255,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             scanThreeUnitsChainedType(unitsXIndex[i], unitsYIndex[i]);
         }
 
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.4f);
 
         // If there are chained units
         if (chainedUnits)
@@ -240,6 +265,7 @@ public class ChainedUnitsScanner : MonoBehaviour
         }
         else
         {
+            bonusPoint = 0;
             GameController.Instance.currentState = GameController.GameState.idle;
         }
     }
@@ -453,15 +479,17 @@ public class ChainedUnitsScanner : MonoBehaviour
     /// <param name="unitsYIndex"></param>
     void destroyUnits(List<int> unitsXIndex, List<int> unitsYIndex)
     {
-        //if (_scanUnitARR[targetXIndex, targetYIndex]._value == PuzzleGenerator.Instance.Unit.Length)
-        //{
-        //    destroyAllUnitsOfType(_scanUnitARR[localsXIndex[0], localsYIndex[0]]._value);
-        //}
+        if (bonusPoint < maxBonusPoint)
+        {
+            bonusPoint += 10;
+        }
+
         for (int i = 0; i < unitsYIndex.Count; i++)
         {
             disableUnit(unitsXIndex[i], unitsYIndex[i]);
+            UnitInfo unitInfo = PuzzleGenerator.Instance._unitARR[unitsXIndex[i], unitsYIndex[i]].GetComponent<UnitInfo>();
 
-            switch (PuzzleGenerator.Instance._unitARR[unitsXIndex[i], unitsYIndex[i]].GetComponent<UnitInfo>()._unitEff)
+            switch (unitInfo._unitEff)
             {
                 case UnitInfo.SpecialEff.vLightning:
                     {
@@ -483,9 +511,15 @@ public class ChainedUnitsScanner : MonoBehaviour
 
                 case UnitInfo.SpecialEff.noEff:
                     {
+                        activateDestroyEff(unitInfo._value, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
+
+                        // Activate bonus unit score text
+                        getUnitScoreText(bonusPoint, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
+                        GameController.Instance.updateScore(bonusPoint);
+
+
                         break;
                     }
-
                 default: break;
             }
         }
@@ -584,13 +618,28 @@ public class ChainedUnitsScanner : MonoBehaviour
             }
             else
             {
-                //Instantiate(unitDestroyEff[_scanUnitARR[Xtarget, Ytarget]._value],
-                //                    PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget],
-                //                    Quaternion.identity);
-                createDestroyEff(_scanUnitARR[Xtarget, Ytarget]._value, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
+                activateDestroyEff(_scanUnitARR[Xtarget, Ytarget]._value, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
+
+                // Activate bonus unit score text
+                if (bonusPoint < maxBonusPoint)
+                {
+                    getUnitScoreText(bonusPoint + 10, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
+                    GameController.Instance.updateScore(bonusPoint + 10);
+                }
+                else
+                {
+                    getUnitScoreText(maxBonusPoint, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
+                    GameController.Instance.updateScore(maxBonusPoint);
+
+                }
             }
 
             // Then destroy all other unit that are in chain
+            if (bonusPoint < maxBonusPoint)
+            {
+                bonusPoint += 10;
+            }
+
             for (int i = 0; i < unitsYIndex.Count; i++)
             {
                 disableUnit(unitsXIndex[i], unitsYIndex[i]);
@@ -625,10 +674,13 @@ public class ChainedUnitsScanner : MonoBehaviour
 
                         case UnitInfo.SpecialEff.noEff:
                             {
-                                //Instantiate(unitDestroyEff[unitInfo._value], 
-                                //    PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex], 
-                                //    Quaternion.identity);
-                                createDestroyEff(unitInfo._value, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
+                                activateDestroyEff(unitInfo._value, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
+
+                                // Activate bonus unit score text
+                                getUnitScoreText(bonusPoint, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
+                                GameController.Instance.updateScore(bonusPoint);
+
+
                                 break;
                             }
 
@@ -1908,7 +1960,7 @@ public class ChainedUnitsScanner : MonoBehaviour
     }
     #endregion
 
-    public void createDestroyEff(int value, Vector2 spawnPos)
+    public void activateDestroyEff(int value, Vector2 spawnPos)
     {
         GameObject destroyEff = null;
 
@@ -1922,6 +1974,22 @@ public class ChainedUnitsScanner : MonoBehaviour
                 break;
             }
         }
-        // destroyEff;
+    }
+
+    public void getUnitScoreText(int value, Vector2 spawnPos)
+    {
+        Text unitScoreText = null;
+
+        for (int i = 0; i < unitScoreTextPoolSize; i++)
+        {
+            unitScoreText = unitScoreTextPool[i];
+            if (!unitScoreText.gameObject.activeSelf)
+            {
+                unitScoreText.transform.position = spawnPos;
+                unitScoreText.text = value.ToString();
+                unitScoreText.gameObject.SetActive(true);
+                break;
+            }
+        }
     }
 }
