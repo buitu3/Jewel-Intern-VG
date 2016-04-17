@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 using System.Collections;
 
 public class UnitInfo : MonoBehaviour
@@ -37,6 +38,11 @@ public class UnitInfo : MonoBehaviour
     //==============================================
     // Unity Methods
     //==============================================
+
+    //void Start()
+    //{
+    //    transform.DOPunchScale(new Vector3(0.3f, 0.3f, 0f), 3f, 0, 1f).SetLoops(-1).SetEase(Ease.Linear);
+    //}
 
     //==============================================
     // Methods

@@ -16,9 +16,12 @@ public class PointTextController : MonoBehaviour {
         pointTransform = GetComponent<Transform>();
 
         //nextPos = new Vector3(0f, speed, 0f);
+    }
 
-        //StartCoroutine(selfDeactivate(lifeTime));
-	}
+    void OnEnable()
+    {
+        StartCoroutine(selfDeactivate(lifeTime));
+    }
 
     void FixedUpdate()
     {
