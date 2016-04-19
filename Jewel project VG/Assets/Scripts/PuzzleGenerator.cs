@@ -93,21 +93,24 @@ public class PuzzleGenerator : MonoBehaviour {
         //{
         //    _valueARR[7, j] = 2;
         //}
-        _valueARR[1, 1] = 2;
-        _valueARR[2, 1] = 5;
-        _valueARR[3, 1] = 6;
-        _valueARR[1, 2] = 5;
-        _valueARR[2, 2] = 1;
-        _valueARR[3, 2] = 4;
-        _valueARR[2, 5] = 7;
-        _valueARR[2, 3] = 4;
-        _valueARR[3, 3] = 4;
-        _valueARR[4, 4] = 4;
+        //_valueARR[1, 1] = 2;
+        //_valueARR[2, 1] = 5;
+        //_valueARR[3, 1] = 6;
+        //_valueARR[1, 2] = 5;
+        //_valueARR[2, 2] = 1;
+        //_valueARR[3, 2] = 4;
+        //_valueARR[2, 5] = 7;
+        //_valueARR[2, 3] = 4;
+        //_valueARR[3, 3] = 4;
+        //_valueARR[4, 4] = 4;
+
+        //_valueARR[2, 6] = 4;
+        //_valueARR[2, 7] = 4;
+        //_valueARR[2, 8] = 4;
 
         //_valueARR[4, 2] = 3;
         //_valueARR[5, 2] = 2;
 
-        _valueARR[1, 0] = 6;
         // --------------------------------------------
 
         // Init Jewel Puzzle and BG
@@ -125,8 +128,6 @@ public class PuzzleGenerator : MonoBehaviour {
                 GameObject UnitBG = Instantiate(UnitBGPreb, spawnPos, Quaternion.identity) as GameObject;
                 UnitBG.transform.SetParent(unitBGHolder);
 
-                //int unitType = Random.Range(0, Unit.Length - 1);
-                //Instantiate(Unit[unitType], spawnPos, Quaternion.identity);
                 initUnit(spawnPos, XIndex, YIndex, _valueARR[XIndex, YIndex], 0);
             }
         }
@@ -137,7 +138,11 @@ public class PuzzleGenerator : MonoBehaviour {
         // ----------Fake unit value for testing ------------------
 
         //_unitARR[1, 0].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.vLightning;
-        upgradeUnit(2, 3, UnitInfo.SpecialEff.vLightning);
+        upgradeUnit(2, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        upgradeUnit(3, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        upgradeUnit(4, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        upgradeUnit(5, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+
         //upgradeUnit(3, 2, UnitInfo.SpecialEff.hLightning);
         upgradeUnit(0, 2, UnitInfo.SpecialEff.vLightning);
 
@@ -174,6 +179,8 @@ public class PuzzleGenerator : MonoBehaviour {
     //==============================================
     // Methods
     //==============================================
+
+    #region Init Unit methods
 
     public void initUnit(Vector2 spawnPos, int XIndex, int YIndex, int value, UnitInfo.SpecialEff specialEff)
     {
@@ -217,6 +224,70 @@ public class PuzzleGenerator : MonoBehaviour {
         }
     }
 
+    public void initUnit(Vector2 spawnPos, int XIndex, int YIndex, int value,
+        UnitInfo.SpecialEff specialEff, UnitInfo.NegativeEff negativeEff)
+    {
+        // Get unit from pool
+        //_unitARR[XIndex, YIndex] = Instantiate(Unit[value], spawnPos, Quaternion.identity) as GameObject;
+        _unitARR[XIndex, YIndex] = getJewel(value, spawnPos);
+        _unitARR[XIndex, YIndex].transform.SetParent(unitHolder);
+
+        // Set infomation for this unit
+        UnitInfo unitInfo = _unitARR[XIndex, YIndex].GetComponent<UnitInfo>();
+        unitInfo._XIndex = XIndex;
+        unitInfo._YIndex = YIndex;
+        unitInfo._value = value;
+        unitInfo._unitEff = specialEff;
+        unitInfo._negativeEff = negativeEff;
+
+        // Enable specialEff if this is SpecialEff unit
+        switch (specialEff)
+        {
+            case UnitInfo.SpecialEff.vLightning:
+                {
+                    unitInfo.VerticalLightningEff.SetActive(true);
+                    break;
+                }
+            case UnitInfo.SpecialEff.hLightning:
+                {
+                    unitInfo.HorizontalLightningEff.SetActive(true);
+                    break;
+                }
+            case UnitInfo.SpecialEff.explode:
+                {
+                    unitInfo.ExplosiveSparkEff.SetActive(true);
+                    break;
+                }
+            default: break;
+        }
+
+        // Enable negativeEff if this is negativeEff unit
+        switch (negativeEff)
+        {
+            case UnitInfo.NegativeEff.frozen:
+                {
+                    unitInfo.FrozenEff.SetActive(true);
+                    break;
+                }
+            case UnitInfo.NegativeEff.locked:
+                {
+                    break;
+                }
+            case UnitInfo.NegativeEff.hollow:
+                {
+                    break;
+                }
+            default: break;
+        }
+
+        //If this is regen Unit,move to it's original pos
+        if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
+        {
+            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(Ease.InQuad);
+        }
+    }
+
+
     /// <summary>
     /// Upgrade this Unit into Special destroy all type
     /// </summary>
@@ -249,6 +320,16 @@ public class PuzzleGenerator : MonoBehaviour {
         ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = false;
     }
 
+    public void upgradeUnit(int XIndex, int YIndex, UnitInfo.SpecialEff specialEff, UnitInfo.NegativeEff negativeEff)
+    {
+        int value = _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value;
+
+        ChainedUnitsScanner.Instance.disableUnit(XIndex, YIndex);
+        initUnit(PuzzleGenerator.Instance._unitPosARR[XIndex, YIndex], XIndex, YIndex, value, specialEff, negativeEff);
+        ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._value = value;
+        ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = false;
+    }
+
     public GameObject getJewel(int value, Vector2 spawnPos)
     {
         GameObject jewel = null;
@@ -266,6 +347,8 @@ public class PuzzleGenerator : MonoBehaviour {
 
         return jewel;
     }
+
+    #endregion
 
     private int[,] generateValueMatrix()
     {
@@ -290,6 +373,7 @@ public class PuzzleGenerator : MonoBehaviour {
         for (int XIndex = 0; XIndex < _columns; XIndex++)
         {
             int nullObjectCount = 0;
+            int borrowUnitCount = 0;
             for (int YIndex = 0; YIndex < _rows; YIndex++)
             {
                 // Search for emty space
@@ -297,13 +381,29 @@ public class PuzzleGenerator : MonoBehaviour {
                 {
                     nullObjectCount += 1;
                 }
+                // If object is frozen,reset nullObjectCount to prevent falling down
+                else if (_unitARR[XIndex, YIndex] != null && _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+                {
+                    borrowUnitCount = nullObjectCount;
+                    nullObjectCount = 0;
+                    //break;
+                    // If there are units that need to borrow from other col
+                    if (borrowUnitCount > 0)
+                    {
+
+                    }
+                }
                 else
                 {
                     // Make Unit fall down if there are empty space below
                     if (nullObjectCount > 0)
                     {
+                        //print(XIndex + ":::" + YIndex + ":::" + nullObjectCount);
                         Vector3 targetPos = _unitPosARR[XIndex, YIndex - nullObjectCount];
                         StartCoroutine(dropUnit(_unitARR[XIndex, YIndex], targetPos));
+
+                        // Make scanUnit that has fallen down unit become chained
+                        ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = true;
 
                         // Update Unit info
                         _unitARR[XIndex, YIndex - nullObjectCount] = _unitARR[XIndex, YIndex];
@@ -314,6 +414,9 @@ public class PuzzleGenerator : MonoBehaviour {
                     }
                 }
             }
+            // --------------------------------------
+            //      Temporary Disable
+            // --------------------------------------
             // Regen units
             if (nullObjectCount > 0)
             {
@@ -345,9 +448,10 @@ public class PuzzleGenerator : MonoBehaviour {
         //    {
         //        unitsList.Add(_unitARR[XIndex, YIndex]);
         //    }
-        //}
-        StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
+        //}        
         // --------------------------------------------
+
+        StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
     }
 
     private IEnumerator dropUnit(GameObject Unit, Vector2 targetPos)

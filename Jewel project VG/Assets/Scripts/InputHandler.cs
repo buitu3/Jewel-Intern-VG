@@ -59,17 +59,20 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
             // If there is none Unit focused
             if (GameController.Instance.currentState == GameController.GameState.idle)
             {
-                // Focus the hitted Unit
-                GameController.Instance.currentState = GameController.GameState.focusUnit;
-                focusedUnit = unitHit.transform.gameObject;
+                if (unitHit.collider.gameObject.GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
+                {
+                    // Focus the hitted Unit
+                    GameController.Instance.currentState = GameController.GameState.focusUnit;
+                    focusedUnit = unitHit.transform.gameObject;
 
-                unitHighlight.SetActive(true);
-                unitHighlight.transform.position = unitHit.transform.position;
+                    unitHighlight.SetActive(true);
+                    unitHighlight.transform.position = unitHit.transform.position;
+                }
             }
             // If there is focused Unit
             else if (GameController.Instance.currentState == GameController.GameState.focusUnit)
             {
-                SwapType swapType = checkLocalUnits(focusedUnit, unitHit.transform.gameObject);
+                SwapType swapType = checkSwapable(focusedUnit, unitHit.transform.gameObject);
                 if (swapType == SwapType.same)
                 {
                     return;
@@ -121,7 +124,7 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
             // If ray hit on an Unit
             if (unitHit.collider != null)
             {
-                SwapType swapType = checkLocalUnits(focusedUnit, unitHit.transform.gameObject);
+                SwapType swapType = checkSwapable(focusedUnit, unitHit.transform.gameObject);
                 if (swapType == SwapType.same)
                 {
                     return;
@@ -150,7 +153,7 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
     // Methods
     //==============================================
 
-    public SwapType checkLocalUnits(GameObject currentUnit, GameObject nextUnit)
+    public SwapType checkSwapable(GameObject currentUnit, GameObject nextUnit)
     {
         UnitInfo currentUnitInfo = currentUnit.GetComponent<UnitInfo>();
         UnitInfo nextUnitInfo = nextUnit.GetComponent<UnitInfo>();
@@ -158,7 +161,11 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
         int deltaY = nextUnitInfo._YIndex - currentUnitInfo._YIndex;
         //print(deltaX + ":::" + deltaY);
 
-        if (deltaX == 0 && deltaY == 1)
+        if (nextUnitInfo._negativeEff == UnitInfo.NegativeEff.frozen)
+        {
+            return SwapType.none;
+        }
+        else if (deltaX == 0 && deltaY == 1)
         {
             //print("swap up");
             return SwapType.up;

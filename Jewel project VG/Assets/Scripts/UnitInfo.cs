@@ -21,10 +21,14 @@ public class UnitInfo : MonoBehaviour
     public int _value;
     //[HideInInspector]
     public SpecialEff _unitEff;
+    //[HideInInspector]
+    public NegativeEff _negativeEff;
 
     public GameObject HorizontalLightningEff;
     public GameObject VerticalLightningEff;
     public GameObject ExplosiveSparkEff;
+
+    public GameObject FrozenEff;
 
     public enum SpecialEff
     {
@@ -32,6 +36,15 @@ public class UnitInfo : MonoBehaviour
         hLightning,
         vLightning,
         explode,
+        _effsCount
+    }
+
+    public enum NegativeEff
+    {
+        noEff = 0,
+        frozen,
+        locked,
+        hollow,
         _effsCount
     }
 
@@ -47,4 +60,5 @@ public class UnitInfo : MonoBehaviour
     //==============================================
     // Methods
     //==============================================
+
 }

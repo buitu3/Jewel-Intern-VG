@@ -24,11 +24,14 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 1024
@@ -39,14 +42,16 @@ TextureImporter:
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
+  rGBM: 0
   compressionQuality: 50
+  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 50
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings:
@@ -54,10 +59,12 @@ TextureImporter:
     maxTextureSize: 1024
     textureFormat: -2
     compressionQuality: 50
+    allowsAlphaSplitting: 0
   - buildTarget: Android
     maxTextureSize: 1024
     textureFormat: -3
     compressionQuality: 50
+    allowsAlphaSplitting: 0
   spriteSheet:
     sprites:
     - name: ice
@@ -68,8 +75,13 @@ TextureImporter:
         width: 36
         height: 36
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -18, y: 18}
+        - {x: -18, y: -18}
+        - {x: 18, y: -18}
+        - {x: 18, y: 18}
     - name: ice1
       rect:
         serializedVersion: 2
@@ -78,8 +90,14 @@ TextureImporter:
         width: 44
         height: 41
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -22, y: 20.5}
+        - {x: -22, y: -18.5}
+        - {x: -20, y: -20.5}
+        - {x: 22, y: -20.5}
+        - {x: 22, y: 20.5}
     - name: ice2
       rect:
         serializedVersion: 2
@@ -88,8 +106,14 @@ TextureImporter:
         width: 52
         height: 51
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -26, y: 25.5}
+        - {x: -26, y: -23.5}
+        - {x: -20, y: -25.5}
+        - {x: 26, y: -25.5}
+        - {x: 26, y: 25.5}
     - name: ice3
       rect:
         serializedVersion: 2
@@ -98,8 +122,14 @@ TextureImporter:
         width: 61
         height: 61
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -30.5, y: 30.5}
+        - {x: -30.5, y: -29.5}
+        - {x: -27.5, y: -30.5}
+        - {x: 30.5, y: -30.5}
+        - {x: 30.5, y: 30.5}
     - name: ice4
       rect:
         serializedVersion: 2
@@ -108,8 +138,13 @@ TextureImporter:
         width: 61
         height: 61
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -30.5, y: 30.5}
+        - {x: -30.5, y: -30.5}
+        - {x: 30.5, y: -30.5}
+        - {x: 30.5, y: 30.5}
     - name: khoa
       rect:
         serializedVersion: 2
@@ -118,8 +153,17 @@ TextureImporter:
         width: 63
         height: 51
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -30.5, y: 25.5}
+        - {x: -31.5, y: 24.5}
+        - {x: -31.5, y: 16.5}
+        - {x: -28.5, y: 8.5}
+        - {x: -12.5, y: -25.5}
+        - {x: 15.5, y: -25.5}
+        - {x: 31.5, y: -6.5}
+        - {x: 31.5, y: 25.5}
     - name: khoa1
       rect:
         serializedVersion: 2
@@ -128,8 +172,16 @@ TextureImporter:
         width: 62
         height: 50
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -31, y: 25}
+        - {x: -31, y: -1}
+        - {x: -25, y: -25}
+        - {x: 7, y: -25}
+        - {x: 30, y: 12}
+        - {x: 31, y: 16}
+        - {x: 31, y: 25}
     - name: khoa2
       rect:
         serializedVersion: 2
@@ -138,8 +190,47 @@ TextureImporter:
         width: 63
         height: 57
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 4.5, y: 17.5}
+        - {x: -5.5, y: 17.5}
+        - {x: -5.5, y: 16.5}
+        - {x: -4.5, y: 21.5}
+        - {x: -4.5, y: 23.5}
+        - {x: -7.5, y: 26.5}
+        - {x: -20.5, y: 26.5}
+        - {x: -31.5, y: 21.5}
+        - {x: -31.5, y: -25.5}
+        - {x: -30.5, y: -28.5}
+        - {x: 0.5, y: -28.5}
+        - {x: 16.5, y: 2.5}
+        - {x: 16.5, y: 10.5}
+        - {x: 13.5, y: 12.5}
+      - - {x: 25.5, y: 21.5}
+        - {x: 20.5, y: 20.5}
+        - {x: 16.5, y: 15.5}
+        - {x: 16.5, y: 10.5}
+        - {x: 23.5, y: 5.5}
+        - {x: 27.5, y: 5.5}
+        - {x: 31.5, y: 9.5}
+        - {x: 31.5, y: 21.5}
+      - - {x: -19.5, y: 28.5}
+        - {x: -31.5, y: 28.5}
+        - {x: -31.5, y: 12.5}
+        - {x: -29.5, y: 11.5}
+        - {x: -26.5, y: 12.5}
+        - {x: -19.5, y: 16.5}
+        - {x: -18.5, y: 21.5}
+        - {x: -18.5, y: 27.5}
+      - - {x: 11.5, y: 28.5}
+        - {x: 4.5, y: 21.5}
+        - {x: 4.5, y: 15.5}
+        - {x: 6.5, y: 12.5}
+        - {x: 16.5, y: 12.5}
+        - {x: 23.5, y: 16.5}
+        - {x: 23.5, y: 25.5}
+        - {x: 18.5, y: 28.5}
     - name: khoa3
       rect:
         serializedVersion: 2
@@ -148,7 +239,42 @@ TextureImporter:
         width: 62
         height: 56
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 26}
+        - {x: -31, y: 12}
+        - {x: -31, y: -2}
+        - {x: -22, y: -28}
+        - {x: 1, y: -28}
+        - {x: 16, y: -3}
+        - {x: 16, y: 17}
+        - {x: 2, y: 26}
+      - - {x: 20, y: 21}
+        - {x: 16, y: 14}
+        - {x: 16, y: 10}
+        - {x: 20, y: 5}
+        - {x: 25, y: 5}
+        - {x: 31, y: 10}
+        - {x: 31, y: 21}
+      - - {x: -19, y: 28}
+        - {x: -31, y: 28}
+        - {x: -31, y: 11}
+        - {x: -27, y: 11}
+        - {x: -19, y: 14}
+        - {x: -18, y: 20}
+        - {x: -18, y: 27}
+      - - {x: 21, y: 28}
+        - {x: 12, y: 28}
+        - {x: 5, y: 21}
+        - {x: 5, y: 17}
+        - {x: 10, y: 12}
+        - {x: 14, y: 12}
+        - {x: 17, y: 13}
+        - {x: 24, y: 23}
+        - {x: 24, y: 26}
+    outline: []
   spritePackingTag: 
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

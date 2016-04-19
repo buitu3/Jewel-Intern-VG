@@ -126,10 +126,26 @@ public class ChainedUnitsScanner : MonoBehaviour
         {
             for (int XIndex = 0; XIndex < PuzzleGenerator.Instance._columns; XIndex++)
             {
-                _scanUnitARR[XIndex, YIndex]._value = PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value;
-                _scanUnitARR[XIndex, YIndex].pointMultiplier = 0;
-                _scanUnitARR[XIndex, YIndex]._isChained = false;
+                if (PuzzleGenerator.Instance._unitARR[XIndex, YIndex] != null)
+                {
+                    _scanUnitARR[XIndex, YIndex]._value = PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value;
+                    _scanUnitARR[XIndex, YIndex].pointMultiplier = 0;
+                    _scanUnitARR[XIndex, YIndex]._isChained = false;
+                }             
             }
+        }
+    }
+
+    public void updateScanUnits(List<GameObject> unitList)
+    {
+        for (int i = 0; i < unitList.Count; i++)
+        {
+            int XIndex = unitList[i].GetComponent<UnitInfo>()._XIndex;
+            int YIndex = unitList[i].GetComponent<UnitInfo>()._YIndex;
+
+            _scanUnitARR[XIndex, YIndex]._value = PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value;
+            _scanUnitARR[XIndex, YIndex].pointMultiplier = 0;
+            _scanUnitARR[XIndex, YIndex]._isChained = false;
         }
     }
 
@@ -216,7 +232,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             {
                 // Swap Units back
                 yield return new WaitForSeconds(0.1f);
-                InputHandler.SwapType swapType = InputHandler.Instance.checkLocalUnits(focusedUnit, otherUnit);
+                InputHandler.SwapType swapType = InputHandler.Instance.checkSwapable(focusedUnit, otherUnit);
                 InputHandler.Instance.swapUnits(focusedUnit, otherUnit, swapType);
                 yield return new WaitForSeconds(InputHandler.Instance.swapTime);
                 GameController.Instance.currentState = GameController.GameState.idle;
@@ -226,7 +242,8 @@ public class ChainedUnitsScanner : MonoBehaviour
 
     public IEnumerator scanRegenUnits(List<GameObject> unitsList)
     {
-        updateScanARR();
+        //updateScanARR();
+        updateScanUnits(unitsList);
         chainedUnits = false;
 
         delayTime = 0f;
@@ -630,7 +647,6 @@ public class ChainedUnitsScanner : MonoBehaviour
                 {
                     getUnitScoreText(maxBonusPoint, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
                     GameController.Instance.updateScore(maxBonusPoint);
-
                 }
             }
 
@@ -642,8 +658,14 @@ public class ChainedUnitsScanner : MonoBehaviour
 
             for (int i = 0; i < unitsYIndex.Count; i++)
             {
-                disableUnit(unitsXIndex[i], unitsYIndex[i]);
                 UnitInfo unitInfo = PuzzleGenerator.Instance._unitARR[unitsXIndex[i], unitsYIndex[i]].GetComponent<UnitInfo>();
+
+                if (unitInfo._negativeEff == UnitInfo.NegativeEff.frozen)
+                {
+                    continue;
+                }
+
+                disableUnit(unitsXIndex[i], unitsYIndex[i]);
 
                 if (unitInfo._value
                     == PuzzleGenerator.Instance.Unit.Length - 1)

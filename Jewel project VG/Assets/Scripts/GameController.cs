@@ -60,7 +60,7 @@ public class GameController : MonoBehaviour {
     {
         //Score += bonusScore;
         scoreSlider.DOValue(Score += bonusScore, 1f, true);
-        DOTween.To(() => Score, x => Score = x, Score += bonusScore, 1f).SetUpdate(UpdateType.Fixed).OnUpdate(updateScoreText);
+        DOTween.To(() => Score, x => Score = x, Score += bonusScore, 0.3f).SetUpdate(UpdateType.Fixed).OnUpdate(updateScoreText);
         //scoreText.text = Score.ToString();
     }
 
