@@ -662,6 +662,15 @@ public class ChainedUnitsScanner : MonoBehaviour
 
                 if (unitInfo._negativeEff == UnitInfo.NegativeEff.frozen)
                 {
+                    //---------------------------------------------------------
+                    //----------------- Temporary Disabled --------------------
+                    //---------------------------------------------------------
+
+                    //unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
+                    //unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
+
+                    //---------------------------------------------------------
+                    //---------------------------------------------------------
                     continue;
                 }
 

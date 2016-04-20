@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NegativeEffController : MonoBehaviour {
+public class NegativeEffController : MonoBehaviour
+{
 
     //==============================================
     // Constants

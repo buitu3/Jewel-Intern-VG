@@ -73,11 +73,14 @@ public class PossibleChainedDetector : MonoBehaviour {
             for (int XIndex = 0; XIndex < PuzzleGenerator.Instance._columns; XIndex++)
             {
                 //_valueARR[XIndex, YIndex] = PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value;
-                //if (!ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained)
-                //{
-                //    _valueARR[XIndex, YIndex] = ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._value;
-
-                //}
+                if (!ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained)
+                {
+                    _valueARR[XIndex, YIndex] = ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._value;
+                }
+                else
+                {
+                    _valueARR[XIndex, YIndex] = -1;
+                }
             }
         }
     }
@@ -106,11 +109,11 @@ public class PossibleChainedDetector : MonoBehaviour {
         if (suggestList.Count > 0)
         {
             blowUnits(suggestList);
-            print("asdf");
-            for (int i = 0;i < suggestList.Count; i++)
-            {
-                print(suggestList[i].GetComponent<UnitInfo>()._XIndex + "---" + suggestList[i].GetComponent<UnitInfo>()._YIndex);
-            }
+            //print("asdf");
+            //for (int i = 0;i < suggestList.Count; i++)
+            //{
+            //    print(suggestList[i].GetComponent<UnitInfo>()._XIndex + "---" + suggestList[i].GetComponent<UnitInfo>()._YIndex);
+            //}
         }
         else
         {
@@ -129,48 +132,122 @@ public class PossibleChainedDetector : MonoBehaviour {
             for (int XIndex = 0; XIndex < PuzzleGenerator.Instance._columns; XIndex++)
             {
                 int value = _valueARR[XIndex, YIndex];
+                #region vertical check
+                if (isNearLeftUpMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex + 2]);
+                }
 
-                //if (isNearLeftUpMatch(XIndex, YIndex, value))
-                //{
-                //    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex    ]);
-                //    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex + 1]);
-                //    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex + 2]);
-                //}
+                if (isNearMiddleUpMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 3]);
+                }
 
-                //if (isNearMiddleUpMatch(XIndex, YIndex, value))
-                //{
-                //    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex    ]);
-                //    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex + 1]);
-                //    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex + 3]);
-                //}
-
-                //if (isNearRightUpMatch(XIndex, YIndex, value))
-                //{
-                //    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex    ]);
-                //    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex + 1]);
-                //    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex + 2]);
-                //}
+                if (isNearRightUpMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex + 2]);
+                }
 
                 if (isNearLeftDownMatch(XIndex, YIndex, value))
                 {
-                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex    ]);
-                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex + 1]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex - 1]);
                 }
 
                 if (isNearMiddleDownMatch(XIndex, YIndex, value))
                 {
-                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex    ]);
-                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex + 1]);
-                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex - 2]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 2]);
                 }
 
                 if (isNearRightDownMatch(XIndex, YIndex, value))
                 {
-                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex    ]);
-                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex + 1]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex - 1]);
                 }
+
+                if (isFarLeftMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex + 1]);
+                }
+
+                if (isFarRightMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex + 1]);
+                }
+                #endregion
+
+                #region horizontal check
+                if (isNearDownLeftMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex - 1]);
+                }
+
+                if (isNearMiddleLeftMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 3, YIndex]);
+                }
+
+                if (isNearUpLeftMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex + 1]);
+                }
+
+                if (isNearDownRightMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex - 1]);
+                }
+
+                if (isNearMiddleRightMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex]);
+                }
+
+                if (isNearUpRightMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex + 1]);
+                }
+
+                if (isFarDownMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex    ]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex    ]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex - 1]);
+                }
+
+                if(isFarUpMatch(XIndex, YIndex, value))
+                {
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex    ]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex    ]);
+                    suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex + 1]);
+                }
+
+                #endregion
             }
         }
 
@@ -183,7 +260,7 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 0 && YIndex < PuzzleGenerator.Instance._rows - 2)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex - 1, YIndex + 2] == value)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex - 1, YIndex + 2] == value && value >= 0)
             {
                 return true;
             }
@@ -195,7 +272,7 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (YIndex < PuzzleGenerator.Instance._rows - 3)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex    , YIndex + 3] == value)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex    , YIndex + 3] == value && value >= 0)
             {
                 return true;
             }
@@ -207,7 +284,7 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex < PuzzleGenerator.Instance._columns - 1 && YIndex < PuzzleGenerator.Instance._rows - 2)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex + 1, YIndex + 2] == value)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex + 1, YIndex + 2] == value && value >= 0)
             {
                 return true;
             }
@@ -219,7 +296,7 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 0 && YIndex > 0 && YIndex < PuzzleGenerator.Instance._rows - 1)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex - 1, YIndex - 1] == value)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex - 1, YIndex - 1] == value && value >= 0)
             {
                 return true;
             }
@@ -231,7 +308,7 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (YIndex > 1 && YIndex < PuzzleGenerator.Instance._rows - 1)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex    , YIndex - 2] == value)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex    , YIndex - 2] == value && value >= 0)
             {
                 return true;
             }
@@ -243,7 +320,7 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex < PuzzleGenerator.Instance._columns - 1 && YIndex > 0 && YIndex < PuzzleGenerator.Instance._rows - 1)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex + 1, YIndex - 1] == value)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex + 1, YIndex - 1] == value && value >= 0)
             {
                 return true;
             }
@@ -251,29 +328,127 @@ public class PossibleChainedDetector : MonoBehaviour {
         return false;
     }
 
-    //bool isFarLeftMatch(int XIndex, int YIndex, int value)
-    //{
-    //    if (XIndex < PuzzleGenerator.Instance._columns - 2 && YIndex > 0)
-    //    {
-    //        if (_valueARR[XIndex, YIndex + 2] == value && _valueARR[XIndex - 1, YIndex + 1] == value)
-    //        {
-    //            return true;
-    //        }
-    //    }
-    //    return false;
-    //}
+    bool isFarLeftMatch(int XIndex, int YIndex, int value)
+    {
+        if (XIndex > 0 && YIndex < PuzzleGenerator.Instance._rows - 2)
+        {
+            if (_valueARR[XIndex, YIndex + 2] == value && _valueARR[XIndex - 1, YIndex + 1] == value && value >= 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    //bool isFarRightMatch(int XIndex, int YIndex, int value)
-    //{
-    //    if (XIndex < PuzzleGenerator.Instance._columns - 2 && YIndex < PuzzleGenerator.Instance._columns - 1)
-    //    {
-    //        if (_valueARR[XIndex, YIndex + 2] == value && _valueARR[XIndex - 1, YIndex + 1] == value)
-    //        {
-    //            return true;
-    //        }
-    //    }
-    //    return false;
-    //}
+    bool isFarRightMatch(int XIndex, int YIndex, int value)
+    {
+        if (XIndex < PuzzleGenerator.Instance._columns - 1 && YIndex < PuzzleGenerator.Instance._rows - 2)
+        {
+            if (_valueARR[XIndex, YIndex + 2] == value && _valueARR[XIndex + 1, YIndex + 1] == value && value >= 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    #endregion
+
+    #region Horizontal possible match scan methods
+    bool isNearDownLeftMatch(int XIndex, int YIndex, int value)
+    {
+        if (XIndex > 1 && YIndex > 0)
+        {
+            if (_valueARR[XIndex - 1, YIndex    ] == value && _valueARR[XIndex - 2, YIndex - 1] == value && value >= 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool isNearMiddleLeftMatch(int XIndex, int YIndex, int value)
+    {
+        if (XIndex > 2)
+        {
+            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex - 3, YIndex    ] == value && value >= 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool isNearUpLeftMatch(int XIndex, int YIndex, int value)
+    {
+        if (XIndex > 1 && YIndex < PuzzleGenerator.Instance._rows - 1)
+        {
+            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex - 2, YIndex + 1] == value && value >= 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool isNearDownRightMatch(int XIndex, int YIndex, int value)
+    {
+        if (XIndex > 0 && XIndex < PuzzleGenerator.Instance._columns - 1 && YIndex > 0)
+        {
+            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex + 1, YIndex - 1] == value && value >= 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool isNearMiddleRightMatch(int XIndex, int YIndex, int value)
+    {
+        if (XIndex > 0 && XIndex < PuzzleGenerator.Instance._columns - 2)
+        {
+            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex + 2, YIndex    ] == value && value >= 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool isNearUpRightMatch(int XIndex, int YIndex, int value)
+    {
+        if (XIndex > 0 && XIndex < PuzzleGenerator.Instance._columns - 1 && YIndex < PuzzleGenerator.Instance._rows - 1)
+        {
+            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex + 1, YIndex + 1] == value && value >= 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool isFarDownMatch(int XIndex, int YIndex, int value)
+    {
+        if (XIndex > 1 && YIndex > 0)
+        {
+            if (_valueARR[XIndex - 2, YIndex] == value && _valueARR[XIndex - 1, YIndex - 1] == value && value >= 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool isFarUpMatch(int XIndex, int YIndex, int value)
+    {
+        if (XIndex > 1 && YIndex < PuzzleGenerator.Instance._rows - 1)
+        {
+            if (_valueARR[XIndex - 2, YIndex] == value && _valueARR[XIndex - 1, YIndex + 1] == value && value >= 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     #endregion
 }
