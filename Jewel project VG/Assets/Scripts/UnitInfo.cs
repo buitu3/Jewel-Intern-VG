@@ -29,6 +29,7 @@ public class UnitInfo : MonoBehaviour
     public GameObject ExplosiveSparkEff;
 
     public GameObject FrozenEff;
+    public GameObject LockEff;
 
     public enum SpecialEff
     {

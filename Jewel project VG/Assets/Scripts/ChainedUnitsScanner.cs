@@ -503,8 +503,16 @@ public class ChainedUnitsScanner : MonoBehaviour
 
         for (int i = 0; i < unitsYIndex.Count; i++)
         {
-            disableUnit(unitsXIndex[i], unitsYIndex[i]);
             UnitInfo unitInfo = PuzzleGenerator.Instance._unitARR[unitsXIndex[i], unitsYIndex[i]].GetComponent<UnitInfo>();
+
+            if (unitInfo._negativeEff == UnitInfo.NegativeEff.frozen)
+            {
+                unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
+                unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
+                continue;
+            }
+
+            disableUnit(unitsXIndex[i], unitsYIndex[i]);
 
             switch (unitInfo._unitEff)
             {
@@ -563,7 +571,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         // If the target unit has special Eff
         if (PuzzleGenerator.Instance._unitARR[Xtarget, Ytarget].GetComponent<UnitInfo>()._unitEff != UnitInfo.SpecialEff.noEff)
         {
-            print(PuzzleGenerator.Instance._unitARR[Xtarget, Ytarget].GetComponent<UnitInfo>()._unitEff);
             // Trigger it's Eff
             switch (PuzzleGenerator.Instance._unitARR[Xtarget, Ytarget].GetComponent<UnitInfo>()._unitEff)
             {
@@ -619,6 +626,68 @@ public class ChainedUnitsScanner : MonoBehaviour
                     default: break;
                 }
             }
+            // Then destroy all other unit that are in chain
+            if (bonusPoint < maxBonusPoint)
+            {
+                bonusPoint += 10;
+            }
+
+            for (int i = 0; i < unitsYIndex.Count; i++)
+            {
+                UnitInfo unitInfo = PuzzleGenerator.Instance._unitARR[unitsXIndex[i], unitsYIndex[i]].GetComponent<UnitInfo>();
+
+                if (unitInfo._negativeEff == UnitInfo.NegativeEff.frozen)
+                {
+                    unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
+                    unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
+                    continue;
+                }
+
+                disableUnit(unitsXIndex[i], unitsYIndex[i]);
+
+                if (unitInfo._value
+                    == PuzzleGenerator.Instance.Unit.Length - 1)
+                {
+                    StartCoroutine(destroyAllUnitsOfType(PuzzleGenerator.Instance._unitARR[Xtarget, Ytarget].GetComponent<UnitInfo>()._value));
+                }
+                else
+                {
+                    switch (unitInfo._unitEff)
+                    {
+                        case UnitInfo.SpecialEff.vLightning:
+                            {
+                                destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
+                                break;
+                            }
+
+                        case UnitInfo.SpecialEff.hLightning:
+                            {
+                                destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
+                                break;
+                            }
+
+                        case UnitInfo.SpecialEff.explode:
+                            {
+                                destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
+                                break;
+                            }
+
+                        case UnitInfo.SpecialEff.noEff:
+                            {
+                                activateDestroyEff(unitInfo._value, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
+
+                                // Activate bonus unit score text
+                                getUnitScoreText(bonusPoint, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
+                                GameController.Instance.updateScore(bonusPoint);
+
+
+                                break;
+                            }
+
+                        default: break;
+                    }
+                }
+            }
         }
 
         // If the target doesn't has any special Eff
@@ -662,15 +731,9 @@ public class ChainedUnitsScanner : MonoBehaviour
 
                 if (unitInfo._negativeEff == UnitInfo.NegativeEff.frozen)
                 {
-                    //---------------------------------------------------------
-                    //----------------- Temporary Disabled --------------------
-                    //---------------------------------------------------------
+                    unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
+                    unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
 
-                    //unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
-                    //unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
-
-                    //---------------------------------------------------------
-                    //---------------------------------------------------------
                     continue;
                 }
 
