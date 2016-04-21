@@ -59,7 +59,7 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
             // If there is none Unit focused
             if (GameController.Instance.currentState == GameController.GameState.idle)
             {
-                if (unitHit.collider.gameObject.GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
+                if (unitHit.collider.gameObject.GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
                 {
                     // Focus the hitted Unit
                     GameController.Instance.currentState = GameController.GameState.focusUnit;
@@ -161,7 +161,7 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
         int deltaY = nextUnitInfo._YIndex - currentUnitInfo._YIndex;
         //print(deltaX + ":::" + deltaY);
 
-        if (nextUnitInfo._negativeEff == UnitInfo.NegativeEff.frozen)
+        if (nextUnitInfo._negativeEff == UnitInfo.NegativeEff.frozen || nextUnitInfo._negativeEff == UnitInfo.NegativeEff.locked)
         {
             return SwapType.none;
         }

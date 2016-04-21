@@ -114,9 +114,11 @@ public class PuzzleGenerator : MonoBehaviour {
         //_valueARR[3, 3] = 4;
         //_valueARR[4, 4] = 4;
 
-        _valueARR[4, 7] = 4;
-        _valueARR[5, 7] = 4;
-        _valueARR[7, 7] = 4;
+        //_valueARR[2, 7] = 4;
+        //_valueARR[3, 7] = 4;
+        //_valueARR[4, 7] = 4;
+        //_valueARR[5, 7] = 4;
+        //_valueARR[7, 7] = 4;
 
         //_valueARR[4, 2] = 3;
         //_valueARR[5, 2] = 2;
@@ -148,10 +150,15 @@ public class PuzzleGenerator : MonoBehaviour {
         // ----------Fake unit value for testing ------------------
 
         //_unitARR[1, 0].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.vLightning;
+        upgradeUnit(1, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
         upgradeUnit(2, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
         upgradeUnit(3, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
         upgradeUnit(4, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
         upgradeUnit(5, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        upgradeUnit(6, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        upgradeUnit(1, 1, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
+        upgradeUnit(2, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        upgradeUnit(2, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
 
         //upgradeUnit(3, 2, UnitInfo.SpecialEff.hLightning);
         upgradeUnit(0, 2, UnitInfo.SpecialEff.vLightning);
@@ -281,6 +288,7 @@ public class PuzzleGenerator : MonoBehaviour {
                 }
             case UnitInfo.NegativeEff.locked:
                 {
+                    unitInfo.LockEff.SetActive(true);
                     break;
                 }
             case UnitInfo.NegativeEff.hollow:
@@ -467,13 +475,14 @@ public class PuzzleGenerator : MonoBehaviour {
                                         //    //YIndex = 0;
                                         //}
 
-
                                         yield return (StartCoroutine(borrowUnitsFromCol(XIndex, startBorrowYIndex, 1, unitsCanBorrow, borrowType)));
                                         print("completed");
                                         unitsList.Remove(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
                                         unitsList.Add(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
                                         reOrganizePuzzleCol(XIndex - 1);
+                        
                                         yield return new WaitForSeconds(unitDropTime);
+
                                         //yield return new WaitForSeconds(2f);
                                         XIndex = 0;
                                         YIndex = 0;
@@ -481,15 +490,15 @@ public class PuzzleGenerator : MonoBehaviour {
                                     }
                                 case borrowUnitsType.Right:
                                     {
-                                        print("right");
-                                        yield return (StartCoroutine(borrowUnitsFromCol(XIndex, startBorrowYIndex, 1, unitsCanBorrow, borrowType)));
-                                        unitsList.Remove(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
-                                        unitsList.Add(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
-                                        reOrganizePuzzleCol(XIndex + 1);
-                                        yield return new WaitForSeconds(unitDropTime);
-                                        //yield return new WaitForSeconds(2f);
-                                        XIndex = 0;
-                                        YIndex = 0;
+                                        //print("right");
+                                        //yield return (StartCoroutine(borrowUnitsFromCol(XIndex, startBorrowYIndex, 1, unitsCanBorrow, borrowType)));
+                                        //unitsList.Remove(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
+                                        //unitsList.Add(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
+                                        //reOrganizePuzzleCol(XIndex + 1);
+                                        //yield return new WaitForSeconds(unitDropTime);
+                                        ////yield return new WaitForSeconds(2f);
+                                        //XIndex = 0;
+                                        //YIndex = 0;
                                         break;
                                     }
                                 case borrowUnitsType.None:

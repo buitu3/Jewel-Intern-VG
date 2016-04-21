@@ -18,7 +18,7 @@ public class NegativeEffController : MonoBehaviour
     // Unity Methods
     //==============================================
 
-    void Start()
+    void Awake()
     {
         anim = GetComponent<Animator>();
     }
@@ -39,6 +39,8 @@ public class NegativeEffController : MonoBehaviour
 
     public void selfBreak()
     {
+        UnitInfo info = GetComponentInParent<UnitInfo>();
+        print(info._XIndex + "kkkk" + info._YIndex + "ddd");
         anim.SetTrigger("Break");
     }
 }

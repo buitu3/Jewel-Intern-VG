@@ -131,7 +131,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     _scanUnitARR[XIndex, YIndex]._value = PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value;
                     _scanUnitARR[XIndex, YIndex].pointMultiplier = 0;
                     _scanUnitARR[XIndex, YIndex]._isChained = false;
-                }             
+                }
             }
         }
     }
@@ -297,27 +297,42 @@ public class ChainedUnitsScanner : MonoBehaviour
     public void disableUnit(int XIndex, int YIndex)
     {
         GameObject unit = PuzzleGenerator.Instance._unitARR[XIndex, YIndex];
+        UnitInfo unitInfo = unit.GetComponent<UnitInfo>();
         unit.SetActive(false);
         _scanUnitARR[XIndex, YIndex]._isChained = true;
 
-        switch (unit.GetComponent<UnitInfo>()._unitEff)
+        switch (unitInfo._unitEff)
         {
             case (UnitInfo.SpecialEff.hLightning):
                 {
-                    unit.GetComponent<UnitInfo>().HorizontalLightningEff.SetActive(false);
+                    unitInfo.HorizontalLightningEff.SetActive(false);
                     break;
                 }
             case (UnitInfo.SpecialEff.vLightning):
                 {
-                    unit.GetComponent<UnitInfo>().VerticalLightningEff.SetActive(false);
+                    unitInfo.VerticalLightningEff.SetActive(false);
                     break;
                 }
             case (UnitInfo.SpecialEff.explode):
                 {
-                    unit.GetComponent<UnitInfo>().ExplosiveSparkEff.SetActive(false);
+                    unitInfo.ExplosiveSparkEff.SetActive(false);
                     break;
                 }
             default: break;
+        }
+
+        switch (unitInfo._negativeEff)
+        {
+            case (UnitInfo.NegativeEff.frozen):
+                {
+                    unitInfo.FrozenEff.SetActive(false);
+                    break;
+                }
+            case (UnitInfo.NegativeEff.locked):
+                {
+                    unitInfo.LockEff.SetActive(false);
+                    break;
+                }
         }
     }
 
@@ -511,6 +526,12 @@ public class ChainedUnitsScanner : MonoBehaviour
                 unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
                 continue;
             }
+            else if (unitInfo._negativeEff == UnitInfo.NegativeEff.locked)
+            {
+                unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
+                unitInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
+                continue;
+            }
 
             disableUnit(unitsXIndex[i], unitsYIndex[i]);
 
@@ -536,7 +557,7 @@ public class ChainedUnitsScanner : MonoBehaviour
 
                 case UnitInfo.SpecialEff.noEff:
                     {
-                        activateDestroyEff(unitInfo._value, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
+                        activateDestroyEffAnimation(unitInfo._value, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
 
                         // Activate bonus unit score text
                         getUnitScoreText(bonusPoint, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
@@ -566,7 +587,21 @@ public class ChainedUnitsScanner : MonoBehaviour
             targetNextEff = UnitInfo.SpecialEff.noEff;
         }
 
-        disableUnit(Xtarget, Ytarget);
+        UnitInfo targetInfo = PuzzleGenerator.Instance._unitARR[Xtarget, Ytarget].GetComponent<UnitInfo>();
+        if (targetInfo._negativeEff == UnitInfo.NegativeEff.frozen)
+        {
+            targetInfo._negativeEff = UnitInfo.NegativeEff.noEff;
+            targetInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
+        }
+        else if (targetInfo._negativeEff == UnitInfo.NegativeEff.locked)
+        {
+            targetInfo._negativeEff = UnitInfo.NegativeEff.noEff;
+            targetInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
+        }
+        else
+        {
+            disableUnit(Xtarget, Ytarget);
+        }
 
         // If the target unit has special Eff
         if (PuzzleGenerator.Instance._unitARR[Xtarget, Ytarget].GetComponent<UnitInfo>()._unitEff != UnitInfo.SpecialEff.noEff)
@@ -642,98 +677,11 @@ public class ChainedUnitsScanner : MonoBehaviour
                     unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
                     continue;
                 }
-
-                disableUnit(unitsXIndex[i], unitsYIndex[i]);
-
-                if (unitInfo._value
-                    == PuzzleGenerator.Instance.Unit.Length - 1)
+                else if (unitInfo._negativeEff == UnitInfo.NegativeEff.locked)
                 {
-                    StartCoroutine(destroyAllUnitsOfType(PuzzleGenerator.Instance._unitARR[Xtarget, Ytarget].GetComponent<UnitInfo>()._value));
-                }
-                else
-                {
-                    switch (unitInfo._unitEff)
-                    {
-                        case UnitInfo.SpecialEff.vLightning:
-                            {
-                                destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
-                                break;
-                            }
-
-                        case UnitInfo.SpecialEff.hLightning:
-                            {
-                                destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
-                                break;
-                            }
-
-                        case UnitInfo.SpecialEff.explode:
-                            {
-                                destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
-                                break;
-                            }
-
-                        case UnitInfo.SpecialEff.noEff:
-                            {
-                                activateDestroyEff(unitInfo._value, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
-
-                                // Activate bonus unit score text
-                                getUnitScoreText(bonusPoint, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
-                                GameController.Instance.updateScore(bonusPoint);
-
-
-                                break;
-                            }
-
-                        default: break;
-                    }
-                }
-            }
-        }
-
-        // If the target doesn't has any special Eff
-        else
-        {
-            // If formed special chained type,upgrade it
-            if (targetNextValue == PuzzleGenerator.Instance.Unit.Length - 1)
-            {
-                PuzzleGenerator.Instance.upgradeToDestroyAllUnit(Xtarget, Ytarget);
-            }
-            else if (targetNextEff != UnitInfo.SpecialEff.noEff)
-            {
-                PuzzleGenerator.Instance.upgradeUnit(Xtarget, Ytarget, targetNextEff);
-            }
-            else
-            {
-                activateDestroyEff(_scanUnitARR[Xtarget, Ytarget]._value, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
-
-                // Activate bonus unit score text
-                if (bonusPoint < maxBonusPoint)
-                {
-                    getUnitScoreText(bonusPoint + 10, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
-                    GameController.Instance.updateScore(bonusPoint + 10);
-                }
-                else
-                {
-                    getUnitScoreText(maxBonusPoint, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
-                    GameController.Instance.updateScore(maxBonusPoint);
-                }
-            }
-
-            // Then destroy all other unit that are in chain
-            if (bonusPoint < maxBonusPoint)
-            {
-                bonusPoint += 10;
-            }
-
-            for (int i = 0; i < unitsYIndex.Count; i++)
-            {
-                UnitInfo unitInfo = PuzzleGenerator.Instance._unitARR[unitsXIndex[i], unitsYIndex[i]].GetComponent<UnitInfo>();
-
-                if (unitInfo._negativeEff == UnitInfo.NegativeEff.frozen)
-                {
+                    print("break lock");
                     unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
-                    unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
-
+                    unitInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
                     continue;
                 }
 
@@ -768,7 +716,109 @@ public class ChainedUnitsScanner : MonoBehaviour
 
                         case UnitInfo.SpecialEff.noEff:
                             {
-                                activateDestroyEff(unitInfo._value, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
+                                activateDestroyEffAnimation(unitInfo._value, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
+
+                                // Activate bonus unit score text
+                                getUnitScoreText(bonusPoint, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
+                                GameController.Instance.updateScore(bonusPoint);
+                                break;
+                            }
+
+                        default: break;
+                    }
+                }
+            }
+        }
+
+        // If the target doesn't has any special Eff
+        else
+        {
+            //if (targetInfo._negativeEff != UnitInfo.NegativeEff.noEff)
+            //{
+
+            //}
+            // If formed special chained type,upgrade it
+            if (targetNextValue == PuzzleGenerator.Instance.Unit.Length - 1)
+            {
+                PuzzleGenerator.Instance.upgradeToDestroyAllUnit(Xtarget, Ytarget);
+            }
+            else if (targetNextEff != UnitInfo.SpecialEff.noEff)
+            {
+                PuzzleGenerator.Instance.upgradeUnit(Xtarget, Ytarget, targetNextEff);
+            }
+            else
+            {
+                activateDestroyEffAnimation(_scanUnitARR[Xtarget, Ytarget]._value, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
+
+                // Activate bonus unit score text
+                if (bonusPoint < maxBonusPoint)
+                {
+                    getUnitScoreText(bonusPoint + 10, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
+                    GameController.Instance.updateScore(bonusPoint + 10);
+                }
+                else
+                {
+                    getUnitScoreText(maxBonusPoint, PuzzleGenerator.Instance._unitPosARR[Xtarget, Ytarget]);
+                    GameController.Instance.updateScore(maxBonusPoint);
+                }
+            }
+
+            // Then destroy all other unit that are in chain
+            if (bonusPoint < maxBonusPoint)
+            {
+                bonusPoint += 10;
+            }
+
+            for (int i = 0; i < unitsYIndex.Count; i++)
+            {
+                UnitInfo unitInfo = PuzzleGenerator.Instance._unitARR[unitsXIndex[i], unitsYIndex[i]].GetComponent<UnitInfo>();
+
+                if (unitInfo._negativeEff == UnitInfo.NegativeEff.frozen)
+                {
+                    unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
+                    unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
+                    continue;
+                }
+                else if (unitInfo._negativeEff == UnitInfo.NegativeEff.locked)
+                {
+                    print("break lock");
+                    unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
+                    unitInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
+                    continue;
+                }
+
+                disableUnit(unitsXIndex[i], unitsYIndex[i]);
+
+                if (unitInfo._value
+                    == PuzzleGenerator.Instance.Unit.Length - 1)
+                {
+                    StartCoroutine(destroyAllUnitsOfType(PuzzleGenerator.Instance._unitARR[Xtarget, Ytarget].GetComponent<UnitInfo>()._value));
+                }
+                else
+                {
+                    switch (unitInfo._unitEff)
+                    {
+                        case UnitInfo.SpecialEff.vLightning:
+                            {
+                                destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
+                                break;
+                            }
+
+                        case UnitInfo.SpecialEff.hLightning:
+                            {
+                                destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
+                                break;
+                            }
+
+                        case UnitInfo.SpecialEff.explode:
+                            {
+                                destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
+                                break;
+                            }
+
+                        case UnitInfo.SpecialEff.noEff:
+                            {
+                                activateDestroyEffAnimation(unitInfo._value, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
 
                                 // Activate bonus unit score text
                                 getUnitScoreText(bonusPoint, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
@@ -2054,7 +2104,7 @@ public class ChainedUnitsScanner : MonoBehaviour
     }
     #endregion
 
-    public void activateDestroyEff(int value, Vector2 spawnPos)
+    public void activateDestroyEffAnimation(int value, Vector2 spawnPos)
     {
         GameObject destroyEff = null;
 
