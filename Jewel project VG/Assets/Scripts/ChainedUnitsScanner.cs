@@ -283,7 +283,8 @@ public class ChainedUnitsScanner : MonoBehaviour
         else
         {
             bonusPoint = 0;
-            GameController.Instance.currentState = GameController.GameState.idle;
+            //GameController.Instance.currentState = GameController.GameState.idle;
+            StartCoroutine(PuzzleGenerator.Instance.scanHollowUnits());
         }
     }
 
