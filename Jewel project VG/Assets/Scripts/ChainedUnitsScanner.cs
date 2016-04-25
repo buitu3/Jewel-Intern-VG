@@ -1965,9 +1965,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                 _scanUnitARR[XIndex - 2, YIndex]._isChained = true;
                 _scanUnitARR[XIndex - 1, YIndex]._isChained = true;
                 _scanUnitARR[XIndex, YIndex]._isChained = true;
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+
                 PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex].SetActive(false);
                 PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].SetActive(false);
                 PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);

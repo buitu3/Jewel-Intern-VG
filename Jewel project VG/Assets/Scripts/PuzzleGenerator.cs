@@ -35,17 +35,28 @@ public class PuzzleGenerator : MonoBehaviour {
     private Transform unitBGHolder;
     private Transform poolObjectHolder;
 
+    private bool canPushUnit;
+
     //private float XStartPos = -2.6f;
     //private float YStartPos = -3.7f;
     private float XPadding = 0.73f;
     private float YPadding = 0.73f;
     private float regenYpos = 8f;
 
-    private float unitDropTime = 0.8f;
+    private float unitDropTime = 0.5f;
+    private float unitPushTime = 0.1f;
 
     private int poolSize;
 
     private enum borrowUnitsType
+    {
+        None = 0,
+        Left,
+        Right,
+        typeCounts
+    }
+
+    private enum unitPushType
     {
         None = 0,
         Left,
@@ -152,13 +163,13 @@ public class PuzzleGenerator : MonoBehaviour {
         //_unitARR[1, 0].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.vLightning;
         upgradeUnit(1, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
         upgradeUnit(2, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        upgradeUnit(3, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        upgradeUnit(4, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        upgradeUnit(3, 6, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        //upgradeUnit(4, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
         upgradeUnit(5, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
         upgradeUnit(6, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
         upgradeUnit(1, 1, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
-        upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-        upgradeUnit(4, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        upgradeUnit(2, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        //upgradeUnit(2, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
 
         //upgradeUnit(3, 2, UnitInfo.SpecialEff.hLightning);
         upgradeUnit(0, 2, UnitInfo.SpecialEff.vLightning);
@@ -177,6 +188,8 @@ public class PuzzleGenerator : MonoBehaviour {
         //----------------------------------------------------------------------------------
 
         // ----------Fake for testing ------------------
+
+        yield return new WaitForSeconds(1f);
 
         List<GameObject> unitsList = new List<GameObject>();
         for (int XIndex = 0; XIndex < _columns; XIndex++)
@@ -397,11 +410,11 @@ public class PuzzleGenerator : MonoBehaviour {
 
         ChainedUnitsScanner.Instance.updateScanUnits(unitsList);
 
-        yield return new WaitForSeconds(unitDropTime + 0.5f);
+        yield return new WaitForSeconds(unitDropTime + 0.2f);
         //yield return null;
 
-        //StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
-        StartCoroutine(scanHollowUnits());
+        StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
+        //StartCoroutine(scanHollowUnits());
         //GameController.Instance.currentState = GameController.GameState.idle;
     }
 
@@ -410,184 +423,171 @@ public class PuzzleGenerator : MonoBehaviour {
         bool canBorrow = false;
         unitsList = new List<GameObject>();
 
-        for (int XIndex = 0; XIndex < _columns; XIndex++)
-        {
-            int nullObjectCount = 0;
-            int unitsNeedToBorrow = 0;
-            for (int YIndex = 0; YIndex < _rows; YIndex++)
-            {
-                // Search for emty space
-                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained)
-                {
-                    nullObjectCount += 1;
-                }
-                // If object is frozen,reset nullObjectCount to prevent falling down
-                else if (_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
-                {
-                    unitsNeedToBorrow = nullObjectCount;
-                    nullObjectCount = 0;
-                    //break;
-                    // If there are units that need to borrow from other col
-                    if (unitsNeedToBorrow > 0)
-                    {
-                        // Check for number of empty spaces that can borrow units from other column
-                        int unitsCanBorrow = unitsNeedToBorrow;
-                        for (int i = 0; i < unitsNeedToBorrow; i++)
-                        {
-                            borrowUnitsType borrowType = checkIfCanBorrow(XIndex, YIndex - 1 - i);
+        canPushUnit = false;
+        yield return StartCoroutine(findPushUnitsInPuzzle());
 
-                            //----------------------------------
-                            //-------Temporary Changed----------
-                            //----------------------------------
-
-                            //if (borrowType == borrowUnitsType.None)
-
-                            //----------------------------------
-                            //----------------------------------
-                            if (borrowType == borrowUnitsType.None || borrowType == borrowUnitsType.Right)
-                            {
-                                unitsCanBorrow--;
-                            }
-                            //print(XIndex + ":::" + (YIndex - i) + ":::" + borrowType);
-                        }
-                        // If there are no unit can borrow, jump into the next column
-                        if (unitsCanBorrow == 0)
-                        {
-                            //print(XIndex + ":::" + (YIndex) + ":::" + "cant borrow");
-                            //continue;
-                        }
-                        else
-                        {
-                            canBorrow = true;
-
-                            int startBorrowYIndex = YIndex - 1 - (unitsNeedToBorrow - unitsCanBorrow);
-                            //print(XIndex + ":::" + (YIndex) + ":::" + startBorrowYIndex);
-                            borrowUnitsType borrowType = checkIfCanBorrow(XIndex, startBorrowYIndex);
-
-                            switch (borrowType)
-                            {
-                                case borrowUnitsType.Left:
-                                    {
-                                        //int numberOfUnitsCanBorrowFromCol = 0;
-                                        //for (int j = YIndex - i + 1; j < _rows - 1; j++)
-                                        //{
-                                        //    if (_unitARR[XIndex - 1, j].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
-                                        //    {
-                                        //        numberOfUnitsCanBorrowFromCol++;
-                                        //    }
-                                        //    else
-                                        //    {
-                                        //        break;
-                                        //    }
-                                        //}
-
-                                        //if (numberOfUnitsCanBorrowFromCol > 0)
-                                        //{
-                                        //    if (numberOfUnitsCanBorrowFromCol > borrowUnitCount)
-                                        //    {
-                                        //        borrowUnitsFromCol(XIndex, YIndex - i, borrowUnitCount, borrowUnitCount, borrowType);
-                                        //    }
-                                        //    else
-                                        //    {
-                                        //        borrowUnitsFromCol(XIndex, YIndex - i, numberOfUnitsCanBorrowFromCol, borrowUnitCount, borrowType);
-                                        //    }
-
-                                        //    // Scan the previous column again
-                                        //    //XIndex -= 2;
-                                        //    //YIndex = 0;
-                                        //}
-
-                                        int distanceToBorrowCol = 0;
-                                        for (int i = XIndex - 1; i >= 0; i--)
-                                        {
-                                            //print(XIndex + ".....");
-                                            int unitsInRow = 0;
-                                            for (int j = 0; j < _rows; j++)
-                                            {
-                                                if (ChainedUnitsScanner.Instance._scanUnitARR[i, j]._isChained)
-                                                {
-                                                    unitsInRow++;
-                                                    continue;
-                                                }
-                                                else if (_unitARR[i, j].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
-                                                {
-                                                    unitsInRow++;
-                                                    continue;
-                                                }
-                                                else
-                                                {
-                                                    break;
-                                                }
-                                                
-                                            }
-                                            //print(i + ";;;;;" + unitsInRow);
-                                            if (unitsInRow == _rows)
-                                            {
-                                                distanceToBorrowCol = XIndex - i;
-                                                //print(XIndex + "======" + distanceToBorrowCol);
-                                                break;
-                                            }
-                                        }
-
-
-
-                                        yield return (StartCoroutine(borrowUnitsFromCol(XIndex, startBorrowYIndex, 1, unitsCanBorrow, borrowType)));
-                                        
-                                        //print("completed");
-                                        unitsList.Remove(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
-                                        unitsList.Add(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
-                                        reOrganizePuzzleCol(XIndex - 1);
-                                        reOrganizePuzzleCol(XIndex);
-
-                                        yield return new WaitForSeconds(unitDropTime);
-                                        //print(XIndex + "======" + unitsCanBorrow);
-                                        //if (unitsCanBorrow == 1)
-                                        //{
-                                        //    yield return new WaitForSeconds(0.05f);
-                                        //}
-                                        //else if (unitsCanBorrow > 1)
-                                        //{
-                                            
-                                        //}
-
-                                        //yield return new WaitForSeconds(2f);
-                                        XIndex = 0;
-                                        YIndex = 0;
-                                        break;
-                                    }
-                                case borrowUnitsType.Right:
-                                    {
-                                        //print("right");
-                                        //yield return (StartCoroutine(borrowUnitsFromCol(XIndex, startBorrowYIndex, 1, unitsCanBorrow, borrowType)));
-                                        //unitsList.Remove(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
-                                        //unitsList.Add(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
-                                        //reOrganizePuzzleCol(XIndex + 1);
-                                        //yield return new WaitForSeconds(unitDropTime);
-                                        ////yield return new WaitForSeconds(2f);
-                                        //XIndex = 0;
-                                        //YIndex = 0;
-                                        break;
-                                    }
-                                case borrowUnitsType.None:
-                                    {
-                                        break;
-                                    }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!canBorrow)
+        print(canPushUnit);
+        if (!canPushUnit)
         {
             GameController.Instance.currentState = GameController.GameState.idle;
         }
         else
         {
+            print("scan again");
             StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
         }
 
+
+        #region old borrow unit function
+        //for (int XIndex = 0; XIndex < _columns; XIndex++)
+        //{
+        //    int nullObjectCount = 0;
+        //    int unitsNeedToBorrow = 0;
+        //    for (int YIndex = 0; YIndex < _rows; YIndex++)
+        //    {
+        //        // Search for emty space
+        //        if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained)
+        //        {
+        //            nullObjectCount += 1;
+        //        }
+        //        // If object is frozen,reset nullObjectCount to prevent falling down
+        //        else if (_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+        //        {
+        //            unitsNeedToBorrow = nullObjectCount;
+        //            nullObjectCount = 0;
+        //            //break;
+        //            // If there are units that need to borrow from other col
+        //            if (unitsNeedToBorrow > 0)
+        //            {
+        //                // Check for number of empty spaces that can borrow units from other column
+        //                int unitsCanBorrow = unitsNeedToBorrow;
+        //                for (int i = 0; i < unitsNeedToBorrow; i++)
+        //                {
+        //                    borrowUnitsType borrowType = checkIfCanBorrow(XIndex, YIndex - 1 - i);
+
+        //                    //----------------------------------
+        //                    //-------Temporary Changed----------
+        //                    //----------------------------------
+
+        //                    //if (borrowType == borrowUnitsType.None)
+
+        //                    //----------------------------------
+        //                    //----------------------------------
+        //                    if (borrowType == borrowUnitsType.None || borrowType == borrowUnitsType.Right)
+        //                    {
+        //                        unitsCanBorrow--;
+        //                    }
+        //                    //print(XIndex + ":::" + (YIndex - i) + ":::" + borrowType);
+        //                }
+        //                // If there are no unit can borrow, jump into the next column
+        //                if (unitsCanBorrow == 0)
+        //                {
+        //                    //print(XIndex + ":::" + (YIndex) + ":::" + "cant borrow");
+        //                    //continue;
+        //                }
+        //                else
+        //                {
+        //                    canBorrow = true;
+
+        //                    int startBorrowYIndex = YIndex - 1 - (unitsNeedToBorrow - unitsCanBorrow);
+        //                    //print(XIndex + ":::" + (YIndex) + ":::" + startBorrowYIndex);
+        //                    borrowUnitsType borrowType = checkIfCanBorrow(XIndex, startBorrowYIndex);
+
+        //                    switch (borrowType)
+        //                    {
+        //                        case borrowUnitsType.Left:
+        //                            {                                       
+        //                                int distanceToBorrowCol = 0;
+        //                                for (int i = XIndex - 1; i >= 0; i--)
+        //                                {
+        //                                    //print(XIndex + ".....");
+        //                                    int unitsInRow = 0;
+        //                                    for (int j = 0; j < _rows; j++)
+        //                                    {
+        //                                        if (ChainedUnitsScanner.Instance._scanUnitARR[i, j]._isChained)
+        //                                        {
+        //                                            unitsInRow++;
+        //                                            continue;
+        //                                        }
+        //                                        else if (_unitARR[i, j].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
+        //                                        {
+        //                                            unitsInRow++;
+        //                                            continue;
+        //                                        }
+        //                                        else
+        //                                        {
+        //                                            break;
+        //                                        }
+                                                
+        //                                    }
+        //                                    //print(i + ";;;;;" + unitsInRow);
+        //                                    if (unitsInRow == _rows)
+        //                                    {
+        //                                        distanceToBorrowCol = XIndex - i;
+        //                                        //print(XIndex + "======" + distanceToBorrowCol);
+        //                                        break;
+        //                                    }
+        //                                }
+
+
+
+        //                                yield return (StartCoroutine(borrowUnitsFromCol(XIndex, startBorrowYIndex, 1, unitsCanBorrow, borrowType)));
+                                        
+        //                                //print("completed");
+        //                                unitsList.Remove(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
+        //                                unitsList.Add(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
+        //                                reOrganizePuzzleCol(XIndex - 1);
+        //                                reOrganizePuzzleCol(XIndex);
+
+        //                                yield return new WaitForSeconds(unitDropTime);
+        //                                //print(XIndex + "======" + unitsCanBorrow);
+        //                                //if (unitsCanBorrow == 1)
+        //                                //{
+        //                                //    yield return new WaitForSeconds(0.05f);
+        //                                //}
+        //                                //else if (unitsCanBorrow > 1)
+        //                                //{
+                                            
+        //                                //}
+
+        //                                //yield return new WaitForSeconds(2f);
+        //                                XIndex = 0;
+        //                                YIndex = 0;
+        //                                break;
+        //                            }
+        //                        case borrowUnitsType.Right:
+        //                            {
+        //                                //print("right");
+        //                                //yield return (StartCoroutine(borrowUnitsFromCol(XIndex, startBorrowYIndex, 1, unitsCanBorrow, borrowType)));
+        //                                //unitsList.Remove(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
+        //                                //unitsList.Add(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
+        //                                //reOrganizePuzzleCol(XIndex + 1);
+        //                                //yield return new WaitForSeconds(unitDropTime);
+        //                                ////yield return new WaitForSeconds(2f);
+        //                                //XIndex = 0;
+        //                                //YIndex = 0;
+        //                                break;
+        //                            }
+        //                        case borrowUnitsType.None:
+        //                            {
+        //                                break;
+        //                            }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        //if (!canBorrow)
+        //{
+        //    GameController.Instance.currentState = GameController.GameState.idle;
+        //}
+        //else
+        //{
+        //    StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
+        //}
+        #endregion
         //-------------------------------------------------
         //--------------- Temporary Added -----------------
         //-------------------------------------------------
@@ -625,6 +625,15 @@ public class PuzzleGenerator : MonoBehaviour {
                     //Vector3 targetPos = _unitPosARR[XIndex, YIndex - nullObjectCount];
                     //StartCoroutine(dropUnit(_unitARR[XIndex, YIndex], targetPos, nullObjectCount));
 
+                    if (!unitsList.Contains(_unitARR[XIndex, YIndex]))
+                    {
+                        unitsList.Add(_unitARR[XIndex, YIndex]);
+                    }
+                    if (!refreshUnits.Contains(_unitARR[XIndex, YIndex]))
+                    {
+                        refreshUnits.Add(_unitARR[XIndex, YIndex]);
+                    }
+
                     StartCoroutine(dropUnit(XIndex, YIndex, nullObjectCount));
 
                     //// Make scanUnit that has fallen down unit become chained
@@ -635,8 +644,7 @@ public class PuzzleGenerator : MonoBehaviour {
                     //_unitARR[XIndex, YIndex - nullObjectCount].GetComponent<UnitInfo>()._YIndex -= nullObjectCount;
 
                     // Add this unit to list to scan again
-                    unitsList.Add(_unitARR[XIndex, YIndex - nullObjectCount]);
-                    refreshUnits.Add(_unitARR[XIndex, YIndex - nullObjectCount]);
+                    
                 }
             }
         }
@@ -660,8 +668,183 @@ public class PuzzleGenerator : MonoBehaviour {
         ChainedUnitsScanner.Instance.updateScanUnits(refreshUnits);
     }
 
+    private IEnumerator findPushUnitsInPuzzle()
+    {
+        bool hasUnitToPush = false;
+        List<int> pushColList = new List<int>();
 
+        for (int XIndex = _columns - 1; XIndex >= 0; XIndex--)
+        {
+            bool canPushInCol = findPushRightUnitInCol(XIndex);
+            if (canPushInCol)
+            {
+                hasUnitToPush = true;
+                if (!pushColList.Contains(XIndex))
+                {
+                    pushColList.Add(XIndex);
+                }
+                if (!pushColList.Contains(XIndex + 1))
+                {
+                    pushColList.Add(XIndex + 1);
+                }
+            }
+        }
 
+        yield return new WaitForSeconds(unitPushTime + 0.05f);
+
+        if (hasUnitToPush)
+        {
+            for (int i = 0; i < pushColList.Count; i++)
+            {
+                reOrganizePuzzleCol(pushColList[i]);
+            }
+        }
+        yield return new WaitForSeconds(unitDropTime + 0.05f);
+
+        if (hasUnitToPush)
+        {
+            yield return StartCoroutine(findPushUnitsInPuzzle());
+        }
+    }
+
+    // Find the highest unit in a column that can be push right then push it to the right
+    private bool findPushRightUnitInCol(int col)
+    {
+        for (int YIndex = _rows - 1; YIndex >= 0; YIndex--)
+        {
+            if (!ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex]._isChained 
+                && _unitARR[col, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
+            {
+                unitPushType pushType = checkIfCanPush(col, YIndex);
+
+                if (pushType == unitPushType.Right && hasFrozenUnitInCol(col + 1))
+                {
+                    canPushUnit = true;
+                    StartCoroutine(pushUnit(col, YIndex, unitPushType.Right));
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private bool hasFrozenUnitInCol(int col)
+    {
+        for (int YIndex = 0; YIndex < _rows; YIndex++)
+        {
+            if (_unitARR[col, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private IEnumerator pushUnit(int XIndex, int YIndex, unitPushType pushType)
+    {
+        switch (pushType)
+        {
+            case unitPushType.Left:
+                {
+                    //unitsList.Remove(_unitARR[XIndex, YIndex]);
+                    //unitsList.Add(_unitARR[XIndex, YIndex]);
+                    if(!unitsList.Contains(_unitARR[XIndex, YIndex]))
+                    {
+                        unitsList.Add(_unitARR[XIndex, YIndex]);
+                    }
+
+                    _unitARR[XIndex - 1, YIndex - 1] = _unitARR[XIndex, YIndex];
+                    _unitARR[XIndex - 1, YIndex - 1].GetComponent<UnitInfo>()._XIndex--;
+                    _unitARR[XIndex - 1, YIndex - 1].GetComponent<UnitInfo>()._YIndex--;
+
+                    ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained = false;
+                    ChainedUnitsScanner.Instance._scanUnitARR[XIndex    , YIndex    ]._isChained = true;
+
+                    //Tween tween = _unitARR[XIndex - 1, YIndex + 1].transform.DOMove(_unitPosARR[XIndex , YIndex], 0.3f)
+                    //    .SetEase(Ease.OutBounce).OnComplete(() => StartCoroutine(dropUnit(XIndex, YIndex, borrowNeed - 1)));
+                    
+                    _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex - 1, YIndex - 1], unitPushTime)
+                        .SetEase(Ease.Linear);
+                    //yield return tween.WaitForCompletion();
+                    //yield return new WaitForSeconds(unitDropTime + 0.5f);
+                    break;
+                }
+            case unitPushType.Right:
+                {
+                    //unitsList.Remove(_unitARR[XIndex, YIndex]);
+                    //unitsList.Add(_unitARR[XIndex, YIndex]);
+
+                    if (!unitsList.Contains(_unitARR[XIndex, YIndex]))
+                    {
+                        unitsList.Add(_unitARR[XIndex, YIndex]);
+                    }
+
+                    _unitARR[XIndex + 1, YIndex - 1] = _unitARR[XIndex, YIndex];
+                    _unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._XIndex++;
+                    _unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._YIndex--;
+
+                    ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained = false;
+                    ChainedUnitsScanner.Instance._scanUnitARR[XIndex    , YIndex    ]._isChained = true;
+
+                    _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex + 1, YIndex - 1], unitPushTime)
+                        .SetEase(Ease.Linear);
+                    //yield return tween.WaitForCompletion();
+
+                    break;
+                }
+                yield return null;
+
+        }
+    }
+
+    private unitPushType checkIfCanPush(int XIndex, int YIndex)
+    {
+        if (YIndex > 0)
+        {
+            if (XIndex == 0)
+            {
+                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained)
+                {
+                    return unitPushType.Right;
+                }
+            }
+            else if (XIndex == _columns - 1)
+            {
+                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained)
+                {
+                    return unitPushType.Left;
+                }
+            }
+            else
+            {
+                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained)
+                {
+                    return unitPushType.Left;
+                }
+                else if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained)
+                {
+                    return unitPushType.Right;
+                }
+            }
+        }
+        return unitPushType.None;
+    }
+
+    private IEnumerator dropUnit(int XIndex, int YIndex, int distanceInUnit)
+    {
+        Vector3 targetPos = _unitPosARR[XIndex, YIndex - distanceInUnit];
+
+        // Make scanUnit that has fallen down unit become chained
+        ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = true;
+
+        // Update Unit info
+        _unitARR[XIndex, YIndex - distanceInUnit] = _unitARR[XIndex, YIndex];
+        _unitARR[XIndex, YIndex - distanceInUnit].GetComponent<UnitInfo>()._YIndex -= distanceInUnit;
+
+        yield return new WaitForSeconds(0.1f);
+        //Unit.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.OutBounce);
+        _unitARR[XIndex, YIndex - distanceInUnit].transform.DOMove(targetPos, unitDropTime).SetEase(Ease.OutBounce);
+    }
 
     private IEnumerator borrowUnitsFromCol(int XIndex, int YIndex, int borrowNumber, int borrowNeed, borrowUnitsType borrowType)
     {
@@ -669,7 +852,7 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             case borrowUnitsType.Left:
                 {
-                    for (int i = 0; i < borrowNumber; i ++)
+                    for (int i = 0; i < borrowNumber; i++)
                     {
                         _unitARR[XIndex, YIndex] = _unitARR[XIndex - 1, YIndex + 1];
                         _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._XIndex++;
@@ -713,7 +896,7 @@ public class PuzzleGenerator : MonoBehaviour {
                         ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex + 1]._isChained = true;
 
                         Tween tween = _unitARR[XIndex + 1, YIndex + 1].transform.DOMove(_unitPosARR[XIndex, YIndex], 0.1f)
-                            .SetEase(Ease.OutBounce);
+                            .SetEase(Ease.Linear);
                         yield return tween.WaitForCompletion();
 
 
@@ -759,21 +942,5 @@ public class PuzzleGenerator : MonoBehaviour {
             }
         }
         return borrowUnitsType.None;
-    }
-
-    private IEnumerator dropUnit(int XIndex, int YIndex, int distanceInUnit)
-    {
-        Vector3 targetPos = _unitPosARR[XIndex, YIndex - distanceInUnit];
-
-        // Make scanUnit that has fallen down unit become chained
-        ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = true;
-
-        // Update Unit info
-        _unitARR[XIndex, YIndex - distanceInUnit] = _unitARR[XIndex, YIndex];
-        _unitARR[XIndex, YIndex - distanceInUnit].GetComponent<UnitInfo>()._YIndex -= distanceInUnit;
-
-        yield return new WaitForSeconds(0.1f);
-        //Unit.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.OutBounce);
-        _unitARR[XIndex, YIndex - distanceInUnit].transform.DOMove(targetPos, unitDropTime).SetEase(Ease.OutBounce);
     }
 }
