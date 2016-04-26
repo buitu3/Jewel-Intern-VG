@@ -224,7 +224,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             // If there are chained units
             if (chainedUnits)
             {
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSeconds(0.1f);
                 StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
                 //PuzzleGenerator.Instance.reOrganizePuzzle();
             }
@@ -321,20 +321,32 @@ public class ChainedUnitsScanner : MonoBehaviour
                 }
             default: break;
         }
+        
+        //switch (unitInfo._negativeEff)
+        //{
+        //    case (UnitInfo.NegativeEff.frozen):
+        //        {
+        //            unitInfo.FrozenEff.SetActive(false);
+        //            break;
+        //        }
+        //    case (UnitInfo.NegativeEff.locked):
+        //        {
+        //            unitInfo.LockEff.SetActive(false);
+        //            break;
+        //        }
+        //}
 
-        switch (unitInfo._negativeEff)
+        if (unitInfo._value != PuzzleGenerator.Instance.Unit.Length - 1)
         {
-            case (UnitInfo.NegativeEff.frozen):
-                {
-                    unitInfo.FrozenEff.SetActive(false);
-                    break;
-                }
-            case (UnitInfo.NegativeEff.locked):
-                {
-                    unitInfo.LockEff.SetActive(false);
-                    break;
-                }
-        }
+            if (unitInfo.FrozenEff.activeSelf)
+            {
+                unitInfo.FrozenEff.SetActive(false);
+            }
+            if (unitInfo.LockEff.activeSelf)
+            {
+                unitInfo.LockEff.SetActive(false);
+            }
+        }        
     }
 
     #region Destroy Special Effect Units Method
@@ -782,7 +794,6 @@ public class ChainedUnitsScanner : MonoBehaviour
                 }
                 else if (unitInfo._negativeEff == UnitInfo.NegativeEff.locked)
                 {
-                    print("break lock");
                     unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
                     unitInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
                     continue;

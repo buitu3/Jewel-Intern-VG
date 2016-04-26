@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System.Collections;
 
@@ -17,6 +18,8 @@ public class GameController : MonoBehaviour {
 
     public Slider scoreSlider;
     public Text scoreText;
+
+    public GameObject pausePanel;
 
     [HideInInspector]
     public GameState currentState;
@@ -71,8 +74,19 @@ public class GameController : MonoBehaviour {
 
     public void pauseGame()
     {
-        print("paused");
+        Time.timeScale = 0f;
+        pausePanel.SetActive(true);
     }
 
-    
+    public void resumeGame()
+    {
+        Time.timeScale = 1f;
+        pausePanel.SetActive(false);
+    }
+
+    public void restartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Main Game Scene");
+    }
 }
