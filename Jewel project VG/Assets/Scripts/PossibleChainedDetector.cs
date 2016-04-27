@@ -90,7 +90,7 @@ public class PossibleChainedDetector : MonoBehaviour {
         for (int i = 0; i < suggestTween.Length; i++)
         {
             //suggestTween[i] = unitList[i].transform.DOPunchScale(punchScale, 3f, 0, 1f).SetLoops(-1).SetEase(Ease.Linear);
-            suggestTween[i] = unitList[i].transform.DOScale(punchScale, 2f).SetLoops(-1, LoopType.Yoyo);
+            suggestTween[i] = unitList[i].transform.DOScale(punchScale, 1.5f).SetLoops(-1, LoopType.Yoyo);
         }
     }
 

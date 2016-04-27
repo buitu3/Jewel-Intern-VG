@@ -114,7 +114,7 @@ public class ChainedUnitsScanner : MonoBehaviour
         //a.text = "130";
         //a.transform.SetParent(scoreTextCanvas.transform, false);
     }
-
+    
     //==============================================
     // Methods
     //==============================================
@@ -185,6 +185,8 @@ public class ChainedUnitsScanner : MonoBehaviour
     /// <returns></returns>
     public IEnumerator scanUnitsAfterSwap(GameObject focusedUnit, GameObject otherUnit)
     {
+        PuzzleGenerator.Instance.turnCountToUpgrade++;
+
         yield return new WaitForSeconds(InputHandler.Instance.swapTime);
 
         UnitInfo focusedUnitInfo = focusedUnit.GetComponent<UnitInfo>();

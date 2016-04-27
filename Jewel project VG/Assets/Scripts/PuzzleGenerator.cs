@@ -30,6 +30,7 @@ public class PuzzleGenerator : MonoBehaviour {
     private List<GameObject>[] _poolARR;
 
     private List<GameObject> unitsList;
+    private List<GameObject> temporaryPushRightUnitList;
 
     private Transform unitHolder;
     private Transform unitBGHolder;
@@ -45,6 +46,10 @@ public class PuzzleGenerator : MonoBehaviour {
 
     private float unitDropTime = 0.7f;
     private float unitPushTime = 0.3f;
+
+    private int turnsToUpgradeRandomLightningUnit = 5;
+    [HideInInspector]
+    public int turnCountToUpgrade = 0;
 
     private int poolSize;
 
@@ -172,8 +177,8 @@ public class PuzzleGenerator : MonoBehaviour {
         upgradeUnit(7, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
         upgradeUnit(5, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
         upgradeUnit(3, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
-        upgradeUnit(2, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-        upgradeUnit(2, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        upgradeUnit(4, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
         //upgradeUnit(2, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
 
         //upgradeUnit(3, 2, UnitInfo.SpecialEff.hLightning);
@@ -437,6 +442,13 @@ public class PuzzleGenerator : MonoBehaviour {
         if (!canPushUnit)
         {
             GameController.Instance.currentState = GameController.GameState.idle;
+            
+            if (turnCountToUpgrade >= turnsToUpgradeRandomLightningUnit)
+            {
+                print("upgrade");
+                upgradeRandomUnitIntoLightning();
+                turnCountToUpgrade = 0;
+            }
         }
         else
         {
@@ -655,9 +667,7 @@ public class PuzzleGenerator : MonoBehaviour {
                 }
             }
         }
-        // --------------------------------------
-        //      Temporary Disable
-        // --------------------------------------
+
         // Regen units
         if (nullObjectCount > 0)
         {
@@ -679,6 +689,7 @@ public class PuzzleGenerator : MonoBehaviour {
     {
         bool hasUnitToPush = false;
         List<int> pushColList = new List<int>();
+        temporaryPushRightUnitList = new List<GameObject>();
 
         #region Find push right column
         for (int XIndex = _columns - 2; XIndex >= 0; XIndex--)
@@ -716,10 +727,12 @@ public class PuzzleGenerator : MonoBehaviour {
         //}
         #endregion
 
-        if (hasUnitToPush)
-        {
-            yield return new WaitForSeconds(0.3f);
-        }
+        //if (hasUnitToPush)
+        //{
+        //    yield return new WaitForSeconds(0.3f);
+        //}
+
+        //yield return new WaitForSeconds(0.3f);
 
         #region Find push left column
         //hasUnitToPush = false;
@@ -795,9 +808,14 @@ public class PuzzleGenerator : MonoBehaviour {
                         }
                     }
 
+                    if (!temporaryPushRightUnitList.Contains(_unitARR[col, YIndex]))
+                    {
+                        temporaryPushRightUnitList.Add(_unitARR[col, YIndex]);
+                    }
+
                     canPushUnit = true;
                     StartCoroutine(pushUnit(col, YIndex, pushType));
-                    return true;
+                    return true;                    
                 }
             }
         }
@@ -823,11 +841,17 @@ public class PuzzleGenerator : MonoBehaviour {
                     {
                         if (!isAboveHighestFrozenUnitInCol(col, YIndex)
                         && (!ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex + 1]._isChained)
-                        && _unitARR[col, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
+                        && _unitARR[col, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+                        || temporaryPushRightUnitList.Contains(_unitARR[col, YIndex]))
                         {
                             print(col + ",,," + YIndex + ",,,cant push");
                             return false;
                         }
+                    }
+
+                    if (!temporaryPushRightUnitList.Contains(_unitARR[col, YIndex]))
+                    {
+                        temporaryPushRightUnitList.Add(_unitARR[col, YIndex]);
                     }
 
                     canPushUnit = true;
@@ -888,7 +912,7 @@ public class PuzzleGenerator : MonoBehaviour {
                     //    .SetEase(Ease.OutBounce).OnComplete(() => StartCoroutine(dropUnit(XIndex, YIndex, borrowNeed - 1)));
                     
                     _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex - 1, YIndex - 1], unitPushTime)
-                        .SetEase(Ease.Linear);
+                        .SetEase(Ease.InQuad);
                     //yield return tween.WaitForCompletion();
                     //yield return new WaitForSeconds(unitDropTime + 0.5f);
                     break;
@@ -941,14 +965,14 @@ public class PuzzleGenerator : MonoBehaviour {
             }
             else
             {
-                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained)
-                {
-                    return unitPushType.Left;
-                }
-                else if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained)
+                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained)
                 {
                     return unitPushType.Right;
                 }
+                else if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained)
+                {
+                    return unitPushType.Left;
+                }               
             }
         }
         return unitPushType.None;
@@ -1066,5 +1090,36 @@ public class PuzzleGenerator : MonoBehaviour {
             }
         }
         return borrowUnitsType.None;
+    }
+
+    public void upgradeRandomUnitIntoLightning()
+    {
+        int randomXIndex = Random.Range(0, _columns);
+        int randomYIndex = Random.Range(0, _rows);
+        int randomLighting = Random.Range(0, 2);
+
+        if (ChainedUnitsScanner.Instance._scanUnitARR[randomXIndex, randomYIndex]._isChained || 
+            _unitARR[randomXIndex, randomYIndex].GetComponent<UnitInfo>()._unitEff != UnitInfo.SpecialEff.noEff ||
+            _unitARR[randomXIndex, randomYIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.noEff ||
+            ChainedUnitsScanner.Instance._scanUnitARR[randomXIndex, randomYIndex]._value == Unit.Length - 1)
+        {
+            upgradeRandomUnitIntoLightning();
+        }
+        else
+        {
+            switch (randomLighting)
+            {
+                case 0:
+                    {
+                        upgradeUnit(randomXIndex, randomYIndex, UnitInfo.SpecialEff.vLightning, UnitInfo.NegativeEff.noEff);
+                        break;
+                    }
+                case 1:
+                    {
+                        upgradeUnit(randomXIndex, randomYIndex, UnitInfo.SpecialEff.hLightning, UnitInfo.NegativeEff.noEff);
+                        break;
+                    }
+            }            
+        }
     }
 }
