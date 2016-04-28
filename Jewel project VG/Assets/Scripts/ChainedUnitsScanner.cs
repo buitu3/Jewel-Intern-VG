@@ -114,7 +114,7 @@ public class ChainedUnitsScanner : MonoBehaviour
         //a.text = "130";
         //a.transform.SetParent(scoreTextCanvas.transform, false);
     }
-
+    
     //==============================================
     // Methods
     //==============================================
@@ -185,6 +185,8 @@ public class ChainedUnitsScanner : MonoBehaviour
     /// <returns></returns>
     public IEnumerator scanUnitsAfterSwap(GameObject focusedUnit, GameObject otherUnit)
     {
+        PuzzleGenerator.Instance.turnCountToUpgrade++;
+
         yield return new WaitForSeconds(InputHandler.Instance.swapTime);
 
         UnitInfo focusedUnitInfo = focusedUnit.GetComponent<UnitInfo>();
@@ -224,7 +226,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             // If there are chained units
             if (chainedUnits)
             {
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSeconds(0.1f);
                 StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
                 //PuzzleGenerator.Instance.reOrganizePuzzle();
             }
@@ -283,7 +285,8 @@ public class ChainedUnitsScanner : MonoBehaviour
         else
         {
             bonusPoint = 0;
-            GameController.Instance.currentState = GameController.GameState.idle;
+            //GameController.Instance.currentState = GameController.GameState.idle;
+            StartCoroutine(PuzzleGenerator.Instance.scanHollowUnits());
         }
     }
 
@@ -320,20 +323,32 @@ public class ChainedUnitsScanner : MonoBehaviour
                 }
             default: break;
         }
+        
+        //switch (unitInfo._negativeEff)
+        //{
+        //    case (UnitInfo.NegativeEff.frozen):
+        //        {
+        //            unitInfo.FrozenEff.SetActive(false);
+        //            break;
+        //        }
+        //    case (UnitInfo.NegativeEff.locked):
+        //        {
+        //            unitInfo.LockEff.SetActive(false);
+        //            break;
+        //        }
+        //}
 
-        switch (unitInfo._negativeEff)
+        if (unitInfo._value != PuzzleGenerator.Instance.Unit.Length - 1)
         {
-            case (UnitInfo.NegativeEff.frozen):
-                {
-                    unitInfo.FrozenEff.SetActive(false);
-                    break;
-                }
-            case (UnitInfo.NegativeEff.locked):
-                {
-                    unitInfo.LockEff.SetActive(false);
-                    break;
-                }
-        }
+            if (unitInfo.FrozenEff.activeSelf)
+            {
+                unitInfo.FrozenEff.SetActive(false);
+            }
+            if (unitInfo.LockEff.activeSelf)
+            {
+                unitInfo.LockEff.SetActive(false);
+            }
+        }        
     }
 
     #region Destroy Special Effect Units Method
@@ -781,7 +796,6 @@ public class ChainedUnitsScanner : MonoBehaviour
                 }
                 else if (unitInfo._negativeEff == UnitInfo.NegativeEff.locked)
                 {
-                    print("break lock");
                     unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
                     unitInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
                     continue;
@@ -1964,9 +1978,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                 _scanUnitARR[XIndex - 2, YIndex]._isChained = true;
                 _scanUnitARR[XIndex - 1, YIndex]._isChained = true;
                 _scanUnitARR[XIndex, YIndex]._isChained = true;
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+
                 PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex].SetActive(false);
                 PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].SetActive(false);
                 PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);

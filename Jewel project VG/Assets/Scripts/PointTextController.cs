@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PointTextController : MonoBehaviour {
+public class PointTextController : MonoBehaviour
+{
 
     public float speed;
     private float lifeTime = 0.7f;
@@ -11,7 +12,7 @@ public class PointTextController : MonoBehaviour {
     private Vector3 nextPos;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         pointTransform = GetComponent<Transform>();
 

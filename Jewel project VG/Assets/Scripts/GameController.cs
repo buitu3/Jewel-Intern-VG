@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System.Collections;
 
@@ -18,6 +19,8 @@ public class GameController : MonoBehaviour {
     public Slider scoreSlider;
     public Text scoreText;
 
+    public GameObject pausePanel;
+
     [HideInInspector]
     public GameState currentState;
 
@@ -31,6 +34,8 @@ public class GameController : MonoBehaviour {
         _statesCount
     }
 
+    private Tweener scoreTween;
+
     private int Score;
 
     //==============================================
@@ -40,11 +45,15 @@ public class GameController : MonoBehaviour {
     void Awake()
     {
         Instance = this;
+
+        DOTween.SetTweensCapacity(100, 10);
     }
 
     void start()
     {
         currentState = GameState.idle;
+
+        //scoreTween = DOTween.To(() => Score, x => Score = x, 0, 0.3f).OnUpdate(updateScoreText);
     }
 
     //void Update()
@@ -60,7 +69,9 @@ public class GameController : MonoBehaviour {
     {
         //Score += bonusScore;
         scoreSlider.DOValue(Score += bonusScore, 1f, true);
-        DOTween.To(() => Score, x => Score = x, Score += bonusScore, 0.3f).SetUpdate(UpdateType.Fixed).OnUpdate(updateScoreText);
+        //DOTween.To(() => Score, x => Score = x, Score += bonusScore, 0.3f).OnUpdate(updateScoreText);
+        scoreTween = DOTween.To(() => Score, x => Score = x, Score += bonusScore, 0.3f).OnUpdate(updateScoreText);
+        //scoreTween.ChangeEndValue(Score += bonusScore);
         //scoreText.text = Score.ToString();
     }
 
@@ -71,8 +82,19 @@ public class GameController : MonoBehaviour {
 
     public void pauseGame()
     {
-        print("paused");
+        Time.timeScale = 0f;
+        pausePanel.SetActive(true);
     }
 
-    
+    public void resumeGame()
+    {
+        Time.timeScale = 1f;
+        pausePanel.SetActive(false);
+    }
+
+    public void restartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Main Game Scene");
+    }
 }

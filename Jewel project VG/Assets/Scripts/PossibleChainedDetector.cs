@@ -90,7 +90,7 @@ public class PossibleChainedDetector : MonoBehaviour {
         for (int i = 0; i < suggestTween.Length; i++)
         {
             //suggestTween[i] = unitList[i].transform.DOPunchScale(punchScale, 3f, 0, 1f).SetLoops(-1).SetEase(Ease.Linear);
-            suggestTween[i] = unitList[i].transform.DOScale(punchScale, 2f).SetLoops(-1, LoopType.Yoyo);
+            suggestTween[i] = unitList[i].transform.DOScale(punchScale, 1.5f).SetLoops(-1, LoopType.Yoyo);
         }
     }
 
@@ -260,7 +260,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 0 && YIndex < PuzzleGenerator.Instance._rows - 2)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex - 1, YIndex + 2] == value && value >= 0)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex - 1, YIndex + 2] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex + 2].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -272,7 +274,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (YIndex < PuzzleGenerator.Instance._rows - 3)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex    , YIndex + 3] == value && value >= 0)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex    , YIndex + 3] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 3].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -284,7 +288,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex < PuzzleGenerator.Instance._columns - 1 && YIndex < PuzzleGenerator.Instance._rows - 2)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex + 1, YIndex + 2] == value && value >= 0)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex + 1, YIndex + 2] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex + 2].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -296,7 +302,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 0 && YIndex > 0 && YIndex < PuzzleGenerator.Instance._rows - 1)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex - 1, YIndex - 1] == value && value >= 0)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex - 1, YIndex - 1] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -308,7 +316,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (YIndex > 1 && YIndex < PuzzleGenerator.Instance._rows - 1)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex    , YIndex - 2] == value && value >= 0)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex    , YIndex - 2] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 2].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -320,7 +330,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex < PuzzleGenerator.Instance._columns - 1 && YIndex > 0 && YIndex < PuzzleGenerator.Instance._rows - 1)
         {
-            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex + 1, YIndex - 1] == value && value >= 0)
+            if (_valueARR[XIndex, YIndex + 1] == value && _valueARR[XIndex + 1, YIndex - 1] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -332,7 +344,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 0 && YIndex < PuzzleGenerator.Instance._rows - 2)
         {
-            if (_valueARR[XIndex, YIndex + 2] == value && _valueARR[XIndex - 1, YIndex + 1] == value && value >= 0)
+            if (_valueARR[XIndex, YIndex + 2] == value && _valueARR[XIndex - 1, YIndex + 1] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -344,7 +358,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex < PuzzleGenerator.Instance._columns - 1 && YIndex < PuzzleGenerator.Instance._rows - 2)
         {
-            if (_valueARR[XIndex, YIndex + 2] == value && _valueARR[XIndex + 1, YIndex + 1] == value && value >= 0)
+            if (_valueARR[XIndex, YIndex + 2] == value && _valueARR[XIndex + 1, YIndex + 1] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -358,7 +374,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 1 && YIndex > 0)
         {
-            if (_valueARR[XIndex - 1, YIndex    ] == value && _valueARR[XIndex - 2, YIndex - 1] == value && value >= 0)
+            if (_valueARR[XIndex - 1, YIndex    ] == value && _valueARR[XIndex - 2, YIndex - 1] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -370,7 +388,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 2)
         {
-            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex - 3, YIndex    ] == value && value >= 0)
+            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex - 3, YIndex    ] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex - 3, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -382,7 +402,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 1 && YIndex < PuzzleGenerator.Instance._rows - 1)
         {
-            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex - 2, YIndex + 1] == value && value >= 0)
+            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex - 2, YIndex + 1] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -394,7 +416,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 0 && XIndex < PuzzleGenerator.Instance._columns - 1 && YIndex > 0)
         {
-            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex + 1, YIndex - 1] == value && value >= 0)
+            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex + 1, YIndex - 1] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -406,7 +430,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 0 && XIndex < PuzzleGenerator.Instance._columns - 2)
         {
-            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex + 2, YIndex    ] == value && value >= 0)
+            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex + 2, YIndex    ] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -418,7 +444,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 0 && XIndex < PuzzleGenerator.Instance._columns - 1 && YIndex < PuzzleGenerator.Instance._rows - 1)
         {
-            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex + 1, YIndex + 1] == value && value >= 0)
+            if (_valueARR[XIndex - 1, YIndex] == value && _valueARR[XIndex + 1, YIndex + 1] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -430,7 +458,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 1 && YIndex > 0)
         {
-            if (_valueARR[XIndex - 2, YIndex] == value && _valueARR[XIndex - 1, YIndex - 1] == value && value >= 0)
+            if (_valueARR[XIndex - 2, YIndex] == value && _valueARR[XIndex - 1, YIndex - 1] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
@@ -442,7 +472,9 @@ public class PossibleChainedDetector : MonoBehaviour {
     {
         if (XIndex > 1 && YIndex < PuzzleGenerator.Instance._rows - 1)
         {
-            if (_valueARR[XIndex - 2, YIndex] == value && _valueARR[XIndex - 1, YIndex + 1] == value && value >= 0)
+            if (_valueARR[XIndex - 2, YIndex] == value && _valueARR[XIndex - 1, YIndex + 1] == value && value >= 0
+                && PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                && PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff)
             {
                 return true;
             }
