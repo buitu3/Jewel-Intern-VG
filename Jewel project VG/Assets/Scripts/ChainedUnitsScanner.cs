@@ -162,7 +162,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
 
             yield return new WaitForSeconds(0.6f);
-            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
         }
         else if (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
         {
@@ -171,7 +171,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
 
             yield return new WaitForSeconds(0.6f);
-            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
         }
         else
         {
@@ -185,8 +185,8 @@ public class ChainedUnitsScanner : MonoBehaviour
             // If there are chained units
             if (chainedUnits)
             {
-                yield return new WaitForSeconds(0.1f);
-                StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
+                yield return new WaitForSeconds(0.3f);
+                StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
                 //PuzzleGenerator.Instance.reOrganizePuzzle();
             }
             else
@@ -233,36 +233,39 @@ public class ChainedUnitsScanner : MonoBehaviour
             scanThreeUnitsChainedType(unitsXIndex[i], unitsYIndex[i]);
         }
 
-        yield return new WaitForSeconds(0.4f);
+        //yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.6f);
 
-        // If there are chained units
-        if (chainedUnits)
-        {
-            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
-            //PuzzleGenerator.Instance.reOrganizePuzzle();
-        }
-        else
-        {
-            bonusPoint = 0;
-            //-----------------------------------------------------------
-            //--------------- Temporary added ------------------------
-            //-----------------------------------------------------------
+        StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(chainedUnits));
 
-            //GameController.Instance.currentState = GameController.GameState.idle;
+        //// If there are chained units
+        //if (chainedUnits)
+        //{
+        //    StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle());
+        //    //PuzzleGenerator.Instance.reOrganizePuzzle();
+        //}
+        //else
+        //{
+        //    bonusPoint = 0;
+        //    //-----------------------------------------------------------
+        //    //--------------- Temporary added ------------------------
+        //    //-----------------------------------------------------------
 
-            //-----------------------------------------------------------
-            //-----------------------------------------------------------
+        //    //GameController.Instance.currentState = GameController.GameState.idle;
+
+        //    //-----------------------------------------------------------
+        //    //-----------------------------------------------------------
 
 
-            //-----------------------------------------------------------
-            //--------------- Temporary disabled ------------------------
-            //-----------------------------------------------------------
+        //    //-----------------------------------------------------------
+        //    //--------------- Temporary disabled ------------------------
+        //    //-----------------------------------------------------------
 
-            StartCoroutine(PuzzleGenerator.Instance.scanHollowUnits());
+        //    //StartCoroutine(PuzzleGenerator.Instance.scanHollowUnits());
 
-            //-----------------------------------------------------------
-            //-----------------------------------------------------------
-        }
+        //    //-----------------------------------------------------------
+        //    //-----------------------------------------------------------
+        //}
     }
 
     #region Disable,Destroy and Special Destroy units methods
