@@ -465,8 +465,12 @@ public class PuzzleGenerator : MonoBehaviour {
 
     public IEnumerator reOrganizePuzzle(bool hasChained)
     {
+<<<<<<< HEAD
         unitsList.Clear();
         //unitsList = new List<GameObject>();
+=======
+        unitsList = new List<GameObject>();
+>>>>>>> refs/remotes/origin/master
 
         if (hasChained)
         {
@@ -497,7 +501,10 @@ public class PuzzleGenerator : MonoBehaviour {
     public IEnumerator scanHollowUnits(bool hasChained)
     {
         //unitsList = new List<GameObject>();
+<<<<<<< HEAD
         waitTweenList.Clear();
+=======
+>>>>>>> refs/remotes/origin/master
 
         canPushUnit = false;
         yield return StartCoroutine(findPushUnitsInPuzzle());
@@ -701,6 +708,7 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             // If current Index is hollowed,remember it
             if (_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
+<<<<<<< HEAD
             {
                 if (YIndex == 0)
                 {
@@ -721,6 +729,28 @@ public class PuzzleGenerator : MonoBehaviour {
                 nullObjectCount++;
                 nullUnitsYIndex.Add(YIndex);
             }
+=======
+            {
+                if (YIndex == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    if (!hollowUnitsYIndex.Contains(YIndex))
+                    {
+                        hollowUnitsYIndex.Add(YIndex);
+                    }
+                    hollowUnitcount++;
+                }               
+            }
+            // If current Index is empty space,remember it
+            else if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained)
+            {
+                nullObjectCount++;
+                nullUnitsYIndex.Add(YIndex);
+            }
+>>>>>>> refs/remotes/origin/master
             // If object is frozen,reset hollowUnitcount and nullObjectCount to prevent wrong falling down behaviour
             else if (_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
             {
