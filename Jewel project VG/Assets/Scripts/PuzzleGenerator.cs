@@ -465,12 +465,8 @@ public class PuzzleGenerator : MonoBehaviour {
 
     public IEnumerator reOrganizePuzzle(bool hasChained)
     {
-<<<<<<< HEAD
         unitsList.Clear();
         //unitsList = new List<GameObject>();
-=======
-        unitsList = new List<GameObject>();
->>>>>>> refs/remotes/origin/master
 
         if (hasChained)
         {
@@ -501,10 +497,7 @@ public class PuzzleGenerator : MonoBehaviour {
     public IEnumerator scanHollowUnits(bool hasChained)
     {
         //unitsList = new List<GameObject>();
-<<<<<<< HEAD
         waitTweenList.Clear();
-=======
->>>>>>> refs/remotes/origin/master
 
         canPushUnit = false;
         yield return StartCoroutine(findPushUnitsInPuzzle());
@@ -708,7 +701,6 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             // If current Index is hollowed,remember it
             if (_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
-<<<<<<< HEAD
             {
                 if (YIndex == 0)
                 {
@@ -729,28 +721,6 @@ public class PuzzleGenerator : MonoBehaviour {
                 nullObjectCount++;
                 nullUnitsYIndex.Add(YIndex);
             }
-=======
-            {
-                if (YIndex == 0)
-                {
-                    continue;
-                }
-                else
-                {
-                    if (!hollowUnitsYIndex.Contains(YIndex))
-                    {
-                        hollowUnitsYIndex.Add(YIndex);
-                    }
-                    hollowUnitcount++;
-                }               
-            }
-            // If current Index is empty space,remember it
-            else if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained)
-            {
-                nullObjectCount++;
-                nullUnitsYIndex.Add(YIndex);
-            }
->>>>>>> refs/remotes/origin/master
             // If object is frozen,reset hollowUnitcount and nullObjectCount to prevent wrong falling down behaviour
             else if (_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
             {
@@ -951,9 +921,9 @@ public class PuzzleGenerator : MonoBehaviour {
                     && !isAboveHighestFrozenUnitInCol(col + 1, YIndex - 1)
                     && !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained)
                 {
-                    // Ignore if the push unit is not the highest among units that below frozen unit in the col
                     if (YIndex < _rows - 1)
                     {
+                        // Ignore if the push unit is not the highest among all units that below the highest frozen unit in the same col
                         if (!isAboveHighestFrozenUnitInCol(col, YIndex)
                         && (!ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex + 1]._isChained)
                         && _unitARR[col, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
@@ -1029,7 +999,7 @@ public class PuzzleGenerator : MonoBehaviour {
                             print(col + ",,," + YIndex + ",,,cant push");
                             return false;
                         }
-                    }
+                    }                    
 
                     if (!temporaryPushRightUnitList.Contains(_unitARR[col, YIndex]))
                     {
@@ -1038,6 +1008,29 @@ public class PuzzleGenerator : MonoBehaviour {
 
                     canPushUnit = true;
                     StartCoroutine(pushUnit(col, YIndex, pushType));
+
+                    // If only the unit on top left can repalce this unit's position,then push it to this unit positin on the same turn
+                    if (YIndex < _rows - 1 && col > 0)
+                    {
+                        if (col == _columns - 1)
+                        {
+                            if (_unitARR[col, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen
+                                && _unitARR[col - 1, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+                            {
+                                StartCoroutine(pushUnit(col - 1, YIndex + 1, unitPushType.Right));
+                            }
+                        }
+                        else if (col < _columns - 1)
+                        {
+                            if (_unitARR[col, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen
+                                && _unitARR[col - 1, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen
+                                && _unitARR[col + 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+                            {
+                                StartCoroutine(pushUnit(col - 1, YIndex + 1, unitPushType.Right));
+                            }
+                        }
+                    }
+
                     return true;
                 }
             }
