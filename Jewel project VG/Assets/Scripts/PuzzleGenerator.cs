@@ -45,8 +45,8 @@ public class PuzzleGenerator : MonoBehaviour {
     private float YPadding = 0.73f;
     private float regenYpos = 6f;
 
-    private float unitDropTime = 0.4f;
-    private float unitPushTime = 0.3f;
+    private float unitDropTime = 0.5f;
+    private float unitPushTime = 0.45f;
 
     private int turnsToUpgradeRandomLightningUnit = 4;
     [HideInInspector]
@@ -315,10 +315,10 @@ public class PuzzleGenerator : MonoBehaviour {
         if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
         {
             GameObject target = _unitARR[XIndex, YIndex];
-            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(Ease.InSine);
-            target.transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime - 0.2f).
-                OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.2f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
-                SetEase(Ease.InSine);
+            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(Ease.InSine);
+            //target.transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime - 0.2f).
+            //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
+            //    SetEase(Ease.InSine);
         }
     }
 
@@ -382,7 +382,11 @@ public class PuzzleGenerator : MonoBehaviour {
         //If this is regen Unit,move to it's original pos
         if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
         {
-            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(Ease.InQuad);
+            GameObject target = _unitARR[XIndex, YIndex];
+            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(Ease.InSine);
+            target.transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime - 0.2f).
+                OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
+                SetEase(Ease.InSine);
         }
     }
 
@@ -497,7 +501,6 @@ public class PuzzleGenerator : MonoBehaviour {
     public IEnumerator scanHollowUnits(bool hasChained)
     {
         //unitsList = new List<GameObject>();
-        waitTweenList.Clear();
 
         canPushUnit = false;
         yield return StartCoroutine(findPushUnitsInPuzzle());
@@ -809,6 +812,8 @@ public class PuzzleGenerator : MonoBehaviour {
 
     private IEnumerator findPushUnitsInPuzzle()
     {
+        //waitTweenList.Clear();
+
         bool hasUnitToPush = false;
         List<int> pushColList = new List<int>();
         temporaryPushRightUnitList = new List<GameObject>();
@@ -881,7 +886,9 @@ public class PuzzleGenerator : MonoBehaviour {
         if (hasUnitToPush)
         {
             //yield return new WaitForSeconds(0.1f);
-            yield return new WaitForSeconds(0.3f);
+            //yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.02f);
+            //yield return new WaitForEndOfFrame();
         }
 
         if (hasUnitToPush)
@@ -1065,6 +1072,7 @@ public class PuzzleGenerator : MonoBehaviour {
 
     private IEnumerator pushUnit(int XIndex, int YIndex, unitPushType pushType)
     {
+        GameObject target = _unitARR[XIndex, YIndex];
         switch (pushType)
         {
             case unitPushType.Left:
@@ -1086,10 +1094,23 @@ public class PuzzleGenerator : MonoBehaviour {
                     //Tween tween = _unitARR[XIndex - 1, YIndex + 1].transform.DOMove(_unitPosARR[XIndex , YIndex], 0.3f)
                     //    .SetEase(Ease.OutBounce).OnComplete(() => StartCoroutine(dropUnit(XIndex, YIndex, borrowNeed - 1)));
 
-                    _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex - 1, YIndex - 1], unitPushTime)
+                    // If the Tween that attched to this gameobject 's transform is still running,wait until it complete
+                    if (DOTween.TweensByTarget(target.transform) != null && DOTween.TweensByTarget(target.transform).Count > 0)
+                    {
+                        yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
+                    }
+
+                    Tween t = target.transform.DOMove(_unitPosARR[XIndex - 1, YIndex - 1], unitPushTime)
                         .SetEase(Ease.InSine);
+
+                    //if (!waitTweenList.Contains(t))
+                    //{
+                    //    waitTweenList.Add(t);
+                    //}
+
                     //yield return tween.WaitForCompletion();
                     //yield return new WaitForSeconds(unitDropTime + 0.5f);
+
                     break;
                 }
             case unitPushType.Right:
@@ -1109,14 +1130,24 @@ public class PuzzleGenerator : MonoBehaviour {
                     ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained = false;
                     ChainedUnitsScanner.Instance._scanUnitARR[XIndex    , YIndex    ]._isChained = true;
 
-                    _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex + 1, YIndex - 1], unitPushTime)
+                    //// If the Tween that attched to this gameobject 's transform is still running,wait until it complete
+                    //if (DOTween.TweensByTarget(target.transform) != null && DOTween.TweensByTarget(target.transform).Count > 0)
+                    //{
+                    //    yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
+                    //}
+
+                    Tween  t = _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex + 1, YIndex - 1], unitPushTime)
                         .SetEase(Ease.Linear);
+                    //if (!waitTweenList.Contains(t))
+                    //{
+                    //    waitTweenList.Add(t);
+                    //}
+
                     //yield return tween.WaitForCompletion();
 
                     break;
                 }
                 yield return null;
-
         }
     }
 
@@ -1176,8 +1207,16 @@ public class PuzzleGenerator : MonoBehaviour {
         yield return null;
         //Unit.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.OutBounce);
 
-        //_unitARR[XIndex, YIndex - distanceInUnit].transform.DOMove(targetPos, unitDropTime).SetEase(Ease.OutBounce);
+        //_unitARR[XIndex, YIndex - distanceInUnit].transform.DOMove(targetPos, unitDropTime).SetEase(Ease.OutBounce);        
+
+        // If the Tween that attched to this gameobject 's transform is still running,wait until it complete
+        if (DOTween.TweensByTarget(targetObject.transform) != null && DOTween.TweensByTarget(targetObject.transform).Count > 0)
+        {
+            yield return DOTween.TweensByTarget(targetObject.transform)[0].WaitForCompletion();
+        }
+
         _unitARR[XIndex, YIndex - distanceInUnit].transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
+
         //targetObject.transform.DOMove(targetPos, unitDropTime - 0.2f).
         //    OnComplete(() => targetObject.transform.DOMoveY(targetObject.transform.position.y + 0.2f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
         //    SetEase(Ease.InSine);
