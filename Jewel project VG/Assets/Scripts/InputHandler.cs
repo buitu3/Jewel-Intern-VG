@@ -104,7 +104,7 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
             //    + PuzzleGenerator.Instance._unitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex].GetComponent<UnitInfo>()._YIndex + " : "
             //    + PuzzleGenerator.Instance._unitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex].GetComponent<UnitInfo>()._value);
 
-            print(ChainedUnitsScanner.Instance._scanUnitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex]._isChained);
+            //print(ChainedUnitsScanner.Instance._scanUnitARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex]._isChained);
 
             //print(PuzzleGenerator.Instance._valueARR[_unit.GetComponent<UnitInfo>()._XIndex, +_unit.GetComponent<UnitInfo>()._YIndex]);
 
