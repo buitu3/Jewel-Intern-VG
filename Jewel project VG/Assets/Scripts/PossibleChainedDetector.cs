@@ -23,7 +23,7 @@ public class PossibleChainedDetector : MonoBehaviour {
 
     private Tween[] suggestTween = new Tween[3];
 
-    private Vector2 punchScale = new Vector2(1.4f, 1.4f);
+    private Vector2 zoomOutScale = new Vector2(1.4f, 1.4f);
 
     //==============================================
     // Unity Methods
@@ -90,7 +90,7 @@ public class PossibleChainedDetector : MonoBehaviour {
         for (int i = 0; i < suggestTween.Length; i++)
         {
             //suggestTween[i] = unitList[i].transform.DOPunchScale(punchScale, 3f, 0, 1f).SetLoops(-1).SetEase(Ease.Linear);
-            suggestTween[i] = unitList[i].transform.DOScale(punchScale, 1.5f).SetLoops(-1, LoopType.Yoyo);
+            suggestTween[i] = unitList[i].transform.DOScale(zoomOutScale, 1.2f).SetLoops(-1, LoopType.Yoyo);
         }
     }
 
@@ -109,15 +109,11 @@ public class PossibleChainedDetector : MonoBehaviour {
         if (suggestList.Count > 0)
         {
             blowUnits(suggestList);
-            //print("asdf");
-            //for (int i = 0;i < suggestList.Count; i++)
-            //{
-            //    print(suggestList[i].GetComponent<UnitInfo>()._XIndex + "---" + suggestList[i].GetComponent<UnitInfo>()._YIndex);
-            //}
         }
         else
         {
             print("no more move");
+            StartCoroutine(PuzzleShuffle.Instance.shufflePuzzle());
         }
     }
 

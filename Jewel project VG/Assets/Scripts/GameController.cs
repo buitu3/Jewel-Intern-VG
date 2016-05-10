@@ -31,6 +31,7 @@ public class GameController : MonoBehaviour {
         scanningUnit,
         destroyingUnit,
         regenUnit,
+        shufflePuzzle,
         _statesCount
     }
 

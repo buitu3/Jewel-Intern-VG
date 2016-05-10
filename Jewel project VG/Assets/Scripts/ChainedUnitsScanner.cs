@@ -234,7 +234,11 @@ public class ChainedUnitsScanner : MonoBehaviour
         }
 
         //yield return new WaitForSeconds(0.4f);
-        yield return new WaitForSeconds(0.6f);
+        if (chainedUnits)
+        {
+            yield return new WaitForSeconds(0.6f);
+
+        }
 
         StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(chainedUnits));
 
@@ -414,7 +418,6 @@ public class ChainedUnitsScanner : MonoBehaviour
 
         if (XTarget > 0 && XTarget < PuzzleGenerator.Instance._columns - 1 && YTarget > 0 && YTarget < PuzzleGenerator.Instance._rows - 1)
         {
-            print("middle");
             if (!_scanUnitARR[XTarget - 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget + 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget - 1); }
@@ -426,35 +429,30 @@ public class ChainedUnitsScanner : MonoBehaviour
         }
         else if (XTarget == 0 && YTarget == 0)
         {
-            print("bottom left");
             if (!_scanUnitARR[XTarget + 1, YTarget]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget); }
             if (!_scanUnitARR[XTarget, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget + 1); }
             if (!_scanUnitARR[XTarget + 1, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget + 1); }
         }
         else if (XTarget == 0 && YTarget == PuzzleGenerator.Instance._rows - 1)
         {
-            print("top left");
             if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget + 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget + 1, YTarget]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget); }
         }
         else if (XTarget == PuzzleGenerator.Instance._columns - 1 && YTarget == PuzzleGenerator.Instance._rows - 1)
         {
-            print("top right");
             if (!_scanUnitARR[XTarget - 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget - 1, YTarget]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget); }
         }
         else if (XTarget == PuzzleGenerator.Instance._columns - 1 && YTarget == 0)
         {
-            print("bottom right");
             if (!_scanUnitARR[XTarget - 1, YTarget]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget); }
             if (!_scanUnitARR[XTarget - 1, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget + 1); }
             if (!_scanUnitARR[XTarget, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget + 1); }
         }
         else if (XTarget == 0)
         {
-            print("left");
             if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget + 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget + 1, YTarget]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget); }
@@ -463,7 +461,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         }
         else if (XTarget == PuzzleGenerator.Instance._columns - 1)
         {
-            print("right");
             if (!_scanUnitARR[XTarget - 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget - 1, YTarget]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget); }
@@ -472,7 +469,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         }
         else if (YTarget == 0)
         {
-            print("bottom");
             if (!_scanUnitARR[XTarget - 1, YTarget]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget); }
             if (!_scanUnitARR[XTarget + 1, YTarget]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget); }
             if (!_scanUnitARR[XTarget - 1, YTarget + 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget + 1); }
@@ -481,7 +477,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         }
         else if (YTarget == PuzzleGenerator.Instance._rows - 1)
         {
-            print("top");
             if (!_scanUnitARR[XTarget - 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget); unitsYIndex.Add(YTarget - 1); }
             if (!_scanUnitARR[XTarget + 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget - 1); }
@@ -848,21 +843,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         // Horizontal 5 chained
         if (isRightThreeChained(XIndex, YIndex) && isLeftThreeChained(XIndex, YIndex))
         {
-            //// Disable chained Units
-            //_scanUnitARR[XIndex - 2, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex -1, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex   , YIndex]._isChained = true;
-            //_scanUnitARR[XIndex + 1, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex + 2, YIndex]._isChained = true;
-            //PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex].SetActive(false);
-
-            //// Upgrade special Unit
-            //PuzzleGenerator.Instance.upgradeToDestroyAllUnit(XIndex, YIndex);
-
             unitsXIndex.Add(XIndex - 2); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex);
@@ -876,21 +856,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         // Vertical 5 Chained
         if (isUpThreeChained(XIndex, YIndex) && isDownThreeChained(XIndex, YIndex))
         {
-            //// Disable chained Units
-            //_scanUnitARR[XIndex, YIndex - 2]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex - 1]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex   ]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex + 1]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex + 2]._isChained = true;
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 2].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2].SetActive(false);
-
-            //// Init special Unit
-            //PuzzleGenerator.Instance.upgradeToDestroyAllUnit(XIndex, YIndex);
-
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 2);
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1);
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex + 1);
@@ -917,20 +882,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         // Down Left L 5 Chained
         if (isDownThreeChained(XIndex, YIndex) && isLeftThreeChained(XIndex, YIndex))
         {
-            //_scanUnitARR[XIndex, YIndex - 2]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex - 1]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex - 2, YIndex    ]._isChained = true;
-            //_scanUnitARR[XIndex - 1, YIndex    ]._isChained = true;
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 2].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex    ].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex    ].SetActive(false);
-
-            //// Init special Unit
-            //PuzzleGenerator.Instance.upgradeToDestroyAllUnit(XIndex, YIndex);
-
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 2);
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1);
             unitsXIndex.Add(XIndex - 2); unitsYIndex.Add(YIndex);
@@ -944,20 +895,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         // Up Left L 5 Chained
         if (isUpThreeChained(XIndex, YIndex) && isLeftThreeChained(XIndex, YIndex))
         {
-            //_scanUnitARR[XIndex - 2, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex - 1, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex   , YIndex]._isChained = true;
-            //_scanUnitARR[XIndex   , YIndex + 1]._isChained = true;
-            //_scanUnitARR[XIndex   , YIndex + 2]._isChained = true;
-            //PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex    , YIndex + 1].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex    , YIndex + 2].SetActive(false);
-
-            //// Init special Unit
-            //PuzzleGenerator.Instance.upgradeToDestroyAllUnit(XIndex, YIndex);
-
             unitsXIndex.Add(XIndex - 2); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex + 1);
@@ -971,20 +908,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         // Up right L 5 Chained
         if (isUpThreeChained(XIndex, YIndex) && isRightThreeChained(XIndex, YIndex))
         {
-            //_scanUnitARR[XIndex    , YIndex]._isChained = true;
-            //_scanUnitARR[XIndex + 1, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex + 2, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex   , YIndex + 1]._isChained = true;
-            //_scanUnitARR[XIndex   , YIndex + 2]._isChained = true;
-            //PuzzleGenerator.Instance._unitARR[XIndex    , YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex   , YIndex + 1].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex   , YIndex + 2].SetActive(false);
-
-            //// Init special Unit
-            //PuzzleGenerator.Instance.upgradeToDestroyAllUnit(XIndex, YIndex);
-
             unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex + 2); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex + 1);
@@ -998,20 +921,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         // Down right L 5 Chained
         if (isDownThreeChained(XIndex, YIndex) && isRightThreeChained(XIndex, YIndex))
         {
-            //_scanUnitARR[XIndex, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex + 1, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex + 2, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex - 1]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex - 2]._isChained = true;
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 2].SetActive(false);
-
-            //// Init special Unit
-            //PuzzleGenerator.Instance.upgradeToDestroyAllUnit(XIndex, YIndex);
-
             unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex + 2); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1);
@@ -1025,20 +934,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         // Down T 5 Chained
         if (isDownThreeChained(XIndex, YIndex) && isMiddleHorizontalThreeChained(XIndex, YIndex))
         {
-            //_scanUnitARR[XIndex, YIndex - 1]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex - 2]._isChained = true;
-            //_scanUnitARR[XIndex - 1, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex    ]._isChained = true;
-            //_scanUnitARR[XIndex + 1, YIndex]._isChained = true;
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 2].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
-
-            //// Init special Unit
-            //PuzzleGenerator.Instance.upgradeToDestroyAllUnit(XIndex, YIndex);
-
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1);
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 2);
             unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex);
@@ -1052,20 +947,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         // Left T 5 Chained
         if (isMiddleVerticalThreeChained(XIndex, YIndex) && isLeftThreeChained(XIndex, YIndex))
         {
-            //_scanUnitARR[XIndex - 1, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex - 2, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex   , YIndex]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex - 1]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex + 1]._isChained = true;
-            //PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex   , YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex   , YIndex - 1].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex   , YIndex + 1].SetActive(false);
-
-            //// Init special Unit
-            //PuzzleGenerator.Instance.upgradeToDestroyAllUnit(XIndex, YIndex);
-
             unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex - 2); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1);
@@ -1079,20 +960,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         // Up T 5 Chained
         if (isUpThreeChained(XIndex, YIndex) && isMiddleHorizontalThreeChained(XIndex, YIndex))
         {
-            //_scanUnitARR[XIndex - 1, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex   , YIndex]._isChained = true;
-            //_scanUnitARR[XIndex + 1, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex + 1]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex + 2]._isChained = true;
-            //PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex    , YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2].SetActive(false);
-
-            //// Init special Unit
-            //PuzzleGenerator.Instance.upgradeToDestroyAllUnit(XIndex, YIndex);
-
             unitsXIndex.Add(XIndex - 1); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex + 1);
@@ -1106,20 +973,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         // Right T 5 Chained
         if (isMiddleVerticalThreeChained(XIndex, YIndex) && isRightThreeChained(XIndex, YIndex))
         {
-            //_scanUnitARR[XIndex   , YIndex - 1]._isChained = true;
-            //_scanUnitARR[XIndex   , YIndex]._isChained = true;
-            //_scanUnitARR[XIndex + 1, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex + 2, YIndex]._isChained = true;
-            //_scanUnitARR[XIndex, YIndex + 1]._isChained = true;
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex].SetActive(false);
-            //PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].SetActive(false);
-
-            //// Init special Unit
-            //PuzzleGenerator.Instance.upgradeToDestroyAllUnit(XIndex, YIndex);
-
             unitsXIndex.Add(XIndex); unitsYIndex.Add(YIndex - 1);
             unitsXIndex.Add(XIndex + 1); unitsYIndex.Add(YIndex);
             unitsXIndex.Add(XIndex + 2); unitsYIndex.Add(YIndex);
@@ -1937,162 +1790,7 @@ public class ChainedUnitsScanner : MonoBehaviour
 
     #endregion
 
-    #endregion
-
-    #region old Scan chained unit methods
-    void scanHorizontalThreeChainedSwap(int XIndex, int YIndex)
-    {
-        int scanUnitValue = _scanUnitARR[XIndex, YIndex]._value;
-
-        // Right Chained
-        if (XIndex > 1)
-        {
-            if (_scanUnitARR[XIndex - 2, YIndex]._value == scanUnitValue
-                    && _scanUnitARR[XIndex - 1, YIndex]._value == scanUnitValue
-                    && !_scanUnitARR[XIndex - 2, YIndex]._isChained
-                    && !_scanUnitARR[XIndex - 1, YIndex]._isChained
-                    && !_scanUnitARR[XIndex, YIndex]._isChained)
-            {
-                _scanUnitARR[XIndex - 2, YIndex]._isChained = true;
-                _scanUnitARR[XIndex - 1, YIndex]._isChained = true;
-                _scanUnitARR[XIndex, YIndex]._isChained = true;
-
-                PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-
-                chainedUnits = true;
-                return;
-            }
-        }
-
-        // Middle Chained
-        if (XIndex > 0 && XIndex < PuzzleGenerator.Instance._columns - 1)
-        {
-            if (_scanUnitARR[XIndex - 1, YIndex]._value == scanUnitValue
-                    && _scanUnitARR[XIndex + 1, YIndex]._value == scanUnitValue
-                    && !_scanUnitARR[XIndex - 1, YIndex]._isChained
-                    && !_scanUnitARR[XIndex, YIndex]._isChained
-                    && !_scanUnitARR[XIndex + 1, YIndex]._isChained)
-            {
-                _scanUnitARR[XIndex - 1, YIndex]._isChained = true;
-                _scanUnitARR[XIndex, YIndex]._isChained = true;
-                _scanUnitARR[XIndex + 1, YIndex]._isChained = true;
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex]);
-                PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
-
-                chainedUnits = true;
-                return;
-            }
-        }
-
-        // Left Chained
-        if (XIndex < PuzzleGenerator.Instance._columns - 2)
-        {
-            if (_scanUnitARR[XIndex + 1, YIndex]._value == scanUnitValue
-                    && _scanUnitARR[XIndex + 2, YIndex]._value == scanUnitValue
-                    && !_scanUnitARR[XIndex, YIndex]._isChained
-                    && !_scanUnitARR[XIndex + 1, YIndex]._isChained
-                    && !_scanUnitARR[XIndex + 2, YIndex]._isChained)
-            {
-                _scanUnitARR[XIndex, YIndex]._isChained = true;
-                _scanUnitARR[XIndex + 1, YIndex]._isChained = true;
-                _scanUnitARR[XIndex + 2, YIndex]._isChained = true;
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex]);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex].SetActive(false);
-
-                chainedUnits = true;
-                return;
-            }
-        }
-    }
-
-
-    void scanVerticalThreeChainedSwap(int XIndex, int YIndex)
-    {
-        int scanUnitValue = _scanUnitARR[XIndex, YIndex]._value;
-
-        // Down Chained
-        if (YIndex > 1)
-        {
-            if (_scanUnitARR[XIndex, YIndex - 2]._value == scanUnitValue
-                    && _scanUnitARR[XIndex, YIndex - 1]._value == scanUnitValue
-                    && !_scanUnitARR[XIndex, YIndex - 2]._isChained
-                    && !_scanUnitARR[XIndex, YIndex - 1]._isChained
-                    && !_scanUnitARR[XIndex, YIndex]._isChained)
-            {
-                _scanUnitARR[XIndex, YIndex - 2]._isChained = true;
-                _scanUnitARR[XIndex, YIndex - 1]._isChained = true;
-                _scanUnitARR[XIndex, YIndex]._isChained = true;
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 2]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 2].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-
-                chainedUnits = true;
-                return;
-            }
-        }
-
-        // Middle Chained
-        if (YIndex > 0 && YIndex < PuzzleGenerator.Instance._rows - 1)
-        {
-            if (_scanUnitARR[XIndex, YIndex - 1]._value == scanUnitValue
-                    && _scanUnitARR[XIndex, YIndex + 1]._value == scanUnitValue
-                    && !_scanUnitARR[XIndex, YIndex - 1]._isChained
-                    && !_scanUnitARR[XIndex, YIndex]._isChained
-                    && !_scanUnitARR[XIndex, YIndex + 1]._isChained)
-            {
-                _scanUnitARR[XIndex, YIndex - 1]._isChained = true;
-                _scanUnitARR[XIndex, YIndex]._isChained = true;
-                _scanUnitARR[XIndex, YIndex + 1]._isChained = true;
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].SetActive(false);
-
-                chainedUnits = true;
-                return;
-            }
-        }
-
-        // Up Chained
-        if (YIndex < PuzzleGenerator.Instance._rows - 2)
-        {
-            if (_scanUnitARR[XIndex, YIndex + 1]._value == scanUnitValue
-                    && _scanUnitARR[XIndex, YIndex + 2]._value == scanUnitValue
-                    && !_scanUnitARR[XIndex, YIndex]._isChained
-                    && !_scanUnitARR[XIndex, YIndex + 1]._isChained
-                    && !_scanUnitARR[XIndex, YIndex + 2]._isChained)
-            {
-                _scanUnitARR[XIndex, YIndex]._isChained = true;
-                _scanUnitARR[XIndex, YIndex + 1]._isChained = true;
-                _scanUnitARR[XIndex, YIndex + 2]._isChained = true;
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
-                //Destroy(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2]);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].SetActive(false);
-                PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2].SetActive(false);
-
-                chainedUnits = true;
-                return;
-            }
-        }
-    }
-    #endregion
+    #endregion   
 
     public void activateDestroyEffAnimation(int value, Vector2 spawnPos)
     {
