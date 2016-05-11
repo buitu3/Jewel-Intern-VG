@@ -1398,6 +1398,7 @@ MonoBehaviour:
   - {fileID: 147500, guid: b8d7e50f7c1cb6248adbd9f4e0443f51, type: 2}
   UnitBGPreb: {fileID: 155244, guid: 048eae9f9058bdc48acd195c57c9c42d, type: 2}
   startingSpawnPos: {fileID: 326191071}
+  levelsInfo: {fileID: 4900000, guid: 357ec8e2af2898744b2ed4238454b054, type: 3}
   _rows: 10
   _columns: 8
   turnCountToUpgrade: 0

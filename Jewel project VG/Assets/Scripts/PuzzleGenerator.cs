@@ -19,6 +19,8 @@ public class PuzzleGenerator : MonoBehaviour {
     public GameObject UnitBGPreb;
     public Transform startingSpawnPos;
 
+    public TextAsset levelsInfo;
+    private JSONObject levelsInfoJSON; 
 
     public int _rows;
     public int _columns;
@@ -26,6 +28,7 @@ public class PuzzleGenerator : MonoBehaviour {
     public int[,] _valueARR;
     public GameObject[,] _unitARR;
     public Vector2[,] _unitPosARR;
+    private GameObject[,] _unitBGARR;
 
     private List<GameObject>[] _poolARR;
 
@@ -95,6 +98,8 @@ public class PuzzleGenerator : MonoBehaviour {
         _unitARR = new GameObject[_columns, _rows];
         // Init unitPosArr
         _unitPosARR = new Vector2[_columns, _rows];
+        // Init unitBGArr
+        _unitBGARR = new GameObject[_columns, _rows];
 
         // Init all Object pools
         _poolARR = new List<GameObject>[Unit.Length];
@@ -124,9 +129,6 @@ public class PuzzleGenerator : MonoBehaviour {
         //{
         //    _valueARR[7, j] = 2;
         //}
-        _valueARR[0, 0] = 2;
-        _valueARR[0, 1] = 2;
-        _valueARR[1, 2] = 2;
         //_valueARR[1, 1] = 2;
         //_valueARR[2, 2] = 1;
         //_valueARR[3, 2] = 4;
@@ -147,32 +149,10 @@ public class PuzzleGenerator : MonoBehaviour {
         // --------------------------------------------
 
         // Init Jewel Puzzle and BG
-        for (int YIndex = 0; YIndex < _rows; YIndex++)
-        {
-            for ( int XIndex = 0; XIndex < _columns; XIndex++)
-            {
-                Vector2 spawnPos = new Vector2(startingSpawnPos.position.x + XIndex * XPadding,
-                                                startingSpawnPos.position.y + YIndex * YPadding);
-
-                // Store position of each unit in the puzzle
-                _unitPosARR[XIndex, YIndex] = spawnPos;
-
-                // Init Jewel BG
-                GameObject UnitBG = Instantiate(UnitBGPreb, spawnPos, Quaternion.identity) as GameObject;
-                UnitBG.transform.SetParent(unitBGHolder);
-
-                if (XIndex == 0 || XIndex == 1 || XIndex == 2 || XIndex == 3 ||
-                    XIndex == 4 || XIndex == 5 || XIndex == 6 || XIndex == 7)
-                {
-                    if (YIndex == 5)
-                    {
-                        UnitBG.SetActive(false);
-                    }
-                }
-
-                initUnit(spawnPos, XIndex, YIndex, _valueARR[XIndex, YIndex], 0);
-            }
-        }
+        string levelsInfoString = levelsInfo.text;
+        levelsInfoJSON = new JSONObject(levelsInfoString);
+        yield return StartCoroutine(initPuzzle());
+        //StartCoroutine(initPuzzle());
 
         GameController.Instance.currentState = GameController.GameState.scanningUnit;
 
@@ -453,6 +433,70 @@ public class PuzzleGenerator : MonoBehaviour {
 
     #endregion
 
+    private IEnumerator initPuzzle()
+    {
+        JSONObject puzzleInfoJSon = levelsInfoJSON.GetField("Level 2");
+
+        for (int YIndex = 0; YIndex < _rows; YIndex++)
+        {            
+            for (int XIndex = 0; XIndex < _columns; XIndex++)
+            {               
+                Vector2 spawnPos = new Vector2(startingSpawnPos.position.x + XIndex * XPadding,
+                                                startingSpawnPos.position.y + YIndex * YPadding);
+
+                // Store position of each unit in the puzzle
+                _unitPosARR[XIndex, YIndex] = spawnPos;
+
+                // Init Jewel BG
+                _unitBGARR[XIndex, YIndex] = Instantiate(UnitBGPreb, spawnPos, Quaternion.identity) as GameObject;
+                _unitBGARR[XIndex, YIndex].transform.SetParent(unitBGHolder);
+
+                GameObject UnitBG = _unitBGARR[XIndex, YIndex];
+                if (XIndex == 0 || XIndex == 1 || XIndex == 2 || XIndex == 3 ||
+                    XIndex == 4 || XIndex == 5 || XIndex == 6 || XIndex == 7)
+                {
+                    if (YIndex == 5)
+                    {
+                        UnitBG.SetActive(false);
+                    }
+                }
+
+                initUnit(spawnPos, XIndex, YIndex, _valueARR[XIndex, YIndex], 0);
+            }
+        }
+
+        yield return null;
+
+        for (int YIndex = 0; YIndex < _rows; YIndex++)
+        {
+            JSONObject YIndexJSON = puzzleInfoJSon.GetField("Row " + YIndex);
+
+            for (int XIndex = 0; XIndex < _columns; XIndex++)
+            {                
+                JSONObject XIndexJSON = YIndexJSON.GetField("Col " + XIndex);
+                int unitLevel = (int)XIndexJSON.GetField("Unit Level").i;
+                string specialEff = XIndexJSON.GetField("Special Eff").str;
+                string negativeEff = XIndexJSON.GetField("Negative Eff").str;
+
+                if (negativeEff == "hollow")
+                {
+                    _unitARR[XIndex, YIndex].GetComponent<SpriteRenderer>().enabled = false;
+                    _unitARR[XIndex, YIndex].GetComponent<BoxCollider2D>().enabled = false;
+                    _unitBGARR[XIndex, YIndex].SetActive(false);
+                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
+                }
+                else if (negativeEff == "frozen")
+                {
+                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+                }
+                else if (negativeEff == "locked")
+                {
+                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
+                }
+            }
+        }
+    }
+
     private int[,] generateValueMatrix()
     {
         int[,] valueMatrix = new int[_columns, _rows];
@@ -466,6 +510,8 @@ public class PuzzleGenerator : MonoBehaviour {
         }
         return valueMatrix;
     }
+
+    #region Reorganize Puzzle methods
 
     public IEnumerator reOrganizePuzzle(bool hasChained)
     {
@@ -498,6 +544,129 @@ public class PuzzleGenerator : MonoBehaviour {
         //GameController.Instance.currentState = GameController.GameState.idle;
     }
 
+    private void reOrganizePuzzleCol(int XIndex)
+    {
+        int nullObjectCount = 0;
+
+        List<int> hollowUnitsYIndex = new List<int>();
+        List<int> nullUnitsYIndex = new List<int>();
+        List<GameObject> refreshUnits = new List<GameObject>();
+
+        for (int YIndex = 0; YIndex < _rows; YIndex++)
+        {
+            // If current Index is hollowed,remember it
+            if (_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
+            {
+                if (YIndex == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    if (!hollowUnitsYIndex.Contains(YIndex))
+                    {
+                        hollowUnitsYIndex.Add(YIndex);
+                    }
+                }
+            }
+            // If current Index is empty space,remember it
+            else if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained)
+            {
+                nullObjectCount++;
+                nullUnitsYIndex.Add(YIndex);
+            }
+            // If object is frozen,reset hollowUnitcount and nullObjectCount to prevent wrong falling down behaviour
+            else if (_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+            {
+                nullObjectCount = 0;
+                hollowUnitsYIndex.Clear();
+                nullUnitsYIndex.Clear();
+            }
+            else
+            {
+                // Make Unit fall down if there are empty space below
+                if (nullObjectCount > 0)
+                {
+                    //print(XIndex + ":::" + YIndex + ":::" + nullObjectCount);
+                    //Vector3 targetPos = _unitPosARR[XIndex, YIndex - nullObjectCount];
+                    //StartCoroutine(dropUnit(_unitARR[XIndex, YIndex], targetPos, nullObjectCount));
+
+                    if (!unitsList.Contains(_unitARR[XIndex, YIndex]))
+                    {
+                        unitsList.Add(_unitARR[XIndex, YIndex]);
+                    }
+                    if (!refreshUnits.Contains(_unitARR[XIndex, YIndex]))
+                    {
+                        refreshUnits.Add(_unitARR[XIndex, YIndex]);
+                    }
+
+                    // Calculate where to drop unit
+                    int dropDistance = nullObjectCount;
+                    for (int i = 1; i <= dropDistance; i++)
+                    {
+                        //print(XIndex + "aaasd" + YIndex + "dfsfd" + i);
+                        if (_unitARR[XIndex, YIndex - i].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
+                        {
+                            dropDistance++;
+                        }
+                    }
+
+
+                    StartCoroutine(dropUnit(XIndex, YIndex, dropDistance));
+
+                    //for (int i = 0; i < hollowUnitsYIndex.Count; i++)
+                    //{
+                    //    if ((YIndex - dropDistance + 1) == hollowUnitsYIndex[i])
+                    //    {
+                    //        hollowUnitcount--;
+                    //        hollowUnitsYIndex.Remove(i);
+                    //        break;
+                    //    }
+                    //}
+
+                    //// Make scanUnit that has fallen down unit become chained
+                    //ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = true;
+
+                    //// Update Unit info
+                    //_unitARR[XIndex, YIndex - nullObjectCount] = _unitARR[XIndex, YIndex];
+                    //_unitARR[XIndex, YIndex - nullObjectCount].GetComponent<UnitInfo>()._YIndex -= nullObjectCount;
+
+                    // Add this unit to list to scan again
+
+                }
+            }
+        }
+
+        //Regen units
+        if (nullObjectCount > 0)
+        {
+            int count = nullObjectCount;
+            //int hollowCount = 0;
+
+            for (int i = 0; i < nullObjectCount; i++)
+            {
+                if (_unitARR[XIndex, _rows - i - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
+                {
+                    nullObjectCount++;
+                    continue;
+                }
+
+                Vector2 regenUnitSpawnPos = new Vector2(_unitPosARR[XIndex, _rows - i - 1].x, regenYpos + (nullObjectCount - i) * YPadding);
+                initUnit(regenUnitSpawnPos, XIndex, _rows - i - 1, Random.Range(0, Unit.Length - 1), 0);
+
+                // Add this unit to list to scan again
+                unitsList.Add(_unitARR[XIndex, _rows - i - 1]);
+                refreshUnits.Add(_unitARR[XIndex, _rows - i - 1]);
+                //initUnit(_unitPosARR[XIndex, _rows - i - 1], XIndex, _rows - i - 1, Random.Range(0, Unit.Length - 1), 0);
+            }
+        }
+        ChainedUnitsScanner.Instance.updateScanUnits(refreshUnits);
+    }
+
+    #endregion
+
+    #region Scan for pushable Units methods
+
     public IEnumerator scanEmptyUnits(bool hasChained)
     {
         //unitsList = new List<GameObject>();
@@ -528,7 +697,6 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
         }
-
 
         #region old borrow unit function
         //for (int XIndex = 0; XIndex < _columns; XIndex++)
@@ -610,7 +778,7 @@ public class PuzzleGenerator : MonoBehaviour {
         //                                        {
         //                                            break;
         //                                        }
-                                                
+
         //                                    }
         //                                    //print(i + ";;;;;" + unitsInRow);
         //                                    if (unitsInRow == _rows)
@@ -624,7 +792,7 @@ public class PuzzleGenerator : MonoBehaviour {
 
 
         //                                yield return (StartCoroutine(borrowUnitsFromCol(XIndex, startBorrowYIndex, 1, unitsCanBorrow, borrowType)));
-                                        
+
         //                                //print("completed");
         //                                unitsList.Remove(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
         //                                unitsList.Add(_unitARR[XIndex, startBorrowYIndex - unitsCanBorrow]);
@@ -639,7 +807,7 @@ public class PuzzleGenerator : MonoBehaviour {
         //                                //}
         //                                //else if (unitsCanBorrow > 1)
         //                                //{
-                                            
+
         //                                //}
 
         //                                //yield return new WaitForSeconds(2f);
@@ -689,125 +857,6 @@ public class PuzzleGenerator : MonoBehaviour {
         //-------------------------------------------------
         //-------------------------------------------------
 
-    }
-
-    private void reOrganizePuzzleCol(int XIndex)
-    {
-        int nullObjectCount = 0;
-
-        List<int> hollowUnitsYIndex = new List<int>();
-        List<int> nullUnitsYIndex = new List<int>();
-        List<GameObject> refreshUnits = new List<GameObject>();
-
-        for (int YIndex = 0; YIndex < _rows; YIndex++)
-        {
-            // If current Index is hollowed,remember it
-            if (_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
-            {
-                if (YIndex == 0)
-                {
-                    continue;
-                }
-                else
-                {
-                    if (!hollowUnitsYIndex.Contains(YIndex))
-                    {
-                        hollowUnitsYIndex.Add(YIndex);
-                    }
-                }               
-            }
-            // If current Index is empty space,remember it
-            else if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained)
-            {
-                nullObjectCount++;
-                nullUnitsYIndex.Add(YIndex);
-            }
-            // If object is frozen,reset hollowUnitcount and nullObjectCount to prevent wrong falling down behaviour
-            else if (_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
-            {
-                nullObjectCount = 0;
-                hollowUnitsYIndex.Clear();
-                nullUnitsYIndex.Clear();
-            }
-            else
-            {
-                // Make Unit fall down if there are empty space below
-                if (nullObjectCount > 0)
-                {
-                    //print(XIndex + ":::" + YIndex + ":::" + nullObjectCount);
-                    //Vector3 targetPos = _unitPosARR[XIndex, YIndex - nullObjectCount];
-                    //StartCoroutine(dropUnit(_unitARR[XIndex, YIndex], targetPos, nullObjectCount));
-
-                    if (!unitsList.Contains(_unitARR[XIndex, YIndex]))
-                    {
-                        unitsList.Add(_unitARR[XIndex, YIndex]);
-                    }
-                    if (!refreshUnits.Contains(_unitARR[XIndex, YIndex]))
-                    {
-                        refreshUnits.Add(_unitARR[XIndex, YIndex]);
-                    }
-
-                    // Calculate where to drop unit
-                    int dropDistance = nullObjectCount;
-                    for (int i = 1; i <= dropDistance; i++)
-                    {
-                        //print(XIndex + "aaasd" + YIndex + "dfsfd" + i);
-                        if (_unitARR[XIndex, YIndex - i].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
-                        {
-                            dropDistance++;
-                        }
-                    }
-                    
-
-                    StartCoroutine(dropUnit(XIndex, YIndex, dropDistance));
-
-                    //for (int i = 0; i < hollowUnitsYIndex.Count; i++)
-                    //{
-                    //    if ((YIndex - dropDistance + 1) == hollowUnitsYIndex[i])
-                    //    {
-                    //        hollowUnitcount--;
-                    //        hollowUnitsYIndex.Remove(i);
-                    //        break;
-                    //    }
-                    //}
-
-                    //// Make scanUnit that has fallen down unit become chained
-                    //ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = true;
-
-                    //// Update Unit info
-                    //_unitARR[XIndex, YIndex - nullObjectCount] = _unitARR[XIndex, YIndex];
-                    //_unitARR[XIndex, YIndex - nullObjectCount].GetComponent<UnitInfo>()._YIndex -= nullObjectCount;
-
-                    // Add this unit to list to scan again
-
-                }
-            }
-        }
-
-        //Regen units
-        if (nullObjectCount > 0)
-        {
-            int count = nullObjectCount;
-            //int hollowCount = 0;
-
-            for (int i = 0; i < nullObjectCount; i++)
-            {               
-                if (_unitARR[XIndex, _rows - i - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
-                {
-                    nullObjectCount++;
-                    continue;
-                }
-
-                Vector2 regenUnitSpawnPos = new Vector2(_unitPosARR[XIndex, _rows - i - 1].x, regenYpos + (nullObjectCount - i) * YPadding);
-                initUnit(regenUnitSpawnPos, XIndex, _rows - i - 1, Random.Range(0, Unit.Length - 1), 0);
-
-                // Add this unit to list to scan again
-                unitsList.Add(_unitARR[XIndex, _rows - i - 1]);
-                refreshUnits.Add(_unitARR[XIndex, _rows - i - 1]);
-                //initUnit(_unitPosARR[XIndex, _rows - i - 1], XIndex, _rows - i - 1, Random.Range(0, Unit.Length - 1), 0);
-            }
-        }
-        ChainedUnitsScanner.Instance.updateScanUnits(refreshUnits);
     }
 
     private IEnumerator findPushUnitsInPuzzle()
@@ -914,14 +963,14 @@ public class PuzzleGenerator : MonoBehaviour {
     {
         for (int YIndex = _rows - 1; YIndex >= 0; YIndex--)
         {
-            if (!ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex]._isChained 
+            if (!ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex]._isChained
                 && _unitARR[col, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
             {
                 unitPushType pushType = checkIfCanPush(col, YIndex);
 
                 // The push Unit must not be floating,the position this Unit is pushed into must
                 // below the highest frozen unit in the same column
-                if (pushType == unitPushType.Right && hasFrozenUnitInCol(col + 1) 
+                if (pushType == unitPushType.Right && hasFrozenUnitInCol(col + 1)
                     && !isAboveHighestFrozenUnitInCol(col + 1, YIndex - 1)
                     && !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained)
                 {
@@ -968,7 +1017,7 @@ public class PuzzleGenerator : MonoBehaviour {
                     //    }
                     //}
 
-                    return true;                    
+                    return true;
                 }
             }
         }
@@ -987,7 +1036,7 @@ public class PuzzleGenerator : MonoBehaviour {
 
                 // The push Unit must not be floating,the position this Unit is pushed into must
                 // below the highest frozen unit in the same column
-                if (pushType == unitPushType.Left && hasFrozenUnitInCol(col - 1) 
+                if (pushType == unitPushType.Left && hasFrozenUnitInCol(col - 1)
                     && !isAboveHighestFrozenUnitInCol(col - 1, YIndex - 1)
                     && !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained)
                 {
@@ -1003,7 +1052,7 @@ public class PuzzleGenerator : MonoBehaviour {
                             print(col + ",,," + YIndex + ",,,cant push");
                             return false;
                         }
-                    }                    
+                    }
 
                     if (!temporaryPushRightUnitList.Contains(_unitARR[col, YIndex]))
                     {
@@ -1041,6 +1090,41 @@ public class PuzzleGenerator : MonoBehaviour {
         }
         return false;
     }
+
+    private unitPushType checkIfCanPush(int XIndex, int YIndex)
+    {
+        if (YIndex > 0)
+        {
+            if (XIndex == 0)
+            {
+                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained)
+                {
+                    return unitPushType.Right;
+                }
+            }
+            else if (XIndex == _columns - 1)
+            {
+                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained)
+                {
+                    return unitPushType.Left;
+                }
+            }
+            else
+            {
+                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained)
+                {
+                    return unitPushType.Right;
+                }
+                else if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained)
+                {
+                    return unitPushType.Left;
+                }
+            }
+        }
+        return unitPushType.None;
+    }
+
+    #endregion
 
     private bool hasFrozenUnitInCol(int col)
     {
@@ -1150,39 +1234,6 @@ public class PuzzleGenerator : MonoBehaviour {
                 }
                 yield return null;
         }
-    }
-
-    private unitPushType checkIfCanPush(int XIndex, int YIndex)
-    {
-        if (YIndex > 0)
-        {
-            if (XIndex == 0)
-            {
-                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained)
-                {
-                    return unitPushType.Right;
-                }
-            }
-            else if (XIndex == _columns - 1)
-            {
-                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained)
-                {
-                    return unitPushType.Left;
-                }
-            }
-            else
-            {
-                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained)
-                {
-                    return unitPushType.Right;
-                }
-                else if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained)
-                {
-                    return unitPushType.Left;
-                }               
-            }
-        }
-        return unitPushType.None;
     }
 
     /// <summary>
