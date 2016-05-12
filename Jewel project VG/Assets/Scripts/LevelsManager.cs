@@ -13,7 +13,12 @@ public class LevelsManager : MonoBehaviour {
     // Fields
     //==============================================
 
-    public int selectedLevel;
+    public TextAsset levelsInfo;
+    [HideInInspector]
+    public JSONObject levelsInfoJSON;
+
+    [HideInInspector]
+    public int selectedLevel = 0;
 
     //==============================================
     // Unity Methods
@@ -31,6 +36,10 @@ public class LevelsManager : MonoBehaviour {
         }
 
         DontDestroyOnLoad(gameObject);
+
+        string levelsInfoString = levelsInfo.text;
+        levelsInfoJSON = new JSONObject(levelsInfoString);
+
     }
 
     //==============================================
