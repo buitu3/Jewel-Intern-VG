@@ -1,6 +1,7 @@
 {
 "Level 1":
 	{
+	"1 Star Score":5000,"2 Star Score":10000,"3 Star Score":15000,"High Score":0,"Star":0,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
@@ -124,6 +125,7 @@
 ,
 "Level 2":
 	{
+	"1 Star Score":5000,"2 Star Score":10000,"3 Star Score":15000,"High Score":0,"Star":0,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
