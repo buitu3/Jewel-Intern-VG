@@ -2,7 +2,7 @@
 "Unlocked Level":2,"Time":30,
 "Level 1":
 	{
-	"1 Star Score":5000,"2 Star Score":10000,"3 Star Score":15000,"High Score":0,"Star":2,
+	"1 Star Score":5000,"2 Star Score":10000,"3 Star Score":15000,"High Score":4000,"Star":2,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},

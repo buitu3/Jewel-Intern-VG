@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour {
 
     public Slider scoreSlider;
     public Text scoreText;
+    public Text hiScoreText;
 
     public GameObject pausePanel;
 
@@ -39,6 +40,11 @@ public class GameController : MonoBehaviour {
 
     private int Score;
 
+    private int star1Score;
+    private int star2Score;
+    private int star3Score;
+    private int hiScore;
+
     //==============================================
     // Unity Methods
     //==============================================
@@ -48,13 +54,20 @@ public class GameController : MonoBehaviour {
         Instance = this;
 
         DOTween.SetTweensCapacity(100, 10);
+
+        star1Score = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("1 Star Score").i;
+        star2Score = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("2 Star Score").i;
+        star3Score = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("3 Star Score").i;
+        hiScore = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("High Score").i;
+
     }
 
-    void start()
+    void Start()
     {
         currentState = GameState.idle;
 
         //scoreTween = DOTween.To(() => Score, x => Score = x, 0, 0.3f).OnUpdate(updateScoreText);
+        hiScoreText.text = hiScore.ToString();
     }
 
     //void Update()
@@ -103,5 +116,18 @@ public class GameController : MonoBehaviour {
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("Select Level Scene");
+    }
+
+    public void gameOver()
+    {
+        //if (Score > hiScore)
+        //{
+        //    LevelsManager.Instance.selectedLevelInfoJSON.AddField("High Score", Score);
+        //    if (System.IO.File.Exists(Application.dataPath + "/Scripts/Level Info.json"))
+        //    {
+        //        print("exist");
+        //        System.IO.File.WriteAllText(Application.dataPath + "/Scripts/Level Info.json", LevelsManager.Instance.levelsInfoJSON);
+        //    }
+        //}
     }
 }

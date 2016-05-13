@@ -16,8 +16,9 @@ public class LevelsManager : MonoBehaviour {
     public TextAsset levelsInfo;
     [HideInInspector]
     public JSONObject levelsInfoJSON;
+    public JSONObject selectedLevelInfoJSON;
 
-    [HideInInspector]
+    //[HideInInspector]
     public int selectedLevel = 0;
 
     //==============================================
@@ -39,8 +40,9 @@ public class LevelsManager : MonoBehaviour {
 
         string levelsInfoString = levelsInfo.text;
         levelsInfoJSON = new JSONObject(levelsInfoString);
-
     }
+
+    
 
     //==============================================
     // Methods
