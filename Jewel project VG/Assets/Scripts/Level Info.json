@@ -1,7 +1,7 @@
 {
 "Level 1":
 	{
-	"1 Star Score":200,"2 Star Score":6000,"3 Star Score":9000,
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
@@ -125,7 +125,7 @@
 ,
 "Level 2":
 	{
-	"1 Star Score":200,"2 Star Score":6000,"3 Star Score":9000,
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
@@ -249,7 +249,7 @@
 ,
 "Level 3":
 	{
-	"1 Star Score":500,"2 Star Score":6000,"3 Star Score":9000,
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
@@ -373,7 +373,7 @@
 ,
 "Level 4":
 	{
-	"1 Star Score":500,"2 Star Score":6000,"3 Star Score":9000,
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
