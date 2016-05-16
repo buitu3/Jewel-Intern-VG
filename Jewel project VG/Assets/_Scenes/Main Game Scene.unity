@@ -1452,7 +1452,7 @@ RectTransform:
   m_RootOrder: 3
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -136.84, y: -359.9}
+  m_AnchoredPosition: {x: -136.84, y: -370.2}
   m_SizeDelta: {x: 93.49, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1187842222
@@ -1597,6 +1597,32 @@ MonoBehaviour:
   levelsInfo: {fileID: 4900000, guid: 357ec8e2af2898744b2ed4238454b054, type: 3}
   _rows: 10
   _columns: 8
+  curveTween:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0.029411763
+      outSlope: 0.029411763
+      tangentMode: 0
+    - time: 0.76057696
+      value: 0.9980499
+      inSlope: 1.7978699
+      outSlope: -0.023745129
+      tangentMode: 1
+    - time: 0.8789098
+      value: 0.88870496
+      inSlope: -0.005894757
+      outSlope: -0.005894757
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 1.6500006
+      outSlope: 1.6500006
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
   turnCountToUpgrade: 0
 --- !u!114 &1254704528
 MonoBehaviour:
@@ -2037,7 +2063,7 @@ RectTransform:
   m_RootOrder: 4
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 85.65, y: -359.90002}
+  m_AnchoredPosition: {x: 85.65, y: -371.67}
   m_SizeDelta: {x: 93.49, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1643018663

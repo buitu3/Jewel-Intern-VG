@@ -30,6 +30,8 @@ public class PuzzleGenerator : MonoBehaviour {
     public Vector2[,] _unitPosARR;
     private GameObject[,] _unitBGARR;
 
+    public AnimationCurve curveTween;
+
     private List<GameObject>[] _poolARR;
 
     private List<GameObject> unitsList;
@@ -49,7 +51,7 @@ public class PuzzleGenerator : MonoBehaviour {
     private float regenYpos = 6f;
 
     private float unitDropTime = 0.3f;
-    private float regenUnitDropTime = 0.4f;
+    private float regenUnitDropTime = 0.35f;
     private float unitPushTime = 0.3f;
 
     private int turnsToUpgradeRandomLightningUnit = 4;
@@ -160,20 +162,20 @@ public class PuzzleGenerator : MonoBehaviour {
         // ---------------- Fake value for testing ----------------------------
         //---------------------------------------------------------------------
 
-        for (int i = 0; i < 8; i++)
-        {
-            _unitARR[i, 5].GetComponent<SpriteRenderer>().enabled = false;
-            _unitARR[i, 5].GetComponent<BoxCollider2D>().enabled = false;
-        }
-        yield return null;
-        upgradeUnit(0, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
-        upgradeUnit(1, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
-        upgradeUnit(2, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
-        upgradeUnit(3, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
-        upgradeUnit(4, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
-        upgradeUnit(5, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
-        upgradeUnit(6, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
-        upgradeUnit(7, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
+        //for (int i = 0; i < 8; i++)
+        //{
+        //    _unitARR[i, 5].GetComponent<SpriteRenderer>().enabled = false;
+        //    _unitARR[i, 5].GetComponent<BoxCollider2D>().enabled = false;
+        //}
+        //yield return null;
+        //upgradeUnit(0, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
+        //upgradeUnit(1, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
+        //upgradeUnit(2, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
+        //upgradeUnit(3, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
+        //upgradeUnit(4, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
+        //upgradeUnit(5, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
+        //upgradeUnit(6, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
+        //upgradeUnit(7, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
         
 
         //---------------------------------------------------------------------
@@ -183,31 +185,20 @@ public class PuzzleGenerator : MonoBehaviour {
 
         // ----------Fake unit value for testing ------------------      
 
-        upgradeUnit(0, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        upgradeUnit(1, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        upgradeUnit(2, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        upgradeUnit(3, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        upgradeUnit(4, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        upgradeUnit(5, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        upgradeUnit(6, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        upgradeUnit(7, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        //upgradeUnit(0, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        //upgradeUnit(1, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        //upgradeUnit(2, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        //upgradeUnit(3, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        //upgradeUnit(4, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        //upgradeUnit(5, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        //upgradeUnit(6, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
+        //upgradeUnit(7, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
 
-        upgradeUnit(5, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
-        //upgradeUnit(3, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
-        upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-        upgradeUnit(4, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-        //upgradeUnit(4, 3, UnitInfo.SpecialEff.vLightning, UnitInfo.NegativeEff.noEff);
+        //upgradeUnit(5, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
+        //upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        //upgradeUnit(4, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
 
-        //upgradeUnit(0, 6, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        //upgradeUnit(1, 6, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        //upgradeUnit(2, 6, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        //upgradeUnit(3, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        //upgradeUnit(4, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        //upgradeUnit(5, 6, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        //upgradeUnit(6, 6, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        //upgradeUnit(7, 6, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-
-        upgradeUnit(1, 2, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
+        //upgradeUnit(1, 2, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
 
 
         // --------------------------------------------
@@ -224,8 +215,6 @@ public class PuzzleGenerator : MonoBehaviour {
         //----------------------------------------------------------------------------------
 
         // ----------Fake for testing ------------------
-
-        yield return new WaitForSeconds(1f);
 
         unitsList = new List<GameObject>();
         for (int XIndex = 0; XIndex < _columns; XIndex++)
@@ -295,10 +284,10 @@ public class PuzzleGenerator : MonoBehaviour {
         if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
         {
             GameObject target = _unitARR[XIndex, YIndex];
-            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(Ease.InSine);
-            //target.transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime - 0.1f).
-            //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
-            //    SetEase(Ease.InSine);
+            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(Ease.InSine);
+            target.transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime - 0.1f).
+                OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
+                SetEase(Ease.InSine);
         }
     }
 
@@ -364,9 +353,10 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             GameObject target = _unitARR[XIndex, YIndex];
             //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(Ease.InSine);
-            target.transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime - 0.1f).
-                OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
-                SetEase(Ease.InSine);
+            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(curveTween);
+            //target.transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime - 0.1f).
+            //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
+            //    SetEase(Ease.InSine);
         }
     }
 
@@ -451,21 +441,22 @@ public class PuzzleGenerator : MonoBehaviour {
                 _unitBGARR[XIndex, YIndex] = Instantiate(UnitBGPreb, spawnPos, Quaternion.identity) as GameObject;
                 _unitBGARR[XIndex, YIndex].transform.SetParent(unitBGHolder);
 
-                GameObject UnitBG = _unitBGARR[XIndex, YIndex];
-                if (XIndex == 0 || XIndex == 1 || XIndex == 2 || XIndex == 3 ||
-                    XIndex == 4 || XIndex == 5 || XIndex == 6 || XIndex == 7)
-                {
-                    if (YIndex == 5)
-                    {
-                        UnitBG.SetActive(false);
-                    }
-                }
+                //GameObject UnitBG = _unitBGARR[XIndex, YIndex];
+                //if (XIndex == 0 || XIndex == 1 || XIndex == 2 || XIndex == 3 ||
+                //    XIndex == 4 || XIndex == 5 || XIndex == 6 || XIndex == 7)
+                //{
+                //    if (YIndex == 5)
+                //    {
+                //        UnitBG.SetActive(false);
+                //    }
+                //}
 
                 initUnit(spawnPos, XIndex, YIndex, _valueARR[XIndex, YIndex], 0);
             }
         }
 
-        yield return null;
+        //yield return null;
+        ChainedUnitsScanner.Instance.initScanUnitArr();
 
         for (int YIndex = 0; YIndex < _rows; YIndex++)
         {
@@ -495,6 +486,7 @@ public class PuzzleGenerator : MonoBehaviour {
                 }
             }
         }
+        yield return null;
     }
 
     private int[,] generateValueMatrix()
@@ -1217,6 +1209,10 @@ public class PuzzleGenerator : MonoBehaviour {
                         if (DOTween.TweensByTarget(target.transform) != null)
                         {
                             yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
+                            if (DOTween.TweensByTarget(target.transform) != null)
+                            {
+                                yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
+                            }
                         }
                     }
 
@@ -1268,11 +1264,17 @@ public class PuzzleGenerator : MonoBehaviour {
             if (DOTween.TweensByTarget(targetObject.transform) != null)
             {
                 yield return DOTween.TweensByTarget(targetObject.transform)[0].WaitForCompletion();
+                yield return null;
+                if (DOTween.TweensByTarget(targetObject.transform) != null)
+                {
+                    yield return DOTween.TweensByTarget(targetObject.transform)[0].WaitForCompletion();
+                }
             }
         }
         //_unitARR[XIndex, YIndex - distanceInUnit].transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
-        targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
 
+        //targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
+        targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
         //targetObject.transform.DOMove(targetPos, unitDropTime - 0.1f).
         //    OnComplete(() => targetObject.transform.DOMoveY(targetObject.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
         //    SetEase(Ease.InSine);

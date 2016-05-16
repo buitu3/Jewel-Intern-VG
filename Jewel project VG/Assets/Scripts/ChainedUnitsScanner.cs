@@ -53,8 +53,6 @@ public class ChainedUnitsScanner : MonoBehaviour
     private int maxBonusPoint = 130;
 
     private bool chainedUnits;
-
-    private float destroyAllDelay;
     private float delayTime;
 
     //==============================================
@@ -70,18 +68,7 @@ public class ChainedUnitsScanner : MonoBehaviour
     {
         specialEffHolder = new GameObject("Special Effs Holder").transform;
 
-        // Init scanUnit Array 
-        _scanUnitARR = new ScanUnit[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
-
-        for (int YIndex = 0; YIndex < PuzzleGenerator.Instance._rows; YIndex++)
-        {
-            for (int XIndex = 0; XIndex < PuzzleGenerator.Instance._columns; XIndex++)
-            {
-                _scanUnitARR[XIndex, YIndex] = new ScanUnit(PuzzleGenerator.Instance._valueARR[XIndex, YIndex]);
-            }
-        }
-
-        destroyAllDelay = lightningDestroyAllClip.length;
+        
 
         // Init special Eff pool
         _specialEffPoolARR = new List<GameObject>[unitDestroyEff.Length];
@@ -118,6 +105,20 @@ public class ChainedUnitsScanner : MonoBehaviour
     //==============================================
     // Methods
     //==============================================
+
+    public void initScanUnitArr()
+    {
+        // Init scanUnit Array 
+        _scanUnitARR = new ScanUnit[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
+
+        for (int YIndex = 0; YIndex < PuzzleGenerator.Instance._rows; YIndex++)
+        {
+            for (int XIndex = 0; XIndex < PuzzleGenerator.Instance._columns; XIndex++)
+            {
+                _scanUnitARR[XIndex, YIndex] = new ScanUnit(PuzzleGenerator.Instance._valueARR[XIndex, YIndex]);
+            }
+        }
+    }
 
     // Sync the choosen scanUnits with the current puzzle
     public void updateScanUnits(List<GameObject> unitList)

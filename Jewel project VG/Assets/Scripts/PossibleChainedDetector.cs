@@ -51,12 +51,20 @@ public class PossibleChainedDetector : MonoBehaviour {
         if (GameController.Instance.currentState == GameController.GameState.idle && !suggesting)
         {
             stallTime += Time.fixedDeltaTime;
-            if (stallTime > 2f)
+            if (stallTime > 5f)
             {
                 suggestMove();
                 stallTime = 0f;
                 suggesting = true;
             }
+            //else if (stallTime > 0.5f)
+            //{
+            //    List<GameObject> suggestList = scanPossibleChained();
+            //    if (suggestList.Count > 0)
+            //    {
+            //        blowUnits(suggestList);
+            //    }
+            //}
         }
         
     }

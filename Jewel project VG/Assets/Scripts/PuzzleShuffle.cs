@@ -51,6 +51,7 @@ public class PuzzleShuffle : MonoBehaviour {
     public IEnumerator shufflePuzzle()
     {
         GameController.Instance.currentState = GameController.GameState.shufflePuzzle;
+        yield return new WaitForSeconds(0.5f);
 
         unitsList.Clear();
         shuffleUnitsList.Clear();

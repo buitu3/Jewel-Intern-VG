@@ -20,6 +20,8 @@ public class LevelsManager : MonoBehaviour {
 
     //[HideInInspector]
     public int selectedLevel = 0;
+    [HideInInspector]
+    public int maxLevel;
 
     //==============================================
     // Unity Methods
@@ -40,9 +42,20 @@ public class LevelsManager : MonoBehaviour {
 
         string levelsInfoString = levelsInfo.text;
         levelsInfoJSON = new JSONObject(levelsInfoString);
+
+        maxLevel = levelsInfoJSON.Count;
+
+        // -------------------------------------
+        // ---------Temporary Added----------
+        // -------------------------------------
+
+        //PlayerPrefs.DeleteAll();
+
+        // -------------------------------------
+        // -------------------------------------
     }
 
-    
+
 
     //==============================================
     // Methods

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System.Collections;
+using System.Text;
 
 public class GameController : MonoBehaviour {
 
@@ -58,7 +59,16 @@ public class GameController : MonoBehaviour {
         star1Score = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("1 Star Score").i;
         star2Score = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("2 Star Score").i;
         star3Score = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("3 Star Score").i;
-        hiScore = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("High Score").i;
+
+        string levelHiScoreKey = new StringBuilder("Level " + LevelsManager.Instance.selectedLevel + " High Score").ToString();
+        if (PlayerPrefs.HasKey(levelHiScoreKey))
+        {
+            hiScore = PlayerPrefs.GetInt(levelHiScoreKey);
+        }
+        else
+        {
+            hiScore = 0;
+        }
 
     }
 
@@ -115,19 +125,77 @@ public class GameController : MonoBehaviour {
     public void selectLevel()
     {
         Time.timeScale = 1f;
+        gameOver();
         SceneManager.LoadScene("Select Level Scene");
     }
 
     public void gameOver()
     {
-        //if (Score > hiScore)
-        //{
-        //    LevelsManager.Instance.selectedLevelInfoJSON.AddField("High Score", Score);
-        //    if (System.IO.File.Exists(Application.dataPath + "/Scripts/Level Info.json"))
-        //    {
-        //        print("exist");
-        //        System.IO.File.WriteAllText(Application.dataPath + "/Scripts/Level Info.json", LevelsManager.Instance.levelsInfoJSON);
-        //    }
-        //}
+        saveGame();        
+    }
+
+    void saveGame()
+    {
+        print("save");
+        // Save current level hi-score and star rating
+        string levelHiScoreKey = new StringBuilder("Level " + LevelsManager.Instance.selectedLevel + " High Score").ToString();
+
+        // Check if selected has been played before
+        if (PlayerPrefs.HasKey(levelHiScoreKey))
+        {
+            // Save new hi-score if current score is higher than previous hi-score
+            if (Score > PlayerPrefs.GetInt(levelHiScoreKey))
+            {
+                PlayerPrefs.SetInt(levelHiScoreKey, Score);
+                print(star1Score);
+
+                rateLevelStar(Score);
+            }
+        }
+        // Save this score as hi-score if the selected level is played for the first time
+        else
+        {
+            PlayerPrefs.SetInt(levelHiScoreKey, Score);
+
+            rateLevelStar(Score);
+        }
+    }
+
+    void rateLevelStar(int score)
+    {
+        string levelStarKey = new StringBuilder("Level " + LevelsManager.Instance.selectedLevel + " Star").ToString();
+        if (Score > star1Score)
+        {
+            // Unlock the next level
+            if (!PlayerPrefs.HasKey("Unlocked Level"))
+            {                
+                PlayerPrefs.SetInt("Unlocked Level", LevelsManager.Instance.selectedLevel + 1);
+            }
+            else
+            {
+                if (LevelsManager.Instance.selectedLevel == PlayerPrefs.GetInt("Unlocked Level") && 
+                    LevelsManager.Instance.selectedLevel != LevelsManager.Instance.maxLevel)
+                {
+                    PlayerPrefs.SetInt("Unlocked Level", LevelsManager.Instance.selectedLevel + 1);
+                }
+            }
+
+            // Rate star
+            PlayerPrefs.SetInt(levelStarKey, 1);
+            //print(LevelsManager.Instance.selectedLevel);
+            print("1 star unlocked");
+        }
+        if (Score > star2Score)
+        {
+            // Rate star
+            PlayerPrefs.SetInt(levelStarKey, 2);
+            print("2 star unlocked");
+        }
+        if (Score > star3Score)
+        {
+            // Rate star
+            PlayerPrefs.SetInt(levelStarKey, 3);
+            print("3 star unlocked");
+        }
     }
 }
