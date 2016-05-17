@@ -25,6 +25,8 @@ public class PossibleChainedDetector : MonoBehaviour {
 
     private Vector2 zoomOutScale = new Vector2(1.4f, 1.4f);
 
+    private IEnumerator suggestCoroutine;
+
     //==============================================
     // Unity Methods
     //==============================================
@@ -36,9 +38,11 @@ public class PossibleChainedDetector : MonoBehaviour {
 
     IEnumerator Start()
     {
+        suggestCoroutine = suggestMove();
+
         _valueARR = new int[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
         yield return new WaitForEndOfFrame();
-        updateValueARR();
+        updateValueARR();        
     }
 
     void FixedUpdate()
@@ -47,18 +51,27 @@ public class PossibleChainedDetector : MonoBehaviour {
         {
             stopBlow();
             suggesting = false;
+
+            //StopCoroutine(suggestCoroutine);
+            //StopCoroutine(suggestMove());
+            StopAllCoroutines();
         }
+
         if (GameController.Instance.currentState == GameController.GameState.idle && !suggesting)
         {
-            stallTime += Time.fixedDeltaTime;
-            if (stallTime > 2f)
+            List<GameObject> suggestList = scanPossibleChained();
+            if (suggestList.Count > 0)
             {
-                suggestMove();
-                stallTime = 0f;
                 suggesting = true;
+                //StartCoroutine(suggestCoroutine);
+                StartCoroutine(suggestMove());
+            }
+            else
+            {
+                print("no more move");
+                StartCoroutine(PuzzleShuffle.Instance.shufflePuzzle());
             }
         }
-        
     }
 
     //==============================================
@@ -103,18 +116,28 @@ public class PossibleChainedDetector : MonoBehaviour {
         }
     }
 
-    void suggestMove()
+    public IEnumerator suggestMove()
     {
+        //suggesting = true;
         List<GameObject> suggestList = scanPossibleChained();
-        if (suggestList.Count > 0)
-        {
-            blowUnits(suggestList);
-        }
-        else
-        {
-            print("no more move");
-            StartCoroutine(PuzzleShuffle.Instance.shufflePuzzle());
-        }
+        //if (suggestList.Count > 0)
+        //{
+        //    blowUnits(suggestList);
+        //}
+        //else
+        //{
+        //    print("no more move");
+        //    StartCoroutine(PuzzleShuffle.Instance.shufflePuzzle());
+        //}
+
+        yield return new WaitForSeconds(5f);
+        blowUnits(suggestList);
+
+        //while (true)
+        //{
+        //    yield return new WaitForSeconds(2f);
+        //    print("still suggest");
+        //}
     }
 
     List<GameObject> scanPossibleChained()
