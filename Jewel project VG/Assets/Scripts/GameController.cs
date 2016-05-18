@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour {
     public Slider scoreSlider;
     public Text scoreText;
     public Text hiScoreText;
+    public Text movesCountText;
+    public Text blueBGCountText;
 
     public GameObject pausePanel;
 
@@ -45,6 +47,8 @@ public class GameController : MonoBehaviour {
     private int star2Score;
     private int star3Score;
     private int hiScore;
+    private int moves;
+    private int bgCount = 0;
 
     //==============================================
     // Unity Methods
@@ -59,6 +63,7 @@ public class GameController : MonoBehaviour {
         star1Score = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("1 Star Score").i;
         star2Score = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("2 Star Score").i;
         star3Score = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("3 Star Score").i;
+        moves = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("Moves").i;
 
         string levelHiScoreKey = new StringBuilder("Level " + LevelsManager.Instance.selectedLevel + " High Score").ToString();
         if (PlayerPrefs.HasKey(levelHiScoreKey))
@@ -78,6 +83,9 @@ public class GameController : MonoBehaviour {
 
         //scoreTween = DOTween.To(() => Score, x => Score = x, 0, 0.3f).OnUpdate(updateScoreText);
         hiScoreText.text = hiScore.ToString();
+        movesCountText.text = moves.ToString();
+        bgCount = UnitBGGenerator.Instance.BlueBGCount;
+        blueBGCountText.text = bgCount.ToString();
     }
 
     //void Update()

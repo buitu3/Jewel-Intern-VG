@@ -465,7 +465,6 @@ public class PuzzleGenerator : MonoBehaviour {
             for (int XIndex = 0; XIndex < _columns; XIndex++)
             {                
                 JSONObject XIndexJSON = YIndexJSON.GetField("Col " + XIndex);
-                int unitLevel = (int)XIndexJSON.GetField("Unit Level").i;
                 string specialEff = XIndexJSON.GetField("Special Eff").str;
                 string negativeEff = XIndexJSON.GetField("Negative Eff").str;
 

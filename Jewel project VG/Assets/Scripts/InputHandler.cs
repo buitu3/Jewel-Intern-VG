@@ -20,7 +20,7 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler,IDragHandler
     private GameObject focusedUnit;
     private LayerMask unitLayer;
 
-    public float swapTime = 0.3f;
+    public float swapTime;
 
     public enum SwapType
     {
