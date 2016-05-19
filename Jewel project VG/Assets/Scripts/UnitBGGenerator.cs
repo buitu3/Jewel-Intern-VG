@@ -22,9 +22,9 @@ public class UnitBGGenerator : MonoBehaviour {
         }
     }
 
-    public GameObject blueUnitBGPreb;
+    public GameObject[] unitBGPreb;
 
-    private GameObject[,] _blueBGARR;
+    private GameObject[,] _unitBGARR;
     private int[,] _valueBGARR;
 
     //==============================================
@@ -39,7 +39,7 @@ public class UnitBGGenerator : MonoBehaviour {
     void Start()
     {
         blueBGCount = 0;
-        _blueBGARR = new GameObject[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
+        _unitBGARR = new GameObject[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
         _valueBGARR = new int[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
 
         initBlueBG();
@@ -61,10 +61,12 @@ public class UnitBGGenerator : MonoBehaviour {
                 int unitBGLevel = (int)XIndexJSON.GetField("Unit Level").i;
                 string negativeEff = XIndexJSON.GetField("Negative Eff").str;
 
-                if (unitBGLevel == 1)
+                if (unitBGLevel > 0 && unitBGLevel <= unitBGPreb.Length)
                 {
-                    _blueBGARR[XIndex, YIndex] = Instantiate(blueUnitBGPreb, PuzzleGenerator.Instance._unitPosARR[XIndex, YIndex], Quaternion.identity) as GameObject;
-                    _valueBGARR[XIndex, YIndex] = 1;
+                    _unitBGARR[XIndex, YIndex] = Instantiate(unitBGPreb[unitBGLevel - 1], PuzzleGenerator.Instance._unitPosARR[XIndex, YIndex], Quaternion.identity) as GameObject;
+                    _unitBGARR[XIndex, YIndex].transform.SetParent(PuzzleGenerator.Instance.unitBGHolder);
+
+                    _valueBGARR[XIndex, YIndex] = unitBGLevel;
                     blueBGCount++;
                 }
             }
@@ -73,11 +75,29 @@ public class UnitBGGenerator : MonoBehaviour {
 
     public void removeBG(int XIndex, int YIndex)
     {
-        if (_blueBGARR[XIndex, YIndex] != null && _valueBGARR[XIndex, YIndex] == 1)
+        if (_unitBGARR[XIndex, YIndex] != null)
         {
-            Destroy(_blueBGARR[XIndex, YIndex]);
-            _valueBGARR[XIndex, YIndex]--;
-            blueBGCount--;
+            if (_valueBGARR[XIndex, YIndex] > 1)
+            {
+                _valueBGARR[XIndex, YIndex]--;
+
+                Destroy(_unitBGARR[XIndex, YIndex]);
+                _unitBGARR[XIndex, YIndex] = Instantiate(unitBGPreb[_valueBGARR[XIndex, YIndex] - 1],
+                                                        PuzzleGenerator.Instance._unitPosARR[XIndex, YIndex], Quaternion.identity) as GameObject;
+            }
+            else if (_valueBGARR[XIndex, YIndex] == 1)
+            {
+                _valueBGARR[XIndex, YIndex]--;
+                blueBGCount--;
+
+                Destroy(_unitBGARR[XIndex, YIndex]);
+
+                GameController.Instance.updateUnitBGCountText(blueBGCount);
+                if (blueBGCount == 0)
+                {
+                    print("Game completed");
+                }
+            }
         }
     }
 }

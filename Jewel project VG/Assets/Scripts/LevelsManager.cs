@@ -18,7 +18,7 @@ public class LevelsManager : MonoBehaviour {
     public JSONObject levelsInfoJSON;
     public JSONObject selectedLevelInfoJSON;
 
-    //[HideInInspector]
+    [HideInInspector]
     public int selectedLevel = 0;
     [HideInInspector]
     public int maxLevel;

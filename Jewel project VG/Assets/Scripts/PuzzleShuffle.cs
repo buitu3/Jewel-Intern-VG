@@ -22,6 +22,8 @@ public class PuzzleShuffle : MonoBehaviour {
     private List<int> unitsXIndex;
     private List<int> unitsYIndex;
 
+    private float moveUnitTime = 0.5f;
+
     //==============================================
     // Unity Methods
     //==============================================
@@ -85,10 +87,10 @@ public class PuzzleShuffle : MonoBehaviour {
 
         for(int i = 0; i < shuffleUnitsList.Count; i++)
         {
-            shuffleUnitsList[i].transform.DOMove(shufflePos.position, 1.5f);
+            shuffleUnitsList[i].transform.DOMove(shufflePos.position, moveUnitTime);
         }
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(moveUnitTime + 0.2f);
 
         for (int i = 0; i < unitsXIndex.Count; i++)
         {
@@ -101,10 +103,10 @@ public class PuzzleShuffle : MonoBehaviour {
 
             shuffleUnitsList.Remove(randomUnit);
 
-            randomUnit.transform.DOMove(PuzzleGenerator.Instance._unitPosARR[unitsXIndex[i], unitsYIndex[i]], 1.5f);
+            randomUnit.transform.DOMove(PuzzleGenerator.Instance._unitPosARR[unitsXIndex[i], unitsYIndex[i]], moveUnitTime);
         }
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(moveUnitTime + 0.2f);
 
         //GameController.Instance.currentState = GameController.GameState.idle;
 

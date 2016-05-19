@@ -39,7 +39,7 @@ public class PuzzleGenerator : MonoBehaviour {
     private List<Tween> waitTweenList;
 
     private Transform unitHolder;
-    private Transform unitBGHolder;
+    public Transform unitBGHolder;
     private Transform poolObjectHolder;
 
     private bool canPushUnit;

@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour {
     public Text scoreText;
     public Text hiScoreText;
     public Text movesCountText;
-    public Text blueBGCountText;
+    public Text unitBGCountText;
 
     public GameObject pausePanel;
 
@@ -85,7 +85,7 @@ public class GameController : MonoBehaviour {
         hiScoreText.text = hiScore.ToString();
         movesCountText.text = moves.ToString();
         bgCount = UnitBGGenerator.Instance.BlueBGCount;
-        blueBGCountText.text = bgCount.ToString();
+        unitBGCountText.text = bgCount.ToString();
     }
 
     //void Update()
@@ -110,6 +110,24 @@ public class GameController : MonoBehaviour {
     void updateScoreText()
     {
         scoreText.text = Score.ToString();
+    }
+
+    public void updateUnitBGCountText(int unitBGCount)
+    {
+        unitBGCountText.text = unitBGCount.ToString();
+    }
+
+    public void reduceMovesCount()
+    {
+        if(moves > 0)
+        {
+            moves--;
+            movesCountText.text = moves.ToString();
+        }
+        else
+        {
+            print("out of moves");
+        }
     }
 
     public void pauseGame()

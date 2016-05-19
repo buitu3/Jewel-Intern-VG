@@ -158,18 +158,26 @@ public class ChainedUnitsScanner : MonoBehaviour
         // If true destroy all jewels that has the same type with the other swapped unit
         if (focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
         {
+            // Disable the UnitBG that in the same position as the current destroyAll Unit
+            UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+
             //destroyAllUnitsOfType(otherUnitInfo._value);
             StartCoroutine(destroyAllUnitsOfType(otherUnitInfo._value));
             disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            GameController.Instance.reduceMovesCount();
 
             yield return new WaitForSeconds(0.6f);
             StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
         }
         else if (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
         {
+            // Disable the UnitBG that in the same position as the current destroyAll Unit
+            UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+
             //destroyAllUnitsOfType(focusedUnitInfo._value);
             StartCoroutine(destroyAllUnitsOfType(focusedUnitInfo._value));
             disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            GameController.Instance.reduceMovesCount();
 
             yield return new WaitForSeconds(0.6f);
             StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
@@ -186,6 +194,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             // If there are chained units
             if (chainedUnits)
             {
+                GameController.Instance.reduceMovesCount();
                 yield return new WaitForSeconds(0.3f);
                 StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
                 //PuzzleGenerator.Instance.reOrganizePuzzle();
@@ -384,7 +393,8 @@ public class ChainedUnitsScanner : MonoBehaviour
                 unitsYIndex.Add(YIndex);
             }
         }
-        //destroyUnits(unitsXIndex, unitsYIndex);
+        
+        // Remove the targeted Unit effect to prevent infinity overlapped destroy effect
         PuzzleGenerator.Instance._unitARR[col, YTarget].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.noEff;
         destroyUnits(col, YTarget, unitsXIndex, unitsYIndex, _scanUnitARR[col, YTarget]._value, UnitInfo.SpecialEff.noEff);
 
@@ -405,7 +415,8 @@ public class ChainedUnitsScanner : MonoBehaviour
                 unitsYIndex.Add(row);
             }
         }
-        //destroyUnits(unitsXIndex, unitsYIndex);
+
+        // Remove the targeted Unit effect to prevent infinity overlapped destroy effect
         PuzzleGenerator.Instance._unitARR[XTarget, row].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.noEff;
         destroyUnits(XTarget, row, unitsXIndex, unitsYIndex, _scanUnitARR[XTarget, row]._value, UnitInfo.SpecialEff.noEff);
 
@@ -417,6 +428,7 @@ public class ChainedUnitsScanner : MonoBehaviour
         List<int> unitsXIndex = new List<int>();
         List<int> unitsYIndex = new List<int>();
 
+        // Add local Units to disable list based on the targeted Unit position
         if (XTarget > 0 && XTarget < PuzzleGenerator.Instance._columns - 1 && YTarget > 0 && YTarget < PuzzleGenerator.Instance._rows - 1)
         {
             if (!_scanUnitARR[XTarget - 1, YTarget - 1]._isChained) { unitsXIndex.Add(XTarget - 1); unitsYIndex.Add(YTarget - 1); }
@@ -485,6 +497,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             if (!_scanUnitARR[XTarget + 1, YTarget]._isChained) { unitsXIndex.Add(XTarget + 1); unitsYIndex.Add(YTarget); }
         }
 
+        // Remove the targeted Unit effect to prevent infinity overlapped destroy effect
         PuzzleGenerator.Instance._unitARR[XTarget, YTarget].GetComponent<UnitInfo>()._unitEff = UnitInfo.SpecialEff.noEff;
         destroyUnits(XTarget, YTarget, unitsXIndex, unitsYIndex, _scanUnitARR[XTarget, YTarget]._value, UnitInfo.SpecialEff.noEff);
 
@@ -522,6 +535,9 @@ public class ChainedUnitsScanner : MonoBehaviour
                 continue;
             }
 
+            // Disable the UnitBG that in the same position as the current chained Unit
+            UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+
             disableUnit(unitsXIndex[i], unitsYIndex[i]);
 
             switch (unitInfo._unitEff)
@@ -551,8 +567,6 @@ public class ChainedUnitsScanner : MonoBehaviour
                         // Activate bonus unit score text
                         getUnitScoreText(bonusPoint, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
                         GameController.Instance.updateScore(bonusPoint);
-
-
                         break;
                     }
                 default: break;
@@ -563,10 +577,10 @@ public class ChainedUnitsScanner : MonoBehaviour
     /// <summary>
     /// Check Swapped or Regenerated Units Info to call the suitable destroy type
     /// </summary>
-    /// <param name="Xtarget"></param>
-    /// <param name="Ytarget"></param>
-    /// <param name="unitsXIndex"></param>
-    /// <param name="unitsYIndex"></param>
+    /// <param name="Xtarget">The X index of the targeted Unit</param>
+    /// <param name="Ytarget">The Y index of the targeted Unit</param>
+    /// <param name="unitsXIndex">List of all X indexs of other units that are in chain</param>
+    /// <param name="unitsYIndex">List of all Y indexs of other units that are in chain</param>
     /// <param name="targetNextEff"></param>
     void destroyUnits(int Xtarget, int Ytarget, List<int> unitsXIndex, List<int> unitsYIndex, int targetNextValue, UnitInfo.SpecialEff targetNextEff)
     {
@@ -589,10 +603,13 @@ public class ChainedUnitsScanner : MonoBehaviour
         }
         else
         {
+            // Disable the UnitBG that in the same position as the targeted Unit
+            UnitBGGenerator.Instance.removeBG(Xtarget, Ytarget);
+
             disableUnit(Xtarget, Ytarget);
         }
 
-        // If the target unit has special Eff
+        #region Target Unit has special effect
         if (PuzzleGenerator.Instance._unitARR[Xtarget, Ytarget].GetComponent<UnitInfo>()._unitEff != UnitInfo.SpecialEff.noEff)
         {
             // Trigger it's Eff
@@ -674,6 +691,9 @@ public class ChainedUnitsScanner : MonoBehaviour
                     continue;
                 }
 
+                // Disable the UnitBG that in the same position as the current chained Unit
+                UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+
                 disableUnit(unitsXIndex[i], unitsYIndex[i]);
 
                 if (unitInfo._value
@@ -718,7 +738,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                 }
             }
         }
-
+        #endregion
         // If the target doesn't has any special Eff
         else
         {
@@ -774,6 +794,9 @@ public class ChainedUnitsScanner : MonoBehaviour
                     unitInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
                     continue;
                 }
+
+                // Disable the UnitBG that in the same position as the current chained Unit
+                UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
 
                 disableUnit(unitsXIndex[i], unitsYIndex[i]);
 
