@@ -677,6 +677,15 @@ public class PuzzleGenerator : MonoBehaviour {
             {
                 GameController.Instance.currentState = GameController.GameState.idle;
 
+                if (!GameController.Instance.isGameCompleted())
+                {
+                    GameController.Instance.checkIfGameOver();
+                }
+                else
+                {
+                    GameController.Instance.gameCompleted();
+                }
+                
                 if (turnCountToUpgrade >= turnsToUpgradeRandomLightningUnit)
                 {
                     upgradeRandomUnitIntoLightning();

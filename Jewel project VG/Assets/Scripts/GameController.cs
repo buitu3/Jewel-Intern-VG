@@ -23,7 +23,19 @@ public class GameController : MonoBehaviour {
     public Text movesCountText;
     public Text unitBGCountText;
 
+    public Text gameOverScoreText;
+    public Text gameOverHiScoreText;
+    public Text gameCompleteScoreText;
+    public Text gameCompleteHiScoreText;
+
+    public GameObject gameCompleteStarOne;
+    public GameObject gameCompleteStarTwo;
+    public GameObject gameCompleteStarThree;
+
+    public GameObject greyPanel;
     public GameObject pausePanel;
+    public GameObject gameOverPanel;
+    public GameObject gameCompletedPanel;
 
     [HideInInspector]
     public GameState currentState;
@@ -84,8 +96,10 @@ public class GameController : MonoBehaviour {
         //scoreTween = DOTween.To(() => Score, x => Score = x, 0, 0.3f).OnUpdate(updateScoreText);
         hiScoreText.text = hiScore.ToString();
         movesCountText.text = moves.ToString();
-        bgCount = UnitBGGenerator.Instance.BlueBGCount;
+        bgCount = UnitBGGenerator.Instance.UnitBGCount;
         unitBGCountText.text = bgCount.ToString();
+
+        scoreSlider.maxValue = star3Score;
     }
 
     //void Update()
@@ -96,6 +110,8 @@ public class GameController : MonoBehaviour {
     //==============================================
     // Methods
     //==============================================
+
+    #region Update UI Text methods
 
     public void updateScore(int bonusScore)
     {
@@ -124,22 +140,44 @@ public class GameController : MonoBehaviour {
             moves--;
             movesCountText.text = moves.ToString();
         }
-        else
+    }
+
+    public void checkIfGameOver()
+    {
+        if (moves == 0)
         {
-            print("out of moves");
+            gameOver();
         }
     }
+
+    public bool isGameCompleted()
+    {
+        if (UnitBGGenerator.Instance.UnitBGCount <= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    #endregion
 
     public void pauseGame()
     {
         Time.timeScale = 0f;
         pausePanel.SetActive(true);
+        greyPanel.SetActive(true);
+
+        pausePanel.transform.DOScale(new Vector2(0, 0), 0.5f).From().SetUpdate(UpdateType.Normal, true).SetEase(Ease.OutBack);       
     }
 
     public void resumeGame()
     {
         Time.timeScale = 1f;
         pausePanel.SetActive(false);
+        greyPanel.SetActive(false);
     }
 
     public void restartGame()
@@ -148,16 +186,57 @@ public class GameController : MonoBehaviour {
         SceneManager.LoadScene("Main Game Scene");
     }
 
+    public void loadNextLevel()
+    {
+
+    }
+
     public void selectLevel()
     {
         Time.timeScale = 1f;
-        gameOver();
         SceneManager.LoadScene("Select Level Scene");
     }
 
     public void gameOver()
     {
-        saveGame();        
+        saveGame();
+
+        gameOverPanel.SetActive(true);
+        greyPanel.SetActive(true);
+
+        gameOverPanel.transform.DOScale(new Vector2(0, 0), 0.5f).From().SetUpdate(UpdateType.Normal, true).SetEase(Ease.OutBack);
+
+        gameOverScoreText.text = Score.ToString();
+        gameOverHiScoreText.text = hiScore.ToString();
+    }
+
+    public void gameCompleted()
+    {
+        saveGame();
+
+        gameCompletedPanel.SetActive(true);
+        greyPanel.SetActive(true);
+
+        gameCompletedPanel.transform.DOScale(new Vector2(0, 0), 0.5f).From().SetUpdate(UpdateType.Normal, true).SetEase(Ease.OutBack);
+
+        gameCompleteScoreText.text = Score.ToString();
+        gameCompleteHiScoreText.text = hiScore.ToString();
+
+        if (Score > star3Score)
+        {
+            gameCompleteStarThree.SetActive(true);
+            gameCompleteStarTwo.SetActive(true);
+            gameCompleteStarOne.SetActive(true);
+        }
+        else if (Score > star2Score)
+        {
+            gameCompleteStarTwo.SetActive(true);
+            gameCompleteStarOne.SetActive(true);
+        }
+        else if (Score > star1Score)
+        {
+            gameCompleteStarOne.SetActive(true);
+        }
     }
 
     void saveGame()
@@ -170,12 +249,13 @@ public class GameController : MonoBehaviour {
         if (PlayerPrefs.HasKey(levelHiScoreKey))
         {
             // Save new hi-score if current score is higher than previous hi-score
-            if (Score > PlayerPrefs.GetInt(levelHiScoreKey))
+            if (Score > PlayerPrefs.GetInt(levelHiScoreKey) && isGameCompleted())
             {
                 PlayerPrefs.SetInt(levelHiScoreKey, Score);
-                print(star1Score);
 
                 rateLevelStar(Score);
+
+                hiScore = Score;
             }
         }
         // Save this score as hi-score if the selected level is played for the first time
@@ -184,6 +264,8 @@ public class GameController : MonoBehaviour {
             PlayerPrefs.SetInt(levelHiScoreKey, Score);
 
             rateLevelStar(Score);
+
+            hiScore = Score;
         }
     }
 

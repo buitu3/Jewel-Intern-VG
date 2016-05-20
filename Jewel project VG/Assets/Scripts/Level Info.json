@@ -200,14 +200,14 @@
 	,
 	"Row 6":
 		{
-			"Col 0":{"Unit Level":3,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 1":{"Unit Level":3,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 2":{"Unit Level":3,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 3":{"Unit Level":3,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 4":{"Unit Level":3,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 5":{"Unit Level":3,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 6":{"Unit Level":3,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 7":{"Unit Level":3,"Special Eff":"noEff","Negative Eff":"noEff"}
+			"Col 0":{"Unit Level":2,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":2,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":2,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":2,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":2,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":2,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":2,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":2,"Special Eff":"noEff","Negative Eff":"noEff"}
 		}		
 	,
 	"Row 7":
@@ -611,8 +611,8 @@
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"locked"},
-			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"locked"},
+			"Col 3":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"locked"},
+			"Col 4":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"locked"},
 			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
@@ -663,8 +663,8 @@
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
@@ -674,10 +674,10 @@
 		{
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
 		}		
@@ -685,37 +685,37 @@
 	"Row 5":
 		{
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
 			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
-			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
 		}		
 	,
 	"Row 6":
 		{
-			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 0":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
 			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
-			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+			"Col 6":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"}
 		}		
 	,
 	"Row 7":
 		{
-			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 0":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
 			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
-			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+			"Col 7":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"noEff"}
 		}		
 	,
 	"Row 8":
@@ -868,6 +868,874 @@
 	}
 ,
 "Level 8":
+	{
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"Row 0":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 1":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 2":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 3":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 4":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 5":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 6":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 7":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 8":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 9":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	}
+,
+"Level 9":
+	{
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"Row 0":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 1":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 2":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 3":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 4":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 5":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 6":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 7":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 8":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 9":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	}
+,
+"Level 10":
+	{
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"Row 0":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 1":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 2":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 3":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 4":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 5":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 6":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 7":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 8":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 9":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	}
+,
+"Level 11":
+	{
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"Row 0":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 1":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 2":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 3":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 4":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 5":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 6":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 7":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 8":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 9":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	}
+,
+"Level 12":
+	{
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"Row 0":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 1":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 2":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 3":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 4":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 5":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 6":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 7":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 8":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 9":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	}
+,
+"Level 13":
+	{
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"Row 0":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 1":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 2":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 3":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 4":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 5":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 6":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 7":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 8":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 9":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	}
+,
+"Level 14":
+	{
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"Row 0":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 1":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 2":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 3":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 4":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 5":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 6":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 7":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 8":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	,
+	"Row 9":
+		{
+			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
+		}		
+	}
+,
+"Level 15":
 	{
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
 	"Row 0":

@@ -13,12 +13,12 @@ public class UnitBGGenerator : MonoBehaviour {
     // Fields
     //==============================================
 
-    private int blueBGCount;
-    public int BlueBGCount
+    private int unitBGCount;
+    public int UnitBGCount
     {
         get
         {
-            return blueBGCount;
+            return unitBGCount;
         }
     }
 
@@ -38,7 +38,7 @@ public class UnitBGGenerator : MonoBehaviour {
 
     void Start()
     {
-        blueBGCount = 0;
+        unitBGCount = 0;
         _unitBGARR = new GameObject[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
         _valueBGARR = new int[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
 
@@ -67,7 +67,7 @@ public class UnitBGGenerator : MonoBehaviour {
                     _unitBGARR[XIndex, YIndex].transform.SetParent(PuzzleGenerator.Instance.unitBGHolder);
 
                     _valueBGARR[XIndex, YIndex] = unitBGLevel;
-                    blueBGCount++;
+                    unitBGCount++;
                 }
             }
         }
@@ -88,12 +88,12 @@ public class UnitBGGenerator : MonoBehaviour {
             else if (_valueBGARR[XIndex, YIndex] == 1)
             {
                 _valueBGARR[XIndex, YIndex]--;
-                blueBGCount--;
+                unitBGCount--;
 
                 Destroy(_unitBGARR[XIndex, YIndex]);
 
-                GameController.Instance.updateUnitBGCountText(blueBGCount);
-                if (blueBGCount == 0)
+                GameController.Instance.updateUnitBGCountText(unitBGCount);
+                if (unitBGCount == 0)
                 {
                     print("Game completed");
                 }
