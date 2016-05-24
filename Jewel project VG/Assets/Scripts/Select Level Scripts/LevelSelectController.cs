@@ -26,6 +26,8 @@ public class LevelSelectController : MonoBehaviour {
 
     public GameObject panel;
 
+    public AudioClip clickSound;
+
     //==============================================
     // Unity Methods
     //==============================================
@@ -107,6 +109,8 @@ public class LevelSelectController : MonoBehaviour {
 
     public void loadMainGame(int level)
     {
+        SoundController.Instance.playOneShotClip(clickSound);
+
         LevelsManager.Instance.selectedLevel = level;
         LevelsManager.Instance.selectedLevelInfoJSON = LevelsManager.Instance.levelsInfoJSON.GetField("Level " + level);
         SceneManager.LoadScene("Main Game Scene");

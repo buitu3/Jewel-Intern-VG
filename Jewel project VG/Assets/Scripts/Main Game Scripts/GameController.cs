@@ -37,6 +37,8 @@ public class GameController : MonoBehaviour {
     public GameObject gameOverPanel;
     public GameObject gameCompletedPanel;
 
+    public AudioClip clickSound;
+
     [HideInInspector]
     public GameState currentState;
 
@@ -166,6 +168,8 @@ public class GameController : MonoBehaviour {
 
     public void pauseGame()
     {
+        SoundController.Instance.playOneShotClip(clickSound);
+
         Time.timeScale = 0f;
         pausePanel.SetActive(true);
         greyPanel.SetActive(true);
@@ -178,10 +182,14 @@ public class GameController : MonoBehaviour {
         Time.timeScale = 1f;
         pausePanel.SetActive(false);
         greyPanel.SetActive(false);
+
+        SoundController.Instance.playOneShotClip(clickSound);
     }
 
     public void restartGame()
     {
+        SoundController.Instance.playOneShotClip(clickSound);
+
         Time.timeScale = 1f;
         SceneManager.LoadScene("Main Game Scene");
     }
@@ -193,6 +201,8 @@ public class GameController : MonoBehaviour {
 
     public void selectLevel()
     {
+        SoundController.Instance.playOneShotClip(clickSound);
+
         Time.timeScale = 1f;
         SceneManager.LoadScene("Select Level Scene");
     }

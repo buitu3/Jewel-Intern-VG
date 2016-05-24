@@ -39,6 +39,16 @@ public class ChainedUnitsScanner : MonoBehaviour
 
     public AnimationClip lightningDestroyAllClip;
 
+    public AudioClip unitDestroySound;
+    public AudioClip explosionDestroySound;
+    public AudioClip lightingDestroySound;
+    public AudioClip destroyAllUnitSound;
+
+    public AudioClip frozenBreakSound;
+    public AudioClip lockBreakSound;
+
+    public AudioClip unSwapUnitSound;
+
     public ScanUnit[,] _scanUnitARR;
 
     private Transform specialEffHolder;
@@ -67,8 +77,6 @@ public class ChainedUnitsScanner : MonoBehaviour
     void Start()
     {
         specialEffHolder = new GameObject("Special Effs Holder").transform;
-
-        
 
         // Init special Eff pool
         _specialEffPoolARR = new List<GameObject>[unitDestroyEff.Length];
@@ -203,6 +211,9 @@ public class ChainedUnitsScanner : MonoBehaviour
             {
                 // Swap Units back
                 yield return new WaitForSeconds(0.1f);
+
+                SoundController.Instance.playOneShotClip(unSwapUnitSound);
+
                 InputHandler.SwapType swapType = InputHandler.Instance.checkSwapable(focusedUnit, otherUnit);
                 InputHandler.Instance.swapUnits(focusedUnit, otherUnit, swapType);
                 yield return new WaitForSeconds(InputHandler.Instance.swapTime);
@@ -371,6 +382,8 @@ public class ChainedUnitsScanner : MonoBehaviour
 
         destroyUnits(unitsXIndex, unitsYIndex);
 
+        SoundController.Instance.playOneShotClip(destroyAllUnitSound);
+
         for (int i = 0; i < unitsXIndex.Count; i++)
         {
             Instantiate(AllUnitsTypeDestroyEff, PuzzleGenerator.Instance._unitPosARR[unitsXIndex[i], unitsYIndex[i]], Quaternion.identity);
@@ -526,12 +539,18 @@ public class ChainedUnitsScanner : MonoBehaviour
             {
                 unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
                 unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
+
+                SoundController.Instance.playOneShotClip(frozenBreakSound);
+
                 continue;
             }
             else if (unitInfo._negativeEff == UnitInfo.NegativeEff.locked)
             {
                 unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
                 unitInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
+
+                SoundController.Instance.playOneShotClip(lockBreakSound);
+
                 continue;
             }
 
@@ -545,18 +564,27 @@ public class ChainedUnitsScanner : MonoBehaviour
                 case UnitInfo.SpecialEff.vLightning:
                     {
                         destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
+
+                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+
                         break;
                     }
 
                 case UnitInfo.SpecialEff.hLightning:
                     {
                         destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
+
+                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+
                         break;
                     }
 
                 case UnitInfo.SpecialEff.explode:
                     {
                         destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
+
+                        SoundController.Instance.playOneShotClip(explosionDestroySound);
+
                         break;
                     }
 
@@ -567,6 +595,9 @@ public class ChainedUnitsScanner : MonoBehaviour
                         // Activate bonus unit score text
                         getUnitScoreText(bonusPoint, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
                         GameController.Instance.updateScore(bonusPoint);
+
+                        SoundController.Instance.playSingleClip(unitDestroySound);
+
                         break;
                     }
                 default: break;
@@ -595,11 +626,15 @@ public class ChainedUnitsScanner : MonoBehaviour
         {
             targetInfo._negativeEff = UnitInfo.NegativeEff.noEff;
             targetInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
+
+            SoundController.Instance.playOneShotClip(frozenBreakSound);
         }
         else if (targetInfo._negativeEff == UnitInfo.NegativeEff.locked)
         {
             targetInfo._negativeEff = UnitInfo.NegativeEff.noEff;
             targetInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
+
+            SoundController.Instance.playOneShotClip(lockBreakSound);
         }
         else
         {
@@ -618,18 +653,27 @@ public class ChainedUnitsScanner : MonoBehaviour
                 case UnitInfo.SpecialEff.vLightning:
                     {
                         destroyAllUnitsOfColumn(Xtarget, Ytarget);
+
+                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+
                         break;
                     }
 
                 case UnitInfo.SpecialEff.hLightning:
                     {
                         destroyAllUnitsOfRow(Xtarget, Ytarget);
+
+                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+
                         break;
                     }
 
                 case UnitInfo.SpecialEff.explode:
                     {
                         destroyAllLocalUnits(Xtarget, Ytarget);
+
+                        SoundController.Instance.playOneShotClip(explosionDestroySound);
+
                         break;
                     }
 
@@ -649,18 +693,27 @@ public class ChainedUnitsScanner : MonoBehaviour
                     case UnitInfo.SpecialEff.vLightning:
                         {
                             destroyAllUnitsOfColumn(Xtarget, Ytarget);
+
+                            SoundController.Instance.playOneShotClip(lightingDestroySound);
+
                             break;
                         }
 
                     case UnitInfo.SpecialEff.hLightning:
                         {
                             destroyAllUnitsOfRow(Xtarget, Ytarget);
+
+                            SoundController.Instance.playOneShotClip(lightingDestroySound);
+
                             break;
                         }
 
                     case UnitInfo.SpecialEff.explode:
                         {
                             destroyAllLocalUnits(Xtarget, Ytarget);
+
+                            SoundController.Instance.playOneShotClip(explosionDestroySound);
+
                             break;
                         }
 
@@ -681,6 +734,9 @@ public class ChainedUnitsScanner : MonoBehaviour
                 {
                     unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
                     unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
+
+                    SoundController.Instance.playOneShotClip(frozenBreakSound);
+
                     continue;
                 }
                 else if (unitInfo._negativeEff == UnitInfo.NegativeEff.locked)
@@ -688,6 +744,9 @@ public class ChainedUnitsScanner : MonoBehaviour
                     print("break lock");
                     unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
                     unitInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
+
+                    SoundController.Instance.playOneShotClip(lockBreakSound);
+
                     continue;
                 }
 
@@ -708,18 +767,27 @@ public class ChainedUnitsScanner : MonoBehaviour
                         case UnitInfo.SpecialEff.vLightning:
                             {
                                 destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
+
+                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+
                                 break;
                             }
 
                         case UnitInfo.SpecialEff.hLightning:
                             {
                                 destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
+
+                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+
                                 break;
                             }
 
                         case UnitInfo.SpecialEff.explode:
                             {
                                 destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
+
+                                SoundController.Instance.playOneShotClip(explosionDestroySound);
+
                                 break;
                             }
 
@@ -730,6 +798,9 @@ public class ChainedUnitsScanner : MonoBehaviour
                                 // Activate bonus unit score text
                                 getUnitScoreText(bonusPoint, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
                                 GameController.Instance.updateScore(bonusPoint);
+
+                                SoundController.Instance.playSingleClip(unitDestroySound);
+
                                 break;
                             }
 
@@ -786,12 +857,18 @@ public class ChainedUnitsScanner : MonoBehaviour
                 {
                     unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
                     unitInfo.FrozenEff.GetComponent<NegativeEffController>().selfBreak();
+
+                    SoundController.Instance.playOneShotClip(frozenBreakSound);
+
                     continue;
                 }
                 else if (unitInfo._negativeEff == UnitInfo.NegativeEff.locked)
                 {
                     unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
                     unitInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
+
+                    SoundController.Instance.playOneShotClip(frozenBreakSound);
+
                     continue;
                 }
 
@@ -812,18 +889,27 @@ public class ChainedUnitsScanner : MonoBehaviour
                         case UnitInfo.SpecialEff.vLightning:
                             {
                                 destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
+
+                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+
                                 break;
                             }
 
                         case UnitInfo.SpecialEff.hLightning:
                             {
                                 destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
+
+                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+
                                 break;
                             }
 
                         case UnitInfo.SpecialEff.explode:
                             {
                                 destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
+
+                                SoundController.Instance.playOneShotClip(explosionDestroySound);
+
                                 break;
                             }
 
@@ -835,6 +921,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                                 getUnitScoreText(bonusPoint, PuzzleGenerator.Instance._unitPosARR[unitInfo._XIndex, unitInfo._YIndex]);
                                 GameController.Instance.updateScore(bonusPoint);
 
+                                SoundController.Instance.playSingleClip(unitDestroySound);
 
                                 break;
                             }

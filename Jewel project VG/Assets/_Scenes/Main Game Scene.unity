@@ -1518,7 +1518,7 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 41.8, y: -32.88}
+  m_AnchoredPosition: {x: 72.8, y: -32.88}
   m_SizeDelta: {x: 160, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &497179029
@@ -2028,8 +2028,8 @@ RectTransform:
   m_RootOrder: 2
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -150.36, y: -32.88}
-  m_SizeDelta: {x: 160, y: 40}
+  m_AnchoredPosition: {x: -130.3, y: -32.88}
+  m_SizeDelta: {x: 160, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &532441733
 MonoBehaviour:
@@ -4112,6 +4112,7 @@ MonoBehaviour:
   pausePanel: {fileID: 1633320702}
   gameOverPanel: {fileID: 1866576559}
   gameCompletedPanel: {fileID: 1157742465}
+  clickSound: {fileID: 8300000, guid: 1594743f7e11c62429ff8641a48a4489, type: 3}
   currentState: 0
 --- !u!114 &1254704529
 MonoBehaviour:
@@ -4141,6 +4142,15 @@ MonoBehaviour:
   scoreTextCanvas: {fileID: 427357016}
   lightningDestroyAllClip: {fileID: 7400000, guid: 2e9ce0f5bb1ee734f8990d51c30e5045,
     type: 2}
+  unitDestroySound: {fileID: 8300000, guid: 84ad9e3d440c0b146af02740813cf1fe, type: 3}
+  explosionDestroySound: {fileID: 8300000, guid: d685ff51dc40c884384bc76abf756f1e,
+    type: 3}
+  lightingDestroySound: {fileID: 8300000, guid: febd85fc84d26ff46af6e48147ebdd77,
+    type: 3}
+  destroyAllUnitSound: {fileID: 8300000, guid: f640dadb915d8fe4c8a6cef40484f2a9, type: 3}
+  frozenBreakSound: {fileID: 8300000, guid: f67058b4e60a5ec4ebeb2e338cae3e56, type: 3}
+  lockBreakSound: {fileID: 8300000, guid: 47ec95d3be2216842b673c0025809688, type: 3}
+  unSwapUnitSound: {fileID: 8300000, guid: fa3a9d175cd3d684fad00aaf1c835fd9, type: 3}
 --- !u!114 &1254704530
 MonoBehaviour:
   m_ObjectHideFlags: 0
