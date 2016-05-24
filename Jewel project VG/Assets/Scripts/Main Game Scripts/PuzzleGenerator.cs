@@ -425,7 +425,8 @@ public class PuzzleGenerator : MonoBehaviour {
 
     private IEnumerator initPuzzle()
     {
-        JSONObject puzzleInfoJSon = levelsInfoJSON.GetField("Level " + LevelsManager.Instance.selectedLevel);
+        //JSONObject puzzleInfoJSon = levelsInfoJSON.GetField("Level " + LevelsManager.Instance.selectedLevel);
+        JSONObject puzzleInfoJSon = LevelsManager.Instance.selectedLevelInfoJSON;
 
         for (int YIndex = 0; YIndex < _rows; YIndex++)
         {            

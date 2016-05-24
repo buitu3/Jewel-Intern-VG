@@ -196,7 +196,19 @@ public class GameController : MonoBehaviour {
 
     public void loadNextLevel()
     {
+        SoundController.Instance.playOneShotClip(clickSound);
 
+        if (LevelsManager.Instance.selectedLevel < LevelsManager.Instance.maxLevel)
+        {
+            LevelsManager.Instance.selectedLevel++;
+            LevelsManager.Instance.selectedLevelInfoJSON = LevelsManager.Instance.levelsInfoJSON.GetField("Level " + LevelsManager.Instance.selectedLevel);
+
+            SceneManager.LoadScene("Main Game Scene");
+        }
+        else
+        {
+            SceneManager.LoadScene("Main Game Scene");
+        }
     }
 
     public void selectLevel()

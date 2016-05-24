@@ -35,6 +35,15 @@ public class SoundController : MonoBehaviour {
         }
 
         DontDestroyOnLoad(gameObject);
+
+        if (PlayerPrefs.HasKey("SFX Volume"))
+        {
+            sfxSource.volume = PlayerPrefs.GetFloat("SFX Volume");
+        }
+        if (PlayerPrefs.HasKey("Music Volume"))
+        {
+            musicSource.volume = PlayerPrefs.GetFloat("Music Volume");
+        }
     }
 
     //==============================================

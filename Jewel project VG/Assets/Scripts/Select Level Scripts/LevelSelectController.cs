@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 using System.Collections;
 using System.Text;
 
@@ -23,10 +24,20 @@ public class LevelSelectController : MonoBehaviour {
     public Sprite previousPlayedSprite;
 
     public Image playerImage;
+    //public Image SFXImage;
+    //public Image muteSFXImage;
+    //public Image soundImage;
+    //public Image muteSoundImage;
 
-    public GameObject panel;
+    public Slider SFXSlider;
+    public Slider musicSlider;
+
+    public GameObject settingPanel;
 
     public AudioClip clickSound;
+
+    private bool muteSFX = false;
+    private bool muteSound = false;
 
     //==============================================
     // Unity Methods
@@ -41,6 +52,9 @@ public class LevelSelectController : MonoBehaviour {
     void Start()
     {
         loadLevelsInfo();
+
+        SFXSlider.value = SoundController.Instance.sfxSource.volume;
+        musicSlider.value = SoundController.Instance.musicSource.volume;
     }
 
     //==============================================
@@ -114,5 +128,33 @@ public class LevelSelectController : MonoBehaviour {
         LevelsManager.Instance.selectedLevel = level;
         LevelsManager.Instance.selectedLevelInfoJSON = LevelsManager.Instance.levelsInfoJSON.GetField("Level " + level);
         SceneManager.LoadScene("Main Game Scene");
+    }
+
+    public void showSettingsPanel()
+    {
+        SoundController.Instance.playOneShotClip(clickSound);
+
+        settingPanel.SetActive(true);
+        settingPanel.transform.DOScale(new Vector2(0, 0), 0.5f).From().SetUpdate(UpdateType.Normal, true).SetEase(Ease.OutBack);
+    }
+
+    public void hideSettingPanel()
+    {
+        SoundController.Instance.playOneShotClip(clickSound);
+
+        settingPanel.SetActive(false);
+
+        PlayerPrefs.SetFloat("SFX Volume", SoundController.Instance.sfxSource.volume);
+        PlayerPrefs.SetFloat("Music Volume", SoundController.Instance.musicSource.volume);
+    }
+
+    public void changeSFXVolume(float volume)
+    {
+        SoundController.Instance.sfxSource.volume = volume;
+    }
+
+    public void changeMusicVolume(float volume)
+    {
+        SoundController.Instance.musicSource.volume = volume;
     }
 }
