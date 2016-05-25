@@ -34,6 +34,9 @@ public class LevelSelectController : MonoBehaviour {
 
     public GameObject settingPanel;
 
+    public ScrollRect levelScroll;
+    private RectTransform scrollTransform;
+
     public AudioClip clickSound;
 
     private bool muteSFX = false;
@@ -55,6 +58,8 @@ public class LevelSelectController : MonoBehaviour {
 
         SFXSlider.value = SoundController.Instance.sfxSource.volume;
         musicSlider.value = SoundController.Instance.musicSource.volume;
+
+        //levelScroll.verticalNormalizedPosition = 0.5f;
     }
 
     //==============================================
@@ -72,6 +77,24 @@ public class LevelSelectController : MonoBehaviour {
         }
 
         //panel.transform.position = _LevelBtnARR[unlockedLevel - 1].transform.position;
+        scrollTransform = levelScroll.GetComponent<RectTransform>();
+        //float normalizePos = scrollTransform.anchorMin.y - _LevelBtnARR[unlockedLevel - 1].GetComponent<RectTransform>().anchoredPosition.y;
+        //print(_LevelBtnARR[unlockedLevel - 1].GetComponentsInParent<RectTransform>()[1].transform.GetSiblingIndex());
+        //print(_LevelBtnARR[unlockedLevel - 1].GetComponentsInParent<RectTransform>()[1].anchoredPosition.y);
+        //print(levelScroll.content.rect.height);
+
+        if (previousLevel != 0)
+        {
+            float normalizePos = _LevelBtnARR[previousLevel - 1].GetComponentsInParent<RectTransform>()[1].anchoredPosition.y / levelScroll.content.rect.height;
+            print(normalizePos);
+            levelScroll.verticalNormalizedPosition = normalizePos;
+        }
+        else
+        {
+            float normalizePos = _LevelBtnARR[unlockedLevel - 1].GetComponentsInParent<RectTransform>()[1].anchoredPosition.y / levelScroll.content.rect.height;
+            print(normalizePos);
+            levelScroll.verticalNormalizedPosition = normalizePos;
+        }        
 
         // Unlock all unlocked levels
         for (int i = 0; i <= unlockedLevel - 1; i++)
