@@ -51,7 +51,8 @@ public class PuzzleGenerator : MonoBehaviour {
     private float regenYpos = 6f;
 
     private float unitDropTime = 0.3f;
-    private float regenUnitDropTime = 0.35f;
+    //private float regenUnitDropTime = 0.35f;
+    private float regenUnitDropTime = 0.3f;
     private float unitPushTime = 0.3f;
 
     private int turnsToUpgradeRandomLightningUnit = 4;
@@ -285,9 +286,12 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             GameObject target = _unitARR[XIndex, YIndex];
             //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(Ease.InSine);
-            target.transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime - 0.1f).
-                OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
-                SetEase(Ease.InSine);
+
+            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(curveTween);
+
+            //target.transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime - 0.1f).
+            //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
+            //    SetEase(Ease.InSine);
         }
     }
 
@@ -353,7 +357,9 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             GameObject target = _unitARR[XIndex, YIndex];
             //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(Ease.InSine);
+
             _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(curveTween);
+
             //target.transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime - 0.1f).
             //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
             //    SetEase(Ease.InSine);
@@ -523,7 +529,7 @@ public class PuzzleGenerator : MonoBehaviour {
             //yield return new WaitForSeconds(0.05f);
             //---------------------------------------------
             //----------- Temporary changed ---------------
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
             //---------------------------------------------
 
             StartCoroutine(scanEmptyUnits(hasChained));
@@ -667,6 +673,11 @@ public class PuzzleGenerator : MonoBehaviour {
         //unitsList = new List<GameObject>();
 
         canPushUnit = false;
+        if (hasChained)
+        {
+            yield return new WaitForSeconds(unitDropTime);
+        }
+
         yield return StartCoroutine(findPushUnitsInPuzzle());
 
         if (!canPushUnit)
@@ -674,7 +685,7 @@ public class PuzzleGenerator : MonoBehaviour {
             // If there are regenUnits,scan them
             if (hasChained)
             {
-                yield return new WaitForSeconds(unitDropTime + 0.3f);
+                //yield return new WaitForSeconds(unitDropTime + 0.3f);
                 StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
             }
             else
@@ -1176,24 +1187,44 @@ public class PuzzleGenerator : MonoBehaviour {
                     ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained = false;
                     ChainedUnitsScanner.Instance._scanUnitARR[XIndex    , YIndex    ]._isChained = true;
 
-                    //Tween tween = _unitARR[XIndex - 1, YIndex + 1].transform.DOMove(_unitPosARR[XIndex , YIndex], 0.3f)
-                    //    .SetEase(Ease.OutBounce).OnComplete(() => StartCoroutine(dropUnit(XIndex, YIndex, borrowNeed - 1)));
+                    //---------------------------------------------
+                    //------------Temporary Disabled---------------
+                    //---------------------------------------------
 
-                    // If the Tween that attched to this gameobject 's transform is still running,wait until it complete
-                    if (DOTween.TweensByTarget(target.transform) != null && DOTween.TweensByTarget(target.transform).Count > 0)
+                    ////Tween tween = _unitARR[XIndex - 1, YIndex + 1].transform.DOMove(_unitPosARR[XIndex , YIndex], 0.3f)
+                    ////    .SetEase(Ease.OutBounce).OnComplete(() => StartCoroutine(dropUnit(XIndex, YIndex, borrowNeed - 1)));
+
+                    //// If the Tween that attched to this gameobject 's transform is still running,wait until it complete
+                    //if (DOTween.TweensByTarget(target.transform) != null && DOTween.TweensByTarget(target.transform).Count > 0)
+                    //{
+                    //    yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
+                    //    if (DOTween.TweensByTarget(target.transform) != null)
+                    //    {
+                    //        yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
+                    //    }
+                    //}
+
+                    //Tween t = target.transform.DOMove(_unitPosARR[XIndex - 1, YIndex - 1], unitPushTime)
+                    //    .SetEase(Ease.InSine);
+
+                    ////yield return tween.WaitForCompletion();
+                    ////yield return new WaitForSeconds(unitDropTime + 0.5f);
+
+                    //---------------------------------------------
+                    //---------------------------------------------
+
+                    List<Tween> tweenList = DOTween.TweensByTarget(target.transform);
+                    if (tweenList != null)
                     {
-                        yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
-                        if (DOTween.TweensByTarget(target.transform) != null)
-                        {
-                            yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
-                        }
+                        Tween t = target.transform.DOMove(_unitPosARR[XIndex - 1, YIndex - 1], unitPushTime).SetEase(Ease.Linear);
+                        t.Pause();
+                        yield return tweenList[tweenList.Count - 1].WaitForCompletion();
+                        t.Play();
                     }
-
-                    Tween t = target.transform.DOMove(_unitPosARR[XIndex - 1, YIndex - 1], unitPushTime)
-                        .SetEase(Ease.InSine);
-
-                    //yield return tween.WaitForCompletion();
-                    //yield return new WaitForSeconds(unitDropTime + 0.5f);
+                    else
+                    {
+                        target.transform.DOMove(_unitPosARR[XIndex - 1, YIndex - 1], unitPushTime).SetEase(Ease.Linear);
+                    }
 
                     break;
                 }
@@ -1214,29 +1245,51 @@ public class PuzzleGenerator : MonoBehaviour {
                     ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained = false;
                     ChainedUnitsScanner.Instance._scanUnitARR[XIndex    , YIndex    ]._isChained = true;
 
-                    // If the Tween that attched to this gameobject 's transform is still running,wait until it complete
-                    if (DOTween.TweensByTarget(target.transform) != null)
-                    {
-                        yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
-                        if (DOTween.TweensByTarget(target.transform) != null)
-                        {
-                            yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
-                            if (DOTween.TweensByTarget(target.transform) != null)
-                            {
-                                yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
-                            }
-                        }
-                    }
 
-                    //if (DOTween.TweensByTarget(target.transform) != null && DOTween.TweensByTarget(target.transform).Count > 0)
+                    //---------------------------------------------
+                    //------------Temporary Disabled---------------
+                    //---------------------------------------------
+
+                    //// If the Tween that attched to this gameobject 's transform is still running,wait until it complete
+                    //if (DOTween.TweensByTarget(target.transform) != null)
                     //{
-                    //    yield return DOTween.TweensByTarget(target.transform)[DOTween.TweensByTarget(target.transform).Count - 1].WaitForCompletion();
+                    //    yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
+                    //    if (DOTween.TweensByTarget(target.transform) != null)
+                    //    {
+                    //        yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
+                    //        if (DOTween.TweensByTarget(target.transform) != null)
+                    //        {
+                    //            yield return DOTween.TweensByTarget(target.transform)[0].WaitForCompletion();
+                    //        }
+                    //    }
                     //}
 
-                    Tween  t = target.transform.DOMove(_unitPosARR[XIndex + 1, YIndex - 1], unitPushTime)
-                        .SetEase(Ease.InSine);
+                    ////if (DOTween.TweensByTarget(target.transform) != null && DOTween.TweensByTarget(target.transform).Count > 0)
+                    ////{
+                    ////    yield return DOTween.TweensByTarget(target.transform)[DOTween.TweensByTarget(target.transform).Count - 1].WaitForCompletion();
+                    ////}
+
+                    //Tween  t = target.transform.DOMove(_unitPosARR[XIndex + 1, YIndex - 1], unitPushTime)
+                    //    .SetEase(Ease.InSine);
 
                     //yield return tween.WaitForCompletion();
+
+                    //---------------------------------------------
+                    //---------------------------------------------
+                    //---------------------------------------------
+
+                    List<Tween> tweenList = DOTween.TweensByTarget(target.transform);
+                    if (tweenList != null)
+                    {
+                        Tween t = target.transform.DOMove(_unitPosARR[XIndex + 1, YIndex - 1], unitPushTime).SetEase(Ease.Linear);
+                        t.Pause();
+                        yield return tweenList[tweenList.Count - 1].WaitForCompletion();
+                        t.Play();
+                    }
+                    else
+                    {
+                        target.transform.DOMove(_unitPosARR[XIndex + 1, YIndex - 1], unitPushTime).SetEase(Ease.Linear);
+                    }
 
                     break;
                 }
@@ -1268,28 +1321,48 @@ public class PuzzleGenerator : MonoBehaviour {
 
         //_unitARR[XIndex, YIndex - distanceInUnit].transform.DOMove(targetPos, unitDropTime).SetEase(Ease.OutBounce);        
 
-        // If the Tween that attached to this gameobject 's transform is still running,wait until it complete
-        if (DOTween.TweensByTarget(targetObject.transform) != null)
-        {
-            yield return DOTween.TweensByTarget(targetObject.transform)[0].WaitForCompletion();
-            yield return new WaitForEndOfFrame();
-            if (DOTween.TweensByTarget(targetObject.transform) != null)
-            {
-                yield return DOTween.TweensByTarget(targetObject.transform)[0].WaitForCompletion();
-                yield return null;
-                if (DOTween.TweensByTarget(targetObject.transform) != null)
-                {
-                    yield return DOTween.TweensByTarget(targetObject.transform)[0].WaitForCompletion();
-                }
-            }
-        }
-        //_unitARR[XIndex, YIndex - distanceInUnit].transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
+        // ------------------------------------------------------
+        // ----------------- Temporary Disabled -----------------
+        // ------------------------------------------------------
 
-        //targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
-        targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
-        //targetObject.transform.DOMove(targetPos, unitDropTime - 0.1f).
-        //    OnComplete(() => targetObject.transform.DOMoveY(targetObject.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
-        //    SetEase(Ease.InSine);
+        //// If the Tween that attached to this gameobject 's transform is still running,wait until it complete
+        //if (DOTween.TweensByTarget(targetObject.transform) != null)
+        //{
+        //    yield return DOTween.TweensByTarget(targetObject.transform)[0].WaitForCompletion();
+        //    yield return new WaitForEndOfFrame();
+        //    if (DOTween.TweensByTarget(targetObject.transform) != null)
+        //    {
+        //        yield return DOTween.TweensByTarget(targetObject.transform)[0].WaitForCompletion();
+        //        yield return null;
+        //        if (DOTween.TweensByTarget(targetObject.transform) != null)
+        //        {
+        //            yield return DOTween.TweensByTarget(targetObject.transform)[0].WaitForCompletion();
+        //        }
+        //    }
+        //}
+        ////_unitARR[XIndex, YIndex - distanceInUnit].transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
+
+        ////targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
+        //targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
+        ////targetObject.transform.DOMove(targetPos, unitDropTime - 0.1f).
+        ////    OnComplete(() => targetObject.transform.DOMoveY(targetObject.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
+        ////    SetEase(Ease.InSine);
+
+        // ------------------------------------------------------
+        // ------------------------------------------------------
+
+        List<Tween> tweenList = DOTween.TweensByTarget(targetObject.transform);
+        if (tweenList != null)
+        {
+            Tween t = targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
+            t.Pause();
+            yield return tweenList[tweenList.Count - 1].WaitForCompletion();
+            t.Play();
+        }
+        else
+        {
+            targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
+        }
     }
 
     private IEnumerator borrowUnitsFromCol(int XIndex, int YIndex, int borrowNumber, int borrowNeed, borrowUnitsType borrowType)
