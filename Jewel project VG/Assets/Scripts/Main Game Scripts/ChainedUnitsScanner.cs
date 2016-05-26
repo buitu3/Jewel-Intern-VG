@@ -143,8 +143,9 @@ public class ChainedUnitsScanner : MonoBehaviour
                 _scanUnitARR[XIndex, YIndex]._isChained = false;
             }     
         }
-    }    
+    }
 
+    #region Scan Units methods
     /// <summary>
     /// Scan two swapped units
     /// </summary>
@@ -174,7 +175,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
             GameController.Instance.reduceMovesCount();
 
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSeconds(0.5f);
             StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
         }
         else if (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
@@ -187,7 +188,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
             GameController.Instance.reduceMovesCount();
 
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSeconds(0.5f);
             StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
         }
         else
@@ -203,7 +204,7 @@ public class ChainedUnitsScanner : MonoBehaviour
             if (chainedUnits)
             {
                 GameController.Instance.reduceMovesCount();
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(0.5f);
                 StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
                 //PuzzleGenerator.Instance.reOrganizePuzzle();
             }
@@ -227,8 +228,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         //updateScanARR();
         updateScanUnits(unitsList);
         chainedUnits = false;
-
-        delayTime = 0f;
 
         List<int> unitsXIndex = new List<int>();
         List<int> unitsYIndex = new List<int>();
@@ -257,8 +256,7 @@ public class ChainedUnitsScanner : MonoBehaviour
         //yield return new WaitForSeconds(0.4f);
         if (chainedUnits)
         {
-            yield return new WaitForSeconds(0.6f);
-
+            yield return new WaitForSeconds(0.5f);
         }
 
         StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(chainedUnits));
@@ -292,6 +290,8 @@ public class ChainedUnitsScanner : MonoBehaviour
         //    //-----------------------------------------------------------
         //}
     }
+
+    #endregion
 
     #region Disable,Destroy and Special Destroy units methods
 
@@ -1281,7 +1281,7 @@ public class ChainedUnitsScanner : MonoBehaviour
         #endregion
     }
 
-    #region Scan for chained units types methods
+    #region Scan for specified chained units types methods
 
     void scanFiveUnitsChainedType(int XIndex, int YIndex)
     {

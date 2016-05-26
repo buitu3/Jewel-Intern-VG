@@ -519,9 +519,12 @@ public class PuzzleGenerator : MonoBehaviour {
             }
             ChainedUnitsScanner.Instance.updateScanUnits(unitsList);
 
-            //yield return new WaitForSeconds(unitDropTime + 0.1f);
-            yield return new WaitForSeconds(0.2f);
-            //yield return null;
+            //----------- Temporary disabled --------------
+            //yield return new WaitForSeconds(0.05f);
+            //---------------------------------------------
+            //----------- Temporary changed ---------------
+            yield return new WaitForSeconds(0.1f);
+            //---------------------------------------------
 
             StartCoroutine(scanEmptyUnits(hasChained));
             //StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));

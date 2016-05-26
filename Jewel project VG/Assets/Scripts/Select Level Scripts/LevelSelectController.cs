@@ -35,7 +35,6 @@ public class LevelSelectController : MonoBehaviour {
     public GameObject settingPanel;
 
     public ScrollRect levelScroll;
-    private RectTransform scrollTransform;
 
     public AudioClip clickSound;
 
@@ -76,23 +75,23 @@ public class LevelSelectController : MonoBehaviour {
             unlockedLevel = PlayerPrefs.GetInt("Unlocked Level");
         }
 
-        //panel.transform.position = _LevelBtnARR[unlockedLevel - 1].transform.position;
-        scrollTransform = levelScroll.GetComponent<RectTransform>();
-        //float normalizePos = scrollTransform.anchorMin.y - _LevelBtnARR[unlockedLevel - 1].GetComponent<RectTransform>().anchoredPosition.y;
-        //print(_LevelBtnARR[unlockedLevel - 1].GetComponentsInParent<RectTransform>()[1].transform.GetSiblingIndex());
-        //print(_LevelBtnARR[unlockedLevel - 1].GetComponentsInParent<RectTransform>()[1].anchoredPosition.y);
-        //print(levelScroll.content.rect.height);
-
+        // Move ScrollView position into the focused level
         if (previousLevel != 0)
         {
-            float normalizePos = _LevelBtnARR[previousLevel - 1].GetComponentsInParent<RectTransform>()[1].anchoredPosition.y / levelScroll.content.rect.height;
-            print(normalizePos);
+            float BGPos = _LevelBtnARR[previousLevel - 1].GetComponentsInParent<RectTransform>()[1].anchoredPosition.y;
+            float btnPosInBG = _LevelBtnARR[previousLevel - 1].GetComponent<RectTransform>().anchoredPosition.y;
+            float scrollViewHeight = levelScroll.viewport.rect.height;
+            float normalizePos = (BGPos + btnPosInBG - scrollViewHeight / 2) / levelScroll.content.rect.height;
+            normalizePos = Mathf.Clamp01(normalizePos);
             levelScroll.verticalNormalizedPosition = normalizePos;
         }
         else
         {
-            float normalizePos = _LevelBtnARR[unlockedLevel - 1].GetComponentsInParent<RectTransform>()[1].anchoredPosition.y / levelScroll.content.rect.height;
-            print(normalizePos);
+            float BGPos = _LevelBtnARR[unlockedLevel - 1].GetComponentsInParent<RectTransform>()[1].anchoredPosition.y;
+            float btnPosInBG = _LevelBtnARR[unlockedLevel - 1].GetComponent<RectTransform>().anchoredPosition.y;
+            float scrollViewHeight = levelScroll.viewport.rect.height;
+            float normalizePos = (BGPos + btnPosInBG - scrollViewHeight / 2) / levelScroll.content.rect.height;
+            normalizePos = Mathf.Clamp01(normalizePos);
             levelScroll.verticalNormalizedPosition = normalizePos;
         }        
 
