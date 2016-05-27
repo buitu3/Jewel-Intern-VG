@@ -177,12 +177,12 @@ public class PuzzleGenerator : MonoBehaviour {
         //upgradeUnit(5, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
         //upgradeUnit(6, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
         //upgradeUnit(7, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
-        
+
 
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
-
-        yield return new WaitForSeconds(1f);
+        yield return StartCoroutine(GameController.Instance.showLevelText());
+        //yield return new WaitForSeconds(1f);
 
         // ----------Fake unit value for testing ------------------      
 
@@ -529,7 +529,7 @@ public class PuzzleGenerator : MonoBehaviour {
             //yield return new WaitForSeconds(0.05f);
             //---------------------------------------------
             //----------- Temporary changed ---------------
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.15f);
             //---------------------------------------------
 
             StartCoroutine(scanEmptyUnits(hasChained));

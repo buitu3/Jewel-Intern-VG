@@ -37,6 +37,9 @@ public class GameController : MonoBehaviour {
     public GameObject gameOverPanel;
     public GameObject gameCompletedPanel;
 
+    public GameObject levelText;
+    public Text levelNumber;
+
     public AudioClip clickSound;
 
     [HideInInspector]
@@ -88,7 +91,6 @@ public class GameController : MonoBehaviour {
         {
             hiScore = 0;
         }
-
     }
 
     void Start()
@@ -230,6 +232,8 @@ public class GameController : MonoBehaviour {
 
         gameOverScoreText.text = Score.ToString();
         gameOverHiScoreText.text = hiScore.ToString();
+
+        Time.timeScale = 0f;
     }
 
     public void gameCompleted()
@@ -259,6 +263,8 @@ public class GameController : MonoBehaviour {
         {
             gameCompleteStarOne.SetActive(true);
         }
+
+        Time.timeScale = 0f;
     }
 
     void saveGame()
@@ -327,5 +333,16 @@ public class GameController : MonoBehaviour {
             PlayerPrefs.SetInt(levelStarKey, 3);
             print("3 star unlocked");
         }
+    }
+
+    public IEnumerator showLevelText()
+    {
+        levelNumber.text = LevelsManager.Instance.selectedLevel.ToString();
+        levelText.SetActive(true);
+        greyPanel.SetActive(true);
+        yield return levelText.transform.DOLocalMoveX(500, 0.8f).SetEase(Ease.OutQuart).From().WaitForCompletion();
+        yield return levelText.transform.DOLocalMoveX(-500, 0.8f).SetEase(Ease.InQuart).WaitForCompletion();
+        greyPanel.SetActive(false);
+        Destroy(levelText);
     }
 }
