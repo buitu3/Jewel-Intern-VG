@@ -50,10 +50,9 @@ public class PuzzleGenerator : MonoBehaviour {
     private float YPadding = 0.73f;
     private float regenYpos = 6f;
 
-    private float unitDropTime = 0.3f;
-    //private float regenUnitDropTime = 0.35f;
-    private float regenUnitDropTime = 0.3f;
-    private float unitPushTime = 0.3f;
+    private float unitDropTime = 0.2f;
+    private float regenUnitDropTime = 0.5f;
+    private float unitPushTime = 0.18f;
 
     private int turnsToUpgradeRandomLightningUnit = 4;
     [HideInInspector]
@@ -285,9 +284,9 @@ public class PuzzleGenerator : MonoBehaviour {
         if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
         {
             GameObject target = _unitARR[XIndex, YIndex];
-            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(Ease.InSine);
 
-            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(curveTween);
+            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(Ease.InSine);
+            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(curveTween);
 
             //target.transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime - 0.1f).
             //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
@@ -356,9 +355,9 @@ public class PuzzleGenerator : MonoBehaviour {
         if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
         {
             GameObject target = _unitARR[XIndex, YIndex];
-            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(Ease.InSine);
 
-            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime).SetEase(curveTween);
+            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(Ease.InSine);
+            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(curveTween);
 
             //target.transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime - 0.1f).
             //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
@@ -963,7 +962,8 @@ public class PuzzleGenerator : MonoBehaviour {
         //yield return new WaitForSeconds(0.5f);
         if (hasUnitToPush)
         {
-            yield return new WaitForSeconds(regenUnitDropTime);
+            //yield return new WaitForSeconds(regenUnitDropTime);
+            yield return new WaitForSeconds(unitPushTime);
         }
 
         if (hasUnitToPush)
@@ -1354,7 +1354,8 @@ public class PuzzleGenerator : MonoBehaviour {
         List<Tween> tweenList = DOTween.TweensByTarget(targetObject.transform);
         if (tweenList != null)
         {
-            Tween t = targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
+            //Tween t = targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
+            Tween t = targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
             t.Pause();
             yield return tweenList[tweenList.Count - 1].WaitForCompletion();
             t.Play();
@@ -1363,105 +1364,7 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
         }
-    }
-
-    private IEnumerator borrowUnitsFromCol(int XIndex, int YIndex, int borrowNumber, int borrowNeed, borrowUnitsType borrowType)
-    {
-        switch (borrowType)
-        {
-            case borrowUnitsType.Left:
-                {
-                    for (int i = 0; i < borrowNumber; i++)
-                    {
-                        _unitARR[XIndex, YIndex] = _unitARR[XIndex - 1, YIndex + 1];
-                        _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._XIndex++;
-                        _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._YIndex--;
-
-                        ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = false;
-                        ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex + 1]._isChained = true;
-
-                        //Tween tween = _unitARR[XIndex - 1, YIndex + 1].transform.DOMove(_unitPosARR[XIndex , YIndex], 0.3f)
-                        //    .SetEase(Ease.OutBounce).OnComplete(() => StartCoroutine(dropUnit(XIndex, YIndex, borrowNeed - 1)));
-                        Tween tween = _unitARR[XIndex - 1, YIndex + 1].transform.DOMove(_unitPosARR[XIndex, YIndex], 0.1f)
-                            .SetEase(Ease.Linear);
-                        yield return tween.WaitForCompletion();
-                        //yield return new WaitForSeconds(unitDropTime + 0.5f);
-
-                        //print(XIndex + ":::" + (YIndex) + ":::" + borrowNumber + ":::" + borrowNeed);
-                        //ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex - (borrowNeed - 1)]._isChained = false;
-
-                        borrowNeed--;
-
-                        //if (YIndex + 1 < _rows - 1)
-                        //{
-                        //    for (int j = YIndex + 2; j < _rows - 1; j++)
-                        //    {
-                        //        dropUnit(XIndex - 1, j, 1);
-                        //    }
-                        //}
-
-                    }
-                    break;
-                }
-            case borrowUnitsType.Right:
-                {
-                    for (int i = 0; i < borrowNumber; i++)
-                    {
-                        _unitARR[XIndex, YIndex] = _unitARR[XIndex + 1, YIndex + 1];
-                        _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._XIndex--;
-                        _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._YIndex--;
-
-                        ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = false;
-                        ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex + 1]._isChained = true;
-
-                        Tween tween = _unitARR[XIndex + 1, YIndex + 1].transform.DOMove(_unitPosARR[XIndex, YIndex], 0.1f)
-                            .SetEase(Ease.Linear);
-                        yield return tween.WaitForCompletion();
-
-
-                        borrowNeed--;
-                    }
-                    break;
-                }
-        }
-    }
-
-    private borrowUnitsType checkIfCanBorrow(int XIndex, int YIndex)
-    {
-        if (YIndex < _rows - 1)
-        {
-            if (XIndex == 0)
-            {
-                if (!ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex + 1]._isChained
-                    && _unitARR[XIndex + 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
-                {
-                    return borrowUnitsType.Right;
-                }
-            }
-            else if (XIndex == _columns - 1)
-            {
-                if (!ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex + 1]._isChained
-                    && _unitARR[XIndex - 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
-                {
-                    return borrowUnitsType.Left;
-                }
-            }
-            else
-            {
-                if (!ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex + 1]._isChained
-                    && _unitARR[XIndex - 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
-                {
-                    return borrowUnitsType.Left;
-                }
-                else if (!ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex + 1]._isChained
-                        && _unitARR[XIndex + 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
-                {
-                    return borrowUnitsType.Right;
-                }
-            }
-        }
-        return borrowUnitsType.None;
-    }
+    }    
 
     public void upgradeRandomUnitIntoLightning()
     {
