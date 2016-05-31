@@ -46,6 +46,7 @@ public class UnitInfo : MonoBehaviour
         frozen,
         locked,
         hollow,
+        empty,
         _effsCount
     }
 

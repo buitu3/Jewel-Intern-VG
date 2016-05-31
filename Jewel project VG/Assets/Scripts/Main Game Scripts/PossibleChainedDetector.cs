@@ -140,7 +140,7 @@ public class PossibleChainedDetector : MonoBehaviour {
         //}
     }
 
-    List<GameObject> scanPossibleChained()
+    public List<GameObject> scanPossibleChained()
     {
         updateValueARR();
 
@@ -269,7 +269,6 @@ public class PossibleChainedDetector : MonoBehaviour {
                 #endregion
             }
         }
-
         return suggestList;
     }
 
