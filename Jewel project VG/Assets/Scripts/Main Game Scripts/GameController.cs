@@ -323,12 +323,40 @@ public class GameController : MonoBehaviour {
         }
         if (Score > star2Score)
         {
+            // Unlock the next level
+            if (!PlayerPrefs.HasKey("Unlocked Level"))
+            {
+                PlayerPrefs.SetInt("Unlocked Level", LevelsManager.Instance.selectedLevel + 1);
+            }
+            else
+            {
+                if (LevelsManager.Instance.selectedLevel == PlayerPrefs.GetInt("Unlocked Level") &&
+                    LevelsManager.Instance.selectedLevel != LevelsManager.Instance.maxLevel)
+                {
+                    PlayerPrefs.SetInt("Unlocked Level", LevelsManager.Instance.selectedLevel + 1);
+                }
+            }
+
             // Rate star
             PlayerPrefs.SetInt(levelStarKey, 2);
             print("2 star unlocked");
         }
         if (Score > star3Score)
         {
+            // Unlock the next level
+            if (!PlayerPrefs.HasKey("Unlocked Level"))
+            {
+                PlayerPrefs.SetInt("Unlocked Level", LevelsManager.Instance.selectedLevel + 1);
+            }
+            else
+            {
+                if (LevelsManager.Instance.selectedLevel == PlayerPrefs.GetInt("Unlocked Level") &&
+                    LevelsManager.Instance.selectedLevel != LevelsManager.Instance.maxLevel)
+                {
+                    PlayerPrefs.SetInt("Unlocked Level", LevelsManager.Instance.selectedLevel + 1);
+                }
+            }
+
             // Rate star
             PlayerPrefs.SetInt(levelStarKey, 3);
             print("3 star unlocked");

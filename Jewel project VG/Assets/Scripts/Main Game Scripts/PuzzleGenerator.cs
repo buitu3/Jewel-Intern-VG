@@ -106,7 +106,7 @@ public class PuzzleGenerator : MonoBehaviour {
         // Init all Object pools
         _poolARR = new List<GameObject>[Unit.Length];
         Vector2 poolPos = new Vector2(-20, -20);
-        poolSize = _rows * _columns;
+        poolSize = _rows * _columns / 2;
         for (int i = 0; i < _poolARR.Length; i++)
         {
             _poolARR[i] = new List<GameObject>();
@@ -998,7 +998,8 @@ public class PuzzleGenerator : MonoBehaviour {
                         || _unitARR[col + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
                         {
                             print(col + ",,," + YIndex + ",,,cant push");
-                            return false;
+                            //return false;
+                            continue;
                         }
                     }
 
@@ -1065,7 +1066,8 @@ public class PuzzleGenerator : MonoBehaviour {
                         || temporaryPushRightUnitList.Contains(_unitARR[col, YIndex]))
                         {
                             print(col + ",,," + YIndex + ",,,cant push");
-                            return false;
+                            //return false;
+                            continue;
                         }
                     }
 
@@ -1354,7 +1356,21 @@ public class PuzzleGenerator : MonoBehaviour {
         List<Tween> tweenList = DOTween.TweensByTarget(targetObject.transform);
         if (tweenList != null)
         {
-            //Tween t = targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
+            //if(checkIfCanPush(XIndex, YIndex - distanceInUnit) != unitPushType.None)
+            //{
+            //    Tween t = targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
+            //    t.Pause();
+            //    yield return tweenList[tweenList.Count - 1].WaitForCompletion();
+            //    t.Play();
+            //}
+            //else
+            //{
+            //    Tween t = targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
+            //    t.Pause();
+            //    yield return tweenList[tweenList.Count - 1].WaitForCompletion();
+            //    t.Play();
+            //}
+
             Tween t = targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
             t.Pause();
             yield return tweenList[tweenList.Count - 1].WaitForCompletion();
@@ -1362,7 +1378,16 @@ public class PuzzleGenerator : MonoBehaviour {
         }
         else
         {
-            targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
+            //if (checkIfCanPush(XIndex, YIndex - distanceInUnit) != unitPushType.None)
+            //{
+            //    targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
+            //}
+            //else
+            //{
+            //    targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(curveTween);
+            //}
+
+            targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
         }
     }    
 
