@@ -50,8 +50,8 @@ public class PuzzleGenerator : MonoBehaviour {
     private float YPadding = 0.73f;
     private float regenYpos = 6f;
 
-    private float unitDropTime = 0.2f;
-    private float regenUnitDropTime = 0.5f;
+    private float unitDropTime = 0.18f;
+    private float regenUnitDropTime = 0.4f;
     private float unitPushTime = 0.18f;
 
     private int turnsToUpgradeRandomLightningUnit = 4;
@@ -697,7 +697,7 @@ public class PuzzleGenerator : MonoBehaviour {
             // If there are regenUnits,scan them
             if (hasChained)
             {
-                //yield return new WaitForSeconds(unitDropTime + 0.3f);
+                yield return new WaitForSeconds(0.2f);
                 StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
             }
             else
@@ -722,6 +722,8 @@ public class PuzzleGenerator : MonoBehaviour {
         }
         else
         {
+            //yield return StartCoroutine(waitForTweenComplete());
+            yield return new WaitForSeconds(0.1f);
             StartCoroutine(ChainedUnitsScanner.Instance.scanRegenUnits(unitsList));
         }
                 
@@ -1300,5 +1302,15 @@ public class PuzzleGenerator : MonoBehaviour {
             }
         }
         return jewel;
+    }
+
+    private IEnumerator waitForTweenComplete()
+    {
+        print(DOTween.TotalPlayingTweens());
+        while (DOTween.TotalPlayingTweens() != 0)
+        {
+            print("yielding");
+            yield return new WaitForEndOfFrame();
+        }        
     }
 }
