@@ -52,8 +52,8 @@ public class PuzzleGenerator : MonoBehaviour {
 
     private float unitDropTime = 0.3f;
     private float regenUnitDropTime = 0.3f;
-    private float baseUnitDropTime = 0.08f;
-    private float unitPushTime = 0.18f;
+    private float baseUnitDropTime = 0.1f;
+    private float unitPushTime = 0.15f;
 
     private int turnsToUpgradeRandomLightningUnit = 4;
     [HideInInspector]
@@ -1015,6 +1015,8 @@ public class PuzzleGenerator : MonoBehaviour {
                     canPushUnit = true;
                     StartCoroutine(pushUnit(col, YIndex, pushType));
 
+                    StartCoroutine(moveUnitToTheEnd(col - 1, YIndex - 1));
+
                     // If only the unit on top left can repalce this unit's position,then push it to this unit positin on the same turn
                     if (YIndex < _rows - 1 && col > 0)
                     {
@@ -1079,29 +1081,47 @@ public class PuzzleGenerator : MonoBehaviour {
 
     #endregion
 
-    private bool hasFrozenUnitInCol(int col)
+    private IEnumerator moveUnitToTheEnd(int XIndex, int YIndex)
     {
-        for (int YIndex = 0; YIndex < _rows; YIndex++)
-        {
-            if (_unitARR[col, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+        bool canDrop = false;
+        unitPushType push = checkIfCanPush(XIndex, YIndex);
 
-    // Check if this Unit is above the highest frozen unit in the same column
-    private bool isAboveHighestFrozenUnitInCol(int XIndex, int YIndex)
-    {
-        for (int i = YIndex + 1; i < _rows; i++)
+        if (YIndex > 0)
         {
-            if (_unitARR[XIndex, i].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+            for (int i = YIndex - 1; i >= 0; i--)
             {
-                return false;
+                if (_unitARR[XIndex, i].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow)
+                {
+                    continue;
+                }
+
+                if (!ChainedUnitsScanner.Instance._scanUnitARR[XIndex, i]._isChained)
+                {
+                    break;
+                }
+                else
+                {
+                    canDrop = true;
+                    break;
+                }
             }
         }
-        return true;
+
+        if (canDrop)
+        {
+            //int dropDistance = 0;
+            //for (int i = YIndex - 1; i >= 0; i--)
+            //{
+            //    if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex, i]._isChained
+            //        && _unitARR[XIndex, i].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow)
+            //    {
+            //        dropDistance++;
+            //    }
+            //}
+            print("droooooopuuuuu");
+        }
+
+        yield return null;
     }
 
     private IEnumerator pushUnit(int XIndex, int YIndex, unitPushType pushType)
@@ -1359,6 +1379,31 @@ public class PuzzleGenerator : MonoBehaviour {
                     }
             }            
         }
+    }
+
+    private bool hasFrozenUnitInCol(int col)
+    {
+        for (int YIndex = 0; YIndex < _rows; YIndex++)
+        {
+            if (_unitARR[col, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Check if this Unit is above the highest frozen unit in the same column
+    private bool isAboveHighestFrozenUnitInCol(int XIndex, int YIndex)
+    {
+        for (int i = YIndex + 1; i < _rows; i++)
+        {
+            if (_unitARR[XIndex, i].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public GameObject getJewel(int value, Vector2 spawnPos)
