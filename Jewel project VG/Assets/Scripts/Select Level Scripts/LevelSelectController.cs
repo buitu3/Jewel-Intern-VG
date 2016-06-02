@@ -61,6 +61,14 @@ public class LevelSelectController : MonoBehaviour {
         //levelScroll.verticalNormalizedPosition = 0.5f;
     }
 
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
     //==============================================
     // Methods
     //==============================================
