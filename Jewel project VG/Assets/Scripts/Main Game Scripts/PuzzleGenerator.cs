@@ -150,6 +150,10 @@ public class PuzzleGenerator : MonoBehaviour {
             _valueARR[1, 2] = 3;
             _valueARR[0, 3] = 3;
             //_valueARR[0, 4] = 3;
+
+            _valueARR[7, 1] = 4;
+            _valueARR[6, 2] = 4;
+            _valueARR[7, 3] = 4;
         }
 
         // --------------------------------------------
@@ -192,6 +196,9 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             upgradeUnit(0, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
             upgradeUnit(0, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+
+            upgradeUnit(7, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+            upgradeUnit(7, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
         }
 
         // --------------------------------------------
@@ -972,6 +979,8 @@ public class PuzzleGenerator : MonoBehaviour {
                     //StartCoroutine(pushUnit(col, YIndex, pushType));
                     pushUnit(col, YIndex, pushType);
 
+                    moveUnitToTheEnd(col + 1, YIndex - 1);
+
                     //// If only the unit on top right can repalce this unit's position,then push it to this unit positin on the same turn
                     //if (YIndex < _rows - 1 && col < _columns - 1)
                     //{
@@ -1026,7 +1035,7 @@ public class PuzzleGenerator : MonoBehaviour {
                         || _unitARR[col - 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow
                         || temporaryPushRightUnitList.Contains(_unitARR[col, YIndex]))
                         {
-                            print(col + ",,," + YIndex + ",,,cant push");
+                            //print(col + ",,," + YIndex + ",,,cant push");
                             //return false;
                             continue;
                         }
@@ -1042,6 +1051,8 @@ public class PuzzleGenerator : MonoBehaviour {
                     pushUnit(col, YIndex, pushType);
 
                     moveUnitToTheEnd(col - 1, YIndex - 1);
+
+                    moveOtherUnitsAboveInColToTheEnd(col, YIndex);
 
                     // If only the unit on top left can repalce this unit's position,then push it to this unit positin on the same turn
                     if (YIndex < _rows - 1 && col > 0)
@@ -1116,7 +1127,7 @@ public class PuzzleGenerator : MonoBehaviour {
 
         if (YIndex > 0)
         {
-            print(XIndex + ".............." + YIndex + ".........." + "scan");
+            //print(XIndex + ".............." + YIndex + ".........." + "scan");
             for (int i = YIndex - 1; i >= 0; i--)
             {
                 if (_unitARR[XIndex, i].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
@@ -1151,8 +1162,49 @@ public class PuzzleGenerator : MonoBehaviour {
                 }
             }
             dropUnit(XIndex, YIndex, dropDistance);
-            print(dropDistance);
-            print("droooooopuuuuu");
+            moveUnitToTheEnd(XIndex, YIndex - dropDistance);
+            //print(dropDistance);
+            //print("droooooopuuuuu");
+        }
+        else if (push != unitPushType.None)
+        {
+            //print(XIndex + "[[[[[[[[[[[[[" + YIndex + "]]]]]]]]]]]]]]]]" + push);
+            pushUnit(XIndex, YIndex, push);
+            switch (push)
+            {
+                case unitPushType.Left:
+                    {
+                        moveUnitToTheEnd(XIndex - 1, YIndex - 1);
+                        break;
+                    }
+                case unitPushType.Right:
+                    {
+                        moveUnitToTheEnd(XIndex + 1, YIndex - 1);
+                        break;
+                    }
+            }
+        }
+    }
+
+    private void moveOtherUnitsAboveInColToTheEnd(int XIndex, int YIndex)
+    {
+        if (YIndex < _rows - 1)
+        {
+            for (int i = YIndex + 1; i <= _rows - 1; i++)
+            {
+                if (_unitARR[XIndex, i].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
+                {
+                    continue;
+                }
+                else if (_unitARR[XIndex, i].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+                {
+                    break;
+                }
+                else
+                {
+                    moveUnitToTheEnd(XIndex, i);
+                }
+            }
         }
     }
 
@@ -1351,7 +1403,7 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             if (checkIfCanPush(XIndex, YIndex - distanceInUnit) != unitPushType.None)
             {
-                Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.InSine);
+                Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
                 t.Pause();
                 //yield return tweenList[tweenList.Count - 1].WaitForCompletion();
                 //t.Play();
@@ -1359,23 +1411,20 @@ public class PuzzleGenerator : MonoBehaviour {
             }
             else
             {
-                print(XIndex + ">>>>>>>>>>>" + (YIndex - distanceInUnit) + ">>>>>>>>" + "curve");
-                Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.OutBounce);
+                //print(XIndex + ">>>>>>>>>>>" + (YIndex - distanceInUnit) + ">>>>>>>>" + "curve");
+                Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+                //Tweener k = targetObject.transform.DOMoveY(targetObject.transform.position.y + 0.1f, 0.1f).
+                //    SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear);
+                Tweener k = targetObject.transform.DOLocalMoveY(0.1f, 0.1f).
+                    SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear).SetRelative(true);
                 t.Pause();
+                k.Pause();
                 //yield return tweenList[tweenList.Count - 1].WaitForCompletion();
                 //t.Play();
                 tweenList[tweenList.Count - 1].OnComplete(() => t.Play());
-            }
-
-            //Tween t = targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
-
-            //Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(curveTween);
-            //t.Pause();
-            //tweenList[tweenList.Count - 1].OnComplete(() => t.Play());
-
-
-            //yield return tweenList[tweenList.Count - 1].WaitForCompletion();
-            //t.Play();
+                t.OnComplete(() => k.Play());
+                                
+            }            
         }
         else
         {
@@ -1389,10 +1438,22 @@ public class PuzzleGenerator : MonoBehaviour {
             //}
 
             //targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
-            targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
 
+            if (checkIfCanPush(XIndex, YIndex - distanceInUnit) != unitPushType.None)
+            {
+                targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+            }
+            else
+            {
+                Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+                Tweener k = targetObject.transform.DOLocalMoveY(0.1f, 0.1f).
+                    SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear).SetRelative(true);
+                k.Pause();
+                t.OnComplete(() => k.Play());
+            }
         }
-    }    
+
+    }
 
     public void upgradeRandomUnitIntoLightning()
     {
