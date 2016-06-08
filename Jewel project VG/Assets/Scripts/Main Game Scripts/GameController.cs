@@ -204,11 +204,12 @@ public class GameController : MonoBehaviour {
         {
             LevelsManager.Instance.selectedLevel++;
             LevelsManager.Instance.selectedLevelInfoJSON = LevelsManager.Instance.levelsInfoJSON.GetField("Level " + LevelsManager.Instance.selectedLevel);
-
+            Time.timeScale = 1f;
             SceneManager.LoadScene("Main Game Scene");
         }
         else
         {
+            Time.timeScale = 1f;
             SceneManager.LoadScene("Main Game Scene");
         }
     }

@@ -1,7 +1,7 @@
 {
 "Level 1":
 	{
-	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":50,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":1,"Special Eff":"noEff","Negative Eff":"empty"},
@@ -125,7 +125,7 @@
 ,
 "Level 2":
 	{
-	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":50,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
@@ -249,7 +249,7 @@
 ,
 "Level 3":
 	{
-	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":50,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"hollow"},
@@ -497,7 +497,7 @@
 ,
 "Level 5":
 	{
-	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":40,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
@@ -745,7 +745,7 @@
 ,
 "Level 7":
 	{
-	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
+	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":40,
 	"Row 0":
 		{
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
@@ -859,8 +859,8 @@
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
 			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
