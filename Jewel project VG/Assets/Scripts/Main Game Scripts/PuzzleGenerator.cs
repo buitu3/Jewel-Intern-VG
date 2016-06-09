@@ -159,6 +159,10 @@ public class PuzzleGenerator : MonoBehaviour {
             _valueARR[7, 1] = 4;
             _valueARR[6, 2] = 4;
             _valueARR[7, 3] = 4;
+
+            _valueARR[3, 0] = 5;
+            _valueARR[4, 1] = 5;
+            _valueARR[3, 2] = 5;
         }
 
         // --------------------------------------------
@@ -204,6 +208,8 @@ public class PuzzleGenerator : MonoBehaviour {
 
             upgradeUnit(7, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
             upgradeUnit(7, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+
+            upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
         }
 
         // --------------------------------------------
@@ -828,22 +834,25 @@ public class PuzzleGenerator : MonoBehaviour {
         #region Find push left column
         //hasUnitToPush = false;
 
-        for (int XIndex = 1; XIndex < _columns; XIndex++)
+        if (!hasUnitToPush)
         {
-            bool canPushInCol = findPushLeftUnitInCol(XIndex);
-            if (canPushInCol)
+            for (int XIndex = 1; XIndex < _columns; XIndex++)
             {
-                hasUnitToPush = true;
-                if (!pushColList.Contains(XIndex))
+                bool canPushInCol = findPushLeftUnitInCol(XIndex);
+                if (canPushInCol)
                 {
-                    pushColList.Add(XIndex);
-                }
-                if (!pushColList.Contains(XIndex - 1))
-                {
-                    pushColList.Add(XIndex - 1);
+                    hasUnitToPush = true;
+                    if (!pushColList.Contains(XIndex))
+                    {
+                        pushColList.Add(XIndex);
+                    }
+                    if (!pushColList.Contains(XIndex - 1))
+                    {
+                        pushColList.Add(XIndex - 1);
+                    }
                 }
             }
-        }
+        }       
 
         //yield return new WaitForSeconds(unitPushTime + 0.05f);
         //yield return new WaitForSeconds(0.1f);
@@ -889,7 +898,8 @@ public class PuzzleGenerator : MonoBehaviour {
                 // below the highest frozen unit in the same column
                 if (pushType == unitPushType.Right && hasFrozenUnitInCol(col + 1)
                     && !isAboveHighestFrozenUnitInCol(col + 1, YIndex - 1)
-                    && !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained)
+                    //&& !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained
+                    )
                 {
                     if (YIndex < _rows - 1)
                     {
@@ -968,7 +978,8 @@ public class PuzzleGenerator : MonoBehaviour {
                 // below the highest frozen unit in the same column
                 if (pushType == unitPushType.Left && hasFrozenUnitInCol(col - 1)
                     && !isAboveHighestFrozenUnitInCol(col - 1, YIndex - 1)
-                    && !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained)
+                    //&& !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained
+                    )
                 {
                     // Ignore if the push unit is not the highest among units that below frozen unit in the col
                     if (YIndex < _rows - 1)
@@ -1531,48 +1542,48 @@ public class PuzzleGenerator : MonoBehaviour {
             }
         }
 
-        if (YIndex < _rows - 1 && _unitARR[XIndex, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
-        {
-            bool canPush = false;
-            if (XIndex == 0)
-            {
-                if (_unitARR[XIndex + 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
-                    && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex + 1]._isChained)
-                {
-                    canPush = true;
-                    pushUnit(XIndex + 1, YIndex + 1, unitPushType.Left);
-                }
-            }
-            else if (XIndex == _columns - 1)
-            {
-                if (_unitARR[XIndex - 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
-                    && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex + 1]._isChained)
-                {
-                    canPush = true;
-                    pushUnit(XIndex - 1, YIndex + 1, unitPushType.Right);
-                }
-            }
-            else
-            {
-                if (_unitARR[XIndex + 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
-                    && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex + 1]._isChained)
-                {
-                    canPush = true;
-                    pushUnit(XIndex + 1, YIndex + 1, unitPushType.Left);
-                }
-                else if (_unitARR[XIndex - 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
-                    && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex + 1]._isChained)
-                {
-                    canPush = true;
-                    pushUnit(XIndex - 1, YIndex + 1, unitPushType.Right);
-                }
-            }
+        //if (YIndex < _rows - 1 && _unitARR[XIndex, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+        //{
+        //    bool canPush = false;
+        //    if (XIndex == 0)
+        //    {
+        //        if (_unitARR[XIndex + 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+        //            && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex + 1]._isChained)
+        //        {
+        //            canPush = true;
+        //            pushUnit(XIndex + 1, YIndex + 1, unitPushType.Left);
+        //        }
+        //    }
+        //    else if (XIndex == _columns - 1)
+        //    {
+        //        if (_unitARR[XIndex - 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+        //            && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex + 1]._isChained)
+        //        {
+        //            canPush = true;
+        //            pushUnit(XIndex - 1, YIndex + 1, unitPushType.Right);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (_unitARR[XIndex + 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+        //            && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex + 1]._isChained)
+        //        {
+        //            canPush = true;
+        //            pushUnit(XIndex + 1, YIndex + 1, unitPushType.Left);
+        //        }
+        //        else if (_unitARR[XIndex - 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+        //            && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex + 1]._isChained)
+        //        {
+        //            canPush = true;
+        //            pushUnit(XIndex - 1, YIndex + 1, unitPushType.Right);
+        //        }
+        //    }
 
-            if (canPush && distanceInUnit > 1)
-            {
-                dropUnit(XIndex, YIndex, distanceInUnit - 1);
-            }
-        }
+        //    if (canPush && distanceInUnit > 1)
+        //    {
+        //        dropUnit(XIndex, YIndex, distanceInUnit - 1);
+        //    }
+        //}
     }
 
     #endregion
