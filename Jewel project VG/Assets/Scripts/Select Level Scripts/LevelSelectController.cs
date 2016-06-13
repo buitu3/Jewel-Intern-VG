@@ -48,7 +48,6 @@ public class LevelSelectController : MonoBehaviour {
     void Awake()
     {
         Instance = this;
-
     }
 
     void Start()
