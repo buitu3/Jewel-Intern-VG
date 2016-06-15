@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jewel project VG.CSharp.Plugins", "Jewel project VG.CSharp.Plugins.csproj", "{0793A04D-5892-AC8D-9F28-2FDA869B628E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jewel project VG.CSharp", "Jewel project VG.CSharp.csproj", "{55E8F213-440C-9909-59E5-78FA1C5DCCC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jewel project VG.CSharp.Editor", "Jewel project VG.CSharp.Editor.csproj", "{B5F4B8ED-13FB-0543-C441-8DBC8E9CD21C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0793A04D-5892-AC8D-9F28-2FDA869B628E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0793A04D-5892-AC8D-9F28-2FDA869B628E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0793A04D-5892-AC8D-9F28-2FDA869B628E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0793A04D-5892-AC8D-9F28-2FDA869B628E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55E8F213-440C-9909-59E5-78FA1C5DCCC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55E8F213-440C-9909-59E5-78FA1C5DCCC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55E8F213-440C-9909-59E5-78FA1C5DCCC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55E8F213-440C-9909-59E5-78FA1C5DCCC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5F4B8ED-13FB-0543-C441-8DBC8E9CD21C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5F4B8ED-13FB-0543-C441-8DBC8E9CD21C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5F4B8ED-13FB-0543-C441-8DBC8E9CD21C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5F4B8ED-13FB-0543-C441-8DBC8E9CD21C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

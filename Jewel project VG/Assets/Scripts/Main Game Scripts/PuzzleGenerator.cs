@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 
 public class PuzzleGenerator : MonoBehaviour {
@@ -37,12 +38,15 @@ public class PuzzleGenerator : MonoBehaviour {
     private List<GameObject> unitsList;
     private List<GameObject> temporaryPushRightUnitList;
     private List<Tween> waitTweenList;
+    private List<int[]> unbounceList;
 
     private Transform unitHolder;
     public Transform unitBGHolder;
     private Transform poolObjectHolder;
 
     private bool canPushUnit;
+    private bool hasUnitToRegen;
+    private bool hasBouncingUnit;
 
     //private float XStartPos = -2.6f;
     //private float YStartPos = -3.7f;
@@ -53,7 +57,8 @@ public class PuzzleGenerator : MonoBehaviour {
     private float unitDropTime = 0.3f;
     private float regenUnitDropTime = 0.3f;
     private float baseUnitDropTime = 0.1f;
-    private float unitPushTime = 0.15f;
+    private float unitPushTime = 0.1f;
+    private float unitBounceTime = 0.2f;
 
     private int turnsToUpgradeRandomLightningUnit = 4;
     [HideInInspector]
@@ -84,6 +89,8 @@ public class PuzzleGenerator : MonoBehaviour {
         unitHolder = new GameObject("Units Holder").transform;
         unitBGHolder = new GameObject("Units BG Holder").transform;
         poolObjectHolder = new GameObject("Pool Object Holder").transform;
+
+        unbounceList = new List<int[]>();
 
         regenYpos = startingSpawnPos.transform.position.y + (_rows - 1) * YPadding;
 
@@ -151,9 +158,25 @@ public class PuzzleGenerator : MonoBehaviour {
             _valueARR[0, 3] = 3;
             //_valueARR[0, 4] = 3;
 
-            _valueARR[7, 1] = 4;
-            _valueARR[6, 2] = 4;
-            _valueARR[7, 3] = 4;
+            //_valueARR[7, 1] = 4;
+            //_valueARR[6, 2] = 4;
+            //_valueARR[7, 3] = 4;
+
+            //_valueARR[3, 0] = 5;
+            //_valueARR[4, 1] = 5;
+            //_valueARR[3, 2] = 5;
+        }
+        else if (LevelsManager.Instance.selectedLevel == 6)
+        {
+            _valueARR[3, 0] = 5;
+            _valueARR[4, 1] = 5;
+            _valueARR[3, 2] = 5;
+        }
+        else if (LevelsManager.Instance.selectedLevel == 8)
+        {
+            _valueARR[0, 7] = 5;
+            _valueARR[1, 6] = 5;
+            _valueARR[1, 8] = 5;
         }
 
         // --------------------------------------------
@@ -197,8 +220,14 @@ public class PuzzleGenerator : MonoBehaviour {
             upgradeUnit(0, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
             upgradeUnit(0, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
 
-            upgradeUnit(7, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-            upgradeUnit(7, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+            //upgradeUnit(7, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+            //upgradeUnit(7, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+
+            //upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        }
+        else if (LevelsManager.Instance.selectedLevel == 6)
+        {
+            upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
         }
 
         // --------------------------------------------
@@ -276,24 +305,24 @@ public class PuzzleGenerator : MonoBehaviour {
             default: break;
         }
 
-        //If this is regen Unit,move to it's original pos
-        if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
-        {
-            GameObject target = _unitARR[XIndex, YIndex];
+        ////If this is regen Unit,move to it's original pos
+        //if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
+        //{
+        //    GameObject target = _unitARR[XIndex, YIndex];
 
-            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(Ease.InSine);
+        //    //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(Ease.InSine);
 
-            int distance = _rows - YIndex;
-            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], distance * baseUnitDropTime).SetEase(Ease.InSine);
+        //    int distance = _rows - YIndex;
+        //    _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], distance * baseUnitDropTime).SetEase(Ease.InSine);
 
-            //print(XIndex + ";;;;;;;;;" + YIndex + "'''''''''" + distance);
+        //    //print(XIndex + ";;;;;;;;;" + YIndex + "'''''''''" + distance);
 
-            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(curveTween);
+        //    //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(curveTween);
 
-            //target.transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime - 0.1f).
-            //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
-            //    SetEase(Ease.InSine);
-        }
+        //    //target.transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime - 0.1f).
+        //    //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
+        //    //    SetEase(Ease.InSine);
+        //}
     }
 
     public void initUnit(Vector2 spawnPos, int XIndex, int YIndex, int value,
@@ -353,22 +382,22 @@ public class PuzzleGenerator : MonoBehaviour {
             default: break;
         }
 
-        //If this is regen Unit,move to it's original pos
-        if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
-        {
-            GameObject target = _unitARR[XIndex, YIndex];
+        ////If this is regen Unit,move to it's original pos
+        //if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
+        //{
+        //    GameObject target = _unitARR[XIndex, YIndex];
 
-            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(Ease.InSine);
+        //    //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(Ease.InSine);
 
-            int distance = _rows - YIndex;
-            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], distance * baseUnitDropTime).SetEase(Ease.InSine);
+        //    int distance = _rows - YIndex;
+        //    _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], distance * baseUnitDropTime).SetEase(Ease.InSine);
 
-            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(curveTween);
+        //    //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(curveTween);
 
-            //target.transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime - 0.1f).
-            //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
-            //    SetEase(Ease.InSine);
-        }
+        //    //target.transform.DOMove(_unitPosARR[XIndex, YIndex], unitDropTime - 0.1f).
+        //    //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
+        //    //    SetEase(Ease.InSine);
+        //}
     }
 
     public void initRegenUnit(Vector2 spawnPos, int XIndex, int YIndex, int value, UnitInfo.SpecialEff specialEff, int dropDistance)
@@ -406,14 +435,14 @@ public class PuzzleGenerator : MonoBehaviour {
             default: break;
         }
 
-        //If this is regen Unit,move to it's original pos
+        //Move this unit to it's original pos
         if (spawnPos.y != _unitPosARR[XIndex, YIndex].y)
         {
             GameObject target = _unitARR[XIndex, YIndex];
 
             //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime).SetEase(Ease.InSine);
 
-            _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], dropDistance * baseUnitDropTime).SetEase(Ease.Linear);
+            //_unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], dropDistance * baseUnitDropTime).SetEase(Ease.Linear);
 
             //print(XIndex + ";;;;;;;;;" + YIndex + "'''''''''" + distance);
 
@@ -422,6 +451,19 @@ public class PuzzleGenerator : MonoBehaviour {
             //target.transform.DOMove(_unitPosARR[XIndex, YIndex], regenUnitDropTime - 0.1f).
             //    OnComplete(() => target.transform.DOMoveY(target.transform.position.y + 0.1f, 0.1f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo)).
             //    SetEase(Ease.InSine);
+
+            if(getItemIndexFromUnbounceList(XIndex, YIndex) != -1)
+            {
+                _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], dropDistance * baseUnitDropTime).SetEase(Ease.Linear);
+            }
+            else
+            {
+                Tween t = _unitARR[XIndex, YIndex].transform.DOMove(_unitPosARR[XIndex, YIndex], dropDistance * baseUnitDropTime).SetEase(Ease.Linear);
+                Tweener k = _unitARR[XIndex, YIndex].transform.DOLocalMoveY(0.1f, unitBounceTime/2).
+                    SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear).SetRelative(true);
+                k.Pause();
+                t.OnComplete(() => k.Play());
+            }
         }
     }
 
@@ -517,7 +559,6 @@ public class PuzzleGenerator : MonoBehaviour {
                 }
                 else if (negativeEff == "empty")
                 {
-                    print("empty");
                     upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.empty);
                     _unitARR[XIndex, YIndex].SetActive(false);
                 }
@@ -532,90 +573,6 @@ public class PuzzleGenerator : MonoBehaviour {
             }
         }
         yield return null;
-    }
-
-    private int[,] generateValueMatrix()
-    {
-        //int[,] valueMatrix = new int[_columns, _rows];
-
-        //for (int i = 0; i < _columns; i++)
-        //{
-        //    for (int j = 0; j < _rows; j++)
-        //    {
-        //        valueMatrix[i, j] = Random.Range(0, Unit.Length - 1);
-        //    }
-        //}
-        //return valueMatrix;
-
-        List<int>[,] valueListARR = new List<int>[_columns , _rows];
-
-        for (int XIndex = 0; XIndex < _columns; XIndex++)
-        {
-            for (int YIndex = 0; YIndex < _rows; YIndex++)
-            {
-                valueListARR[XIndex, YIndex] = new List<int>();
-
-                for (int i = 0; i < Unit.Length - 1; i++)
-                {
-                    valueListARR[XIndex, YIndex].Add(i);
-                }
-            }
-        }
-
-        int[,] valueMatrix = new int[_columns, _rows];
-
-        for (int XIndex = 0; XIndex < _columns; XIndex++)
-        {
-            for (int YIndex = 0; YIndex < _rows; YIndex++)
-            {
-                // Scan current Unit's relatives to remove value that shouldn't be choosen
-                if (XIndex > 1)
-                {
-                    if (valueMatrix[XIndex - 1, YIndex] == valueMatrix[XIndex - 2, YIndex])
-                    {
-                        valueListARR[XIndex, YIndex].Remove(valueMatrix[XIndex - 1, YIndex]);
-                    }
-                }
-                if (YIndex > 1)
-                {
-                    if (valueMatrix[XIndex, YIndex - 1] == valueMatrix[XIndex, YIndex - 2])
-                    {
-                        valueListARR[XIndex, YIndex].Remove(valueMatrix[XIndex, YIndex - 1]);
-                    }
-                }
-
-                // Select a random possible value from valueList if there is still value to choose
-                if (valueListARR[XIndex, YIndex].Count != 0)
-                {
-                    valueMatrix[XIndex, YIndex] = valueListARR[XIndex, YIndex][Random.Range(0, valueListARR[XIndex, YIndex].Count)];
-                    valueListARR[XIndex, YIndex].Remove(valueMatrix[XIndex, YIndex]);
-                }
-                // If there is no possible value left,recover current list and backtrack to previous unit
-                else
-                {
-                    //valueListARR[XIndex, YIndex] = new List<int>();
-                    for (int i = 0; i < Unit.Length - 1; i++)
-                    {
-                        valueListARR[XIndex, YIndex].Add(i);
-                    }
-
-                    if (XIndex == 0)
-                    {
-                        YIndex -= 1;
-                        XIndex = _columns - 1;
-                    }
-                    else
-                    {
-                        XIndex -= 1;
-                    }
-                    continue;
-                }
-
-
-                //valueMatrix[XIndex, YIndex] = Random.Range(0, Unit.Length - 1);
-            }
-        }
-        return valueMatrix;
     }
 
     #region Reorganize Puzzle methods
@@ -638,7 +595,7 @@ public class PuzzleGenerator : MonoBehaviour {
             //yield return new WaitForSeconds(0.05f);
             //---------------------------------------------
             //----------- Temporary changed ---------------
-            yield return new WaitForSeconds(0.15f);
+            //yield return new WaitForSeconds(0.15f);
             //---------------------------------------------
 
             StartCoroutine(scanEmptyUnits(hasChained));
@@ -792,6 +749,7 @@ public class PuzzleGenerator : MonoBehaviour {
         }
 
         yield return StartCoroutine(findPushUnitsInPuzzle());
+        //findPushUnitsInPuzzle();
 
         if (!canPushUnit)
         {
@@ -840,9 +798,11 @@ public class PuzzleGenerator : MonoBehaviour {
 
     }
 
+    /* Old findPushUnitsInPuzzle() method
     private IEnumerator findPushUnitsInPuzzle()
     {
         //waitTweenList.Clear();
+        unbounceList.Clear();
 
         bool hasUnitToPush = false;
         List<int> pushColList = new List<int>();
@@ -894,22 +854,25 @@ public class PuzzleGenerator : MonoBehaviour {
         #region Find push left column
         //hasUnitToPush = false;
 
-        for (int XIndex = 1; XIndex < _columns; XIndex++)
+        if (!hasUnitToPush)
         {
-            bool canPushInCol = findPushLeftUnitInCol(XIndex);
-            if (canPushInCol)
+            for (int XIndex = 1; XIndex < _columns; XIndex++)
             {
-                hasUnitToPush = true;
-                if (!pushColList.Contains(XIndex))
+                bool canPushInCol = findPushLeftUnitInCol(XIndex);
+                if (canPushInCol)
                 {
-                    pushColList.Add(XIndex);
-                }
-                if (!pushColList.Contains(XIndex - 1))
-                {
-                    pushColList.Add(XIndex - 1);
+                    hasUnitToPush = true;
+                    if (!pushColList.Contains(XIndex))
+                    {
+                        pushColList.Add(XIndex);
+                    }
+                    if (!pushColList.Contains(XIndex - 1))
+                    {
+                        pushColList.Add(XIndex - 1);
+                    }
                 }
             }
-        }
+        }       
 
         //yield return new WaitForSeconds(unitPushTime + 0.05f);
         //yield return new WaitForSeconds(0.1f);
@@ -931,6 +894,7 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             //yield return new WaitForSeconds(regenUnitDropTime);
             yield return new WaitForSeconds(unitPushTime);
+            //yield return new WaitForSeconds(2f);
         }
 
         if (hasUnitToPush)
@@ -938,6 +902,220 @@ public class PuzzleGenerator : MonoBehaviour {
             yield return StartCoroutine(findPushUnitsInPuzzle());
         }
         #endregion
+    }
+    */
+
+    private IEnumerator findPushUnitsInPuzzle()
+    {
+        //unbounceList.Clear();
+
+        bool hasUnitToPush = false;
+        hasUnitToRegen = false;
+        hasBouncingUnit = false;
+
+        //List<int> pushColList = new List<int
+        int pushCol = -1;
+        temporaryPushRightUnitList = new List<GameObject>();
+
+        for (int YIndex = _rows - 1; YIndex >= 0; YIndex--)
+        {
+            for (int XIndex = 0; XIndex < _columns; XIndex++)
+            {
+                hasUnitToPush = findUnitPushTypeAndPush(XIndex, YIndex);
+
+                if (hasUnitToPush)
+                {
+                    pushCol = XIndex;
+                    break;
+                }
+            }
+            if (hasUnitToPush)
+            {
+                break;
+            }
+        }
+
+        if (hasUnitToPush && pushCol >= 0)
+        {
+            reOrganizePuzzleCol(pushCol);
+        }
+
+        if (hasUnitToRegen)
+        {
+            //print("regen");
+            yield return new WaitForSeconds(baseUnitDropTime);
+        }
+
+        if (hasBouncingUnit)
+        {
+            //print("bounce");
+            yield return new WaitForSeconds(unitBounceTime);
+        }
+
+        if (hasUnitToPush)
+        {
+            yield return StartCoroutine(findPushUnitsInPuzzle());
+        }
+
+        //yield return null;
+    }
+
+    private bool findUnitPushTypeAndPush(int XIndex, int YIndex)
+    {
+        if (!ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained
+                && _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
+        {
+            unitPushType pushType = checkIfCanPush(XIndex, YIndex);
+            switch (pushType)
+            {
+                case unitPushType.Right:
+                    {
+                        // The push Unit must not be floating,the position this Unit is pushed into must
+                        // below the highest frozen unit in the same column
+                        if (hasFrozenUnitInCol(XIndex + 1) && !isAboveHighestFrozenUnitInCol(XIndex + 1, YIndex - 1)
+                            //&& !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained
+                            )
+                        {
+                            if (YIndex < _rows - 1)
+                            {
+                                //// Ignore if the push unit is not the highest among all units that below the highest frozen unit in the same col
+                                //if (!isAboveHighestFrozenUnitInCol(XIndex, YIndex)
+                                //&& (!ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex + 1]._isChained)
+                                //&& _unitARR[XIndex, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+                                //|| _unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
+                                //{
+                                //    //print(col + ",,," + YIndex + ",,,cant push");
+                                //    //return false;
+                                //    break;
+                                //}
+
+                                if (checkIfCanPush(XIndex, YIndex + 1) == unitPushType.Right)
+                                {
+                                    break;
+                                }
+
+                                if (_unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
+                                {
+                                    //print(col + ",,," + YIndex + ",,,cant push");
+                                    //return false;
+                                    break;
+                                }
+                            }
+
+                            //if (!temporaryPushRightUnitList.Contains(_unitARR[XIndex, YIndex]))
+                            //{
+                            //    temporaryPushRightUnitList.Add(_unitARR[XIndex, YIndex]);
+                            //}
+
+                            canPushUnit = true;
+                            pushUnit(XIndex, YIndex, pushType);
+
+                            if(getItemIndexFromUnbounceList(XIndex + 1, YIndex - 1) != -1)
+                            {
+                                getDropableUnitIndexList(XIndex, YIndex);
+                            }
+                            else if (checkIfCanPush(XIndex + 1, YIndex - 1) != unitPushType.None ||
+                                (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 2]._isChained &&
+                                _unitARR[XIndex + 1, YIndex - 2].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow))
+                            {
+                                //print("unbounce");
+                                getDropableUnitIndexList(XIndex, YIndex);
+                                //print(XIndex + "~~~~~~~" + YIndex + "~~~~~~~~~~~" + unbounceList.Count);
+                            }
+                            else if (YIndex == _rows - 1)
+                            {
+                                hasBouncingUnit = true;
+                            }
+
+                            if(YIndex == _rows - 1)
+                            {
+                                hasUnitToRegen = true;                                
+                            }
+
+                            moveUnitToTheEnd(XIndex + 1, YIndex - 1);
+
+                            return true;
+                        }
+                        break;
+                    }
+
+                case unitPushType.Left:
+                    {
+                        // The push Unit must not be floating,the position this Unit is pushed into must
+                        // below the highest frozen unit in the same column
+                        if (hasFrozenUnitInCol(XIndex - 1) && !isAboveHighestFrozenUnitInCol(XIndex - 1, YIndex - 1)
+                            //&& !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained
+                            )
+                        {
+                            // Ignore if the push unit is not the highest among units that below frozen unit in the col
+                            if (YIndex < _rows - 1)
+                            {
+                                //if (!isAboveHighestFrozenUnitInCol(XIndex, YIndex)
+                                //&& (!ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex + 1]._isChained)
+                                //&& _unitARR[XIndex, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+                                //|| _unitARR[XIndex - 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow
+                                //)
+                                //{
+                                //    //print(col + ",,," + YIndex + ",,,cant push");
+                                //    //return false;
+                                //    break;
+                                //}
+
+                                if (checkIfCanPush(XIndex, YIndex + 1) == unitPushType.Left)
+                                {
+                                    break;
+                                }
+
+                                if (_unitARR[XIndex - 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
+                                {
+                                    //print(col + ",,," + YIndex + ",,,cant push");
+                                    //return false;
+                                    break;
+                                }
+                            }
+
+                           
+                            //if (!temporaryPushRightUnitList.Contains(_unitARR[XIndex, YIndex]))
+                            //{
+                            //    temporaryPushRightUnitList.Add(_unitARR[XIndex, YIndex]);
+                            //}
+
+                            canPushUnit = true;
+                            //StartCoroutine(pushUnit(col, YIndex, pushType));
+                            pushUnit(XIndex, YIndex, pushType);
+
+                            if (getItemIndexFromUnbounceList(XIndex - 1, YIndex - 1) != -1)
+                            {
+                                //print("has item");
+                                getDropableUnitIndexList(XIndex, YIndex);
+                            }
+                            else if (checkIfCanPush(XIndex - 1, YIndex - 1) != unitPushType.None ||
+                                (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 2]._isChained &&
+                                _unitARR[XIndex - 1, YIndex - 2].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow))
+                            {
+                                //print("unbounce");
+                                getDropableUnitIndexList(XIndex, YIndex);
+                                //print(XIndex + "~~~~~~~" + YIndex + "~~~~~~~~~~~" + unbounceList.Count);
+                            }
+                            else if (YIndex == _rows - 1)
+                            {
+                                hasBouncingUnit = true;
+                            }
+
+                            if (YIndex == _rows - 1)
+                            {
+                                hasUnitToRegen = true;
+                            }
+
+                            moveUnitToTheEnd(XIndex - 1, YIndex - 1);
+
+                            return true;
+                        }
+                        break;
+                    }
+            }
+        }
+        return false;
     }
 
     // Find the highest unit in a column that can be push right then push it to the right
@@ -954,7 +1132,8 @@ public class PuzzleGenerator : MonoBehaviour {
                 // below the highest frozen unit in the same column
                 if (pushType == unitPushType.Right && hasFrozenUnitInCol(col + 1)
                     && !isAboveHighestFrozenUnitInCol(col + 1, YIndex - 1)
-                    && !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained)
+                    //&& !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained
+                    )
                 {
                     if (YIndex < _rows - 1)
                     {
@@ -978,6 +1157,15 @@ public class PuzzleGenerator : MonoBehaviour {
                     canPushUnit = true;
                     //StartCoroutine(pushUnit(col, YIndex, pushType));
                     pushUnit(col, YIndex, pushType);
+
+                    if (checkIfCanPush(col + 1, YIndex - 1) != unitPushType.None ||
+                        (ChainedUnitsScanner.Instance._scanUnitARR[col + 1, YIndex - 2]._isChained &&
+                        _unitARR[col + 1, YIndex - 2].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow))
+                    {
+                        //print("unbounce");
+                        getDropableUnitIndexList(col, YIndex);
+                        //print(col + "~~~~~~~" + YIndex + "~~~~~~~~~~~" + unbounceList.Count);
+                    }
 
                     moveUnitToTheEnd(col + 1, YIndex - 1);
 
@@ -1024,7 +1212,8 @@ public class PuzzleGenerator : MonoBehaviour {
                 // below the highest frozen unit in the same column
                 if (pushType == unitPushType.Left && hasFrozenUnitInCol(col - 1)
                     && !isAboveHighestFrozenUnitInCol(col - 1, YIndex - 1)
-                    && !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained)
+                    //&& !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained
+                    )
                 {
                     // Ignore if the push unit is not the highest among units that below frozen unit in the col
                     if (YIndex < _rows - 1)
@@ -1039,6 +1228,19 @@ public class PuzzleGenerator : MonoBehaviour {
                             //return false;
                             continue;
                         }
+
+                        //if (checkIfCanPush(col, YIndex + 1) == unitPushType.Left)
+                        //{
+                        //    continue;
+                        //}
+
+                        //if (_unitARR[col - 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow
+                        //|| temporaryPushRightUnitList.Contains(_unitARR[col, YIndex]))
+                        //{
+                        //    //print(col + ",,," + YIndex + ",,,cant push");
+                        //    //return false;
+                        //    continue;
+                        //}
                     }
 
                     if (!temporaryPushRightUnitList.Contains(_unitARR[col, YIndex]))
@@ -1050,9 +1252,25 @@ public class PuzzleGenerator : MonoBehaviour {
                     //StartCoroutine(pushUnit(col, YIndex, pushType));
                     pushUnit(col, YIndex, pushType);
 
+                    if (checkIfCanPush(col - 1, YIndex - 1) != unitPushType.None ||
+                        (ChainedUnitsScanner.Instance._scanUnitARR[col - 1, YIndex - 2]._isChained &&
+                        _unitARR[col - 1, YIndex - 2].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow))
+                    {
+                        //print("unbounce");
+                        getDropableUnitIndexList(col, YIndex);
+                        //print(col + "~~~~~~~" + YIndex + "~~~~~~~~~~~" + unbounceList.Count);
+                    }
+
                     moveUnitToTheEnd(col - 1, YIndex - 1);
 
-                    moveOtherUnitsAboveInColToTheEnd(col, YIndex);
+                    //------------------------------------
+                    //--------Temporary disabled----------
+                    //------------------------------------
+
+                    //moveOtherUnitsAboveInColToTheEnd(col, YIndex);
+
+                    //------------------------------------
+                    //------------------------------------
 
                     // If only the unit on top left can repalce this unit's position,then push it to this unit positin on the same turn
                     if (YIndex < _rows - 1 && col > 0)
@@ -1087,29 +1305,44 @@ public class PuzzleGenerator : MonoBehaviour {
 
     private unitPushType checkIfCanPush(int XIndex, int YIndex)
     {
+        if (_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen 
+            || _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow
+            || ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained)
+        {
+            return unitPushType.None;
+        }
+
         if (YIndex > 0)
         {
             if (XIndex == 0)
             {
-                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained)
+                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained
+                    //&& _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+                    && _unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow)
                 {
                     return unitPushType.Right;
                 }
             }
             else if (XIndex == _columns - 1)
             {
-                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained)
+                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained
+                    //&& _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+                    && _unitARR[XIndex - 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow)
                 {
                     return unitPushType.Left;
                 }
             }
             else
             {
-                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained)
+                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained
+                    //&& _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+                    && _unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow)
                 {
                     return unitPushType.Right;
                 }
-                else if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained)
+                else if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained
+                    //&& _unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+                    && _unitARR[XIndex - 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow)
                 {
                     return unitPushType.Left;
                 }
@@ -1120,6 +1353,7 @@ public class PuzzleGenerator : MonoBehaviour {
 
     #endregion
 
+    #region Move Units methods
     private void moveUnitToTheEnd(int XIndex, int YIndex)
     {
         bool canDrop = false;
@@ -1364,6 +1598,12 @@ public class PuzzleGenerator : MonoBehaviour {
 
         GameObject targetObject = _unitARR[XIndex, YIndex - distanceInUnit];
 
+        bool unBounce = false;
+        if (getItemIndexFromUnbounceList(XIndex, YIndex - distanceInUnit) != -1)
+        {
+            unBounce = true;
+        }
+
         //Unit.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.OutBounce);
 
         //_unitARR[XIndex, YIndex - distanceInUnit].transform.DOMove(targetPos, unitDropTime).SetEase(Ease.OutBounce);        
@@ -1401,29 +1641,83 @@ public class PuzzleGenerator : MonoBehaviour {
         List<Tween> tweenList = DOTween.TweensByTarget(targetObject.transform);
         if (tweenList != null)
         {
-            if (checkIfCanPush(XIndex, YIndex - distanceInUnit) != unitPushType.None)
+            unitPushType pushType = checkIfCanPush(XIndex, YIndex - distanceInUnit);
+            if (pushType != unitPushType.None)
+            {
+                switch (pushType)
+                {
+                    case unitPushType.Left:
+                        {
+                            if (hasDropableUnitAbove(XIndex - 1, YIndex))
+                            {
+                                Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+                                t.Pause();
+                                Tweener k = targetObject.transform.DOLocalMoveY(0.1f, unitBounceTime/2).
+                                    SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear).SetRelative(true);
+                                k.Pause();
+
+                                tweenList[tweenList.Count - 1].OnComplete(() => t.Play());
+                                t.OnComplete(() => k.Play());
+                            }
+                            else
+                            {
+                                Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+                                t.Pause();
+                                tweenList[tweenList.Count - 1].OnComplete(() => t.Play());
+                            }
+                            break;
+                        }
+
+                    case unitPushType.Right:
+                        {
+                            if (hasDropableUnitAbove(XIndex + 1, YIndex))
+                            {
+                                Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+                                t.Pause();
+                                Tweener k = targetObject.transform.DOLocalMoveY(0.1f, unitBounceTime/2).
+                                    SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear).SetRelative(true);
+                                k.Pause();
+
+                                tweenList[tweenList.Count - 1].OnComplete(() => t.Play());
+                                t.OnComplete(() => k.Play());
+                            }
+                            else
+                            {
+                                Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+                                t.Pause();
+                                tweenList[tweenList.Count - 1].OnComplete(() => t.Play());
+                            }
+                            break;
+                        }
+                }
+
+                //Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+                //t.Pause();
+                ////yield return tweenList[tweenList.Count - 1].WaitForCompletion();
+                ////t.Play();
+                //tweenList[tweenList.Count - 1].OnComplete(() => t.Play());
+            }
+            else if (unBounce)
             {
                 Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
                 t.Pause();
-                //yield return tweenList[tweenList.Count - 1].WaitForCompletion();
-                //t.Play();
                 tweenList[tweenList.Count - 1].OnComplete(() => t.Play());
             }
             else
             {
                 //print(XIndex + ">>>>>>>>>>>" + (YIndex - distanceInUnit) + ">>>>>>>>" + "curve");
                 Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
-                //Tweener k = targetObject.transform.DOMoveY(targetObject.transform.position.y + 0.1f, 0.1f).
-                //    SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear);
-                Tweener k = targetObject.transform.DOLocalMoveY(0.1f, 0.1f).
-                    SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear).SetRelative(true);
                 t.Pause();
+                Tweener k = targetObject.transform.DOLocalMoveY(0.1f, unitBounceTime/2).
+                    SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear).SetRelative(true);           
                 k.Pause();
+
                 //yield return tweenList[tweenList.Count - 1].WaitForCompletion();
                 //t.Play();
+
                 tweenList[tweenList.Count - 1].OnComplete(() => t.Play());
                 t.OnComplete(() => k.Play());
-                                
+
             }            
         }
         else
@@ -1439,21 +1733,107 @@ public class PuzzleGenerator : MonoBehaviour {
 
             //targetObject.transform.DOMove(targetPos, unitDropTime).SetEase(Ease.InSine);
 
-            if (checkIfCanPush(XIndex, YIndex - distanceInUnit) != unitPushType.None)
+            unitPushType pushType = checkIfCanPush(XIndex, YIndex - distanceInUnit);
+            if (pushType != unitPushType.None)
+            {
+                switch (pushType)
+                {
+                    case unitPushType.Left:
+                        {
+                            if (hasDropableUnitAbove(XIndex - 1, YIndex))
+                            {
+                                Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+                                Tweener k = targetObject.transform.DOLocalMoveY(0.1f, unitBounceTime/2).
+                                    SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear).SetRelative(true);
+                                k.Pause();
+                                t.OnComplete(() => k.Play());
+                            }
+                            else
+                            {
+                                targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+                            }
+                            break;
+                        }
+
+                    case unitPushType.Right:
+                        {
+                            if (hasDropableUnitAbove(XIndex + 1, YIndex))
+                            {
+                                Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+                                Tweener k = targetObject.transform.DOLocalMoveY(0.1f, unitBounceTime/2).
+                                    SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear).SetRelative(true);
+                                k.Pause();
+                                t.OnComplete(() => k.Play());
+                            }
+                            else
+                            {
+                                targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+                            }
+                            break;
+                        }
+                }
+
+                //targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
+            }
+            else if (unBounce)
             {
                 targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
             }
             else
             {
                 Tween t = targetObject.transform.DOMove(targetPos, baseUnitDropTime * distanceInUnit).SetEase(Ease.Linear);
-                Tweener k = targetObject.transform.DOLocalMoveY(0.1f, 0.1f).
+                Tweener k = targetObject.transform.DOLocalMoveY(0.1f, unitBounceTime/2).
                     SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear).SetRelative(true);
                 k.Pause();
                 t.OnComplete(() => k.Play());
             }
         }
 
+        //if (YIndex < _rows - 1 && _unitARR[XIndex, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+        //{
+        //    bool canPush = false;
+        //    if (XIndex == 0)
+        //    {
+        //        if (_unitARR[XIndex + 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+        //            && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex + 1]._isChained)
+        //        {
+        //            canPush = true;
+        //            pushUnit(XIndex + 1, YIndex + 1, unitPushType.Left);
+        //        }
+        //    }
+        //    else if (XIndex == _columns - 1)
+        //    {
+        //        if (_unitARR[XIndex - 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+        //            && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex + 1]._isChained)
+        //        {
+        //            canPush = true;
+        //            pushUnit(XIndex - 1, YIndex + 1, unitPushType.Right);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (_unitARR[XIndex + 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+        //            && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex + 1]._isChained)
+        //        {
+        //            canPush = true;
+        //            pushUnit(XIndex + 1, YIndex + 1, unitPushType.Left);
+        //        }
+        //        else if (_unitARR[XIndex - 1, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
+        //            && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex + 1]._isChained)
+        //        {
+        //            canPush = true;
+        //            pushUnit(XIndex - 1, YIndex + 1, unitPushType.Right);
+        //        }
+        //    }
+
+        //    if (canPush && distanceInUnit > 1)
+        //    {
+        //        dropUnit(XIndex, YIndex, distanceInUnit - 1);
+        //    }
+        //}
     }
+
+    #endregion
 
     public void upgradeRandomUnitIntoLightning()
     {
@@ -1484,6 +1864,151 @@ public class PuzzleGenerator : MonoBehaviour {
                     }
             }            
         }
+    }
+
+    private int[,] generateValueMatrix()
+    {
+        //int[,] valueMatrix = new int[_columns, _rows];
+
+        //for (int i = 0; i < _columns; i++)
+        //{
+        //    for (int j = 0; j < _rows; j++)
+        //    {
+        //        valueMatrix[i, j] = Random.Range(0, Unit.Length - 1);
+        //    }
+        //}
+        //return valueMatrix;
+
+        List<int>[,] valueListARR = new List<int>[_columns, _rows];
+
+        for (int XIndex = 0; XIndex < _columns; XIndex++)
+        {
+            for (int YIndex = 0; YIndex < _rows; YIndex++)
+            {
+                valueListARR[XIndex, YIndex] = new List<int>();
+
+                for (int i = 0; i < Unit.Length - 1; i++)
+                {
+                    valueListARR[XIndex, YIndex].Add(i);
+                }
+            }
+        }
+
+        int[,] valueMatrix = new int[_columns, _rows];
+
+        for (int XIndex = 0; XIndex < _columns; XIndex++)
+        {
+            for (int YIndex = 0; YIndex < _rows; YIndex++)
+            {
+                // Scan current Unit's relatives to remove value that shouldn't be choosen
+                if (XIndex > 1)
+                {
+                    if (valueMatrix[XIndex - 1, YIndex] == valueMatrix[XIndex - 2, YIndex])
+                    {
+                        valueListARR[XIndex, YIndex].Remove(valueMatrix[XIndex - 1, YIndex]);
+                    }
+                }
+                if (YIndex > 1)
+                {
+                    if (valueMatrix[XIndex, YIndex - 1] == valueMatrix[XIndex, YIndex - 2])
+                    {
+                        valueListARR[XIndex, YIndex].Remove(valueMatrix[XIndex, YIndex - 1]);
+                    }
+                }
+
+                // Select a random possible value from valueList if there is still value to choose
+                if (valueListARR[XIndex, YIndex].Count != 0)
+                {
+                    valueMatrix[XIndex, YIndex] = valueListARR[XIndex, YIndex][Random.Range(0, valueListARR[XIndex, YIndex].Count)];
+                    valueListARR[XIndex, YIndex].Remove(valueMatrix[XIndex, YIndex]);
+                }
+                // If there is no possible value left,recover current list and backtrack to previous unit
+                else
+                {
+                    //valueListARR[XIndex, YIndex] = new List<int>();
+                    for (int i = 0; i < Unit.Length - 1; i++)
+                    {
+                        valueListARR[XIndex, YIndex].Add(i);
+                    }
+
+                    if (XIndex == 0)
+                    {
+                        YIndex -= 1;
+                        XIndex = _columns - 1;
+                    }
+                    else
+                    {
+                        XIndex -= 1;
+                    }
+                    continue;
+                }
+
+
+                //valueMatrix[XIndex, YIndex] = Random.Range(0, Unit.Length - 1);
+            }
+        }
+        return valueMatrix;
+    }
+
+    private void getDropableUnitIndexList(int XIndex, int YIndex)
+    {
+        for (int i = YIndex; i <= _rows - 1; i++)
+        {
+            if (_unitARR[XIndex, i].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
+            {
+                continue;
+            }
+            else if (_unitARR[XIndex, i].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+            {
+                break;
+            }
+            else
+            {
+                //if (!unbounceList.Contains(new int[2]  { XIndex, i})){ }
+                unbounceList.Add(new int[2] { XIndex, i });
+
+                if (i == _rows - 1)
+                {
+                    hasUnitToRegen = true;
+                }
+            }
+        }
+    }
+
+    private int getItemIndexFromUnbounceList(int XIndex, int YIndex)
+    {
+        int result = -1;
+
+        for (int i = 0; i < unbounceList.Count; i++)
+        {
+            if (unbounceList[i][0] == XIndex && unbounceList[i][1] == YIndex)
+            {
+                result = i;
+                unbounceList.RemoveAt(i);
+            }
+        }
+        return result;
+    }
+
+    private bool hasDropableUnitAbove(int XIndex, int YIndex)
+    {
+        for (int i = YIndex - 1; i <= _rows - 1; i++)
+        {
+            if (_unitARR[XIndex, i].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
+            {
+                continue;
+            }
+            else if (_unitARR[XIndex, i].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.frozen)
+            {
+                break;
+            }
+            else if (!ChainedUnitsScanner.Instance._scanUnitARR[XIndex, i]._isChained)
+            {
+                return true;
+            }
+        }
+
+        return false; 
     }
 
     private bool hasFrozenUnitInCol(int col)
