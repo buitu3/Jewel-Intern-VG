@@ -158,13 +158,13 @@ public class PuzzleGenerator : MonoBehaviour {
             _valueARR[0, 3] = 3;
             //_valueARR[0, 4] = 3;
 
-            _valueARR[7, 1] = 4;
-            _valueARR[6, 2] = 4;
-            _valueARR[7, 3] = 4;
+            //_valueARR[7, 1] = 4;
+            //_valueARR[6, 2] = 4;
+            //_valueARR[7, 3] = 4;
 
-            _valueARR[3, 0] = 5;
-            _valueARR[4, 1] = 5;
-            _valueARR[3, 2] = 5;
+            //_valueARR[3, 0] = 5;
+            //_valueARR[4, 1] = 5;
+            //_valueARR[3, 2] = 5;
         }
         else if (LevelsManager.Instance.selectedLevel == 6)
         {
@@ -220,10 +220,10 @@ public class PuzzleGenerator : MonoBehaviour {
             upgradeUnit(0, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
             upgradeUnit(0, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
 
-            upgradeUnit(7, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-            upgradeUnit(7, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+            //upgradeUnit(7, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+            //upgradeUnit(7, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
 
-            upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+            //upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
         }
         else if (LevelsManager.Instance.selectedLevel == 6)
         {
@@ -1086,7 +1086,7 @@ public class PuzzleGenerator : MonoBehaviour {
 
                             if (getItemIndexFromUnbounceList(XIndex - 1, YIndex - 1) != -1)
                             {
-                                print("has item");
+                                //print("has item");
                                 getDropableUnitIndexList(XIndex, YIndex);
                             }
                             else if (checkIfCanPush(XIndex - 1, YIndex - 1) != unitPushType.None ||
