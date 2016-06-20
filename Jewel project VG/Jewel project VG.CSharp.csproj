@@ -86,6 +86,7 @@
     <Compile Include="Assets\JSON\JSONObject.cs" />
     <Compile Include="Assets\JSON\JSONTemplates.cs" />
     <Compile Include="Assets\JSON\VectorTemplates.cs" />
+    <Compile Include="Assets\LoadScreenController.cs" />
     <Compile Include="Assets\Scripts\LevelsManager.cs" />
     <Compile Include="Assets\Scripts\Main Game Scripts\ChainedUnitsScanner.cs" />
     <Compile Include="Assets\Scripts\Main Game Scripts\DestroyEffController.cs" />

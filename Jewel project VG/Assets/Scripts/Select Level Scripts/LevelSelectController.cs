@@ -156,7 +156,9 @@ public class LevelSelectController : MonoBehaviour {
 
         LevelsManager.Instance.selectedLevel = level;
         LevelsManager.Instance.selectedLevelInfoJSON = LevelsManager.Instance.levelsInfoJSON.GetField("Level " + level);
-        SceneManager.LoadScene("Main Game Scene");
+        //SceneManager.LoadScene("Main Game Scene");
+        SceneManager.LoadScene("Load Scene");
+        //AsyncOperation async = SceneManager.LoadSceneAsync("Main Game Scene");
     }
 
     public void showSettingsPanel()
