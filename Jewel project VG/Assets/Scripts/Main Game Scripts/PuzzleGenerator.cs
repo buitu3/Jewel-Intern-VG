@@ -158,10 +158,6 @@ public class PuzzleGenerator : MonoBehaviour {
             _valueARR[0, 3] = 3;
             //_valueARR[0, 4] = 3;
 
-            //_valueARR[7, 1] = 4;
-            //_valueARR[6, 2] = 4;
-            //_valueARR[7, 3] = 4;
-
             //_valueARR[3, 0] = 5;
             //_valueARR[4, 1] = 5;
             //_valueARR[3, 2] = 5;
@@ -174,9 +170,14 @@ public class PuzzleGenerator : MonoBehaviour {
         }
         else if (LevelsManager.Instance.selectedLevel == 8)
         {
-            _valueARR[0, 7] = 5;
-            _valueARR[1, 6] = 5;
-            _valueARR[1, 8] = 5;
+            //_valueARR[0, 7] = 5;
+            //_valueARR[1, 6] = 5;
+            //_valueARR[1, 8] = 5;
+
+            _valueARR[0, 0] = 5;
+            _valueARR[1, 0] = 5;
+            _valueARR[2, 1] = 5;
+            _valueARR[3, 0] = 5;
         }
 
         // --------------------------------------------
@@ -219,6 +220,8 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             upgradeUnit(0, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
             upgradeUnit(0, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+
+            //upgradeUnit(2, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.empty);
 
             //upgradeUnit(7, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
             //upgradeUnit(7, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
@@ -561,6 +564,7 @@ public class PuzzleGenerator : MonoBehaviour {
                 {
                     upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.empty);
                     _unitARR[XIndex, YIndex].SetActive(false);
+
                 }
                 else if (negativeEff == "frozen")
                 {
@@ -1022,6 +1026,13 @@ public class PuzzleGenerator : MonoBehaviour {
                                 getDropableUnitIndexList(XIndex, YIndex);
                                 //print(XIndex + "~~~~~~~" + YIndex + "~~~~~~~~~~~" + unbounceList.Count);
                             }
+                            else if (XIndex > 0 && ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex - 1]._isChained
+                                && _unitARR[XIndex - 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow
+                                && _unitARR[XIndex - 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
+                            {
+                                print("still can push");
+                                getDropableUnitIndexList(XIndex, YIndex);
+                            }
                             else if (YIndex == _rows - 1)
                             {
                                 hasBouncingUnit = true;
@@ -1096,6 +1107,13 @@ public class PuzzleGenerator : MonoBehaviour {
                                 //print("unbounce");
                                 getDropableUnitIndexList(XIndex, YIndex);
                                 //print(XIndex + "~~~~~~~" + YIndex + "~~~~~~~~~~~" + unbounceList.Count);
+                            }
+                            else if (XIndex < _rows - 1 && ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained
+                                && _unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow
+                                && _unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
+                            {
+                                print("still can push");
+                                getDropableUnitIndexList(XIndex, YIndex);
                             }
                             else if (YIndex == _rows - 1)
                             {

@@ -161,8 +161,6 @@ public class ChainedUnitsScanner : MonoBehaviour
         UnitInfo focusedUnitInfo = focusedUnit.GetComponent<UnitInfo>();
         UnitInfo otherUnitInfo = otherUnit.GetComponent<UnitInfo>();
 
-        bonusPoint = 0;
-
         // Check if swapped unit is the special "Destroy all" type
         // If true destroy all jewels that has the same type with the other swapped unit
         if (focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
@@ -196,8 +194,10 @@ public class ChainedUnitsScanner : MonoBehaviour
             chainedUnits = false;
 
             // Scan focused Unit chain
+            bonusPoint = 0;
             scanSwappedUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
             // Scan other Unit chain
+            bonusPoint = 0;
             scanSwappedUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
 
             // If there are chained units
@@ -741,7 +741,6 @@ public class ChainedUnitsScanner : MonoBehaviour
                 }
                 else if (unitInfo._negativeEff == UnitInfo.NegativeEff.locked)
                 {
-                    print("break lock");
                     unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
                     unitInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
 
