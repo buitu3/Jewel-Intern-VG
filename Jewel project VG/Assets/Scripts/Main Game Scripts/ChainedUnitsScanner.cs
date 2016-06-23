@@ -161,6 +161,8 @@ public class ChainedUnitsScanner : MonoBehaviour
         UnitInfo focusedUnitInfo = focusedUnit.GetComponent<UnitInfo>();
         UnitInfo otherUnitInfo = otherUnit.GetComponent<UnitInfo>();
 
+        bonusPoint = 0;
+
         // Check if swapped unit is the special "Destroy all" type
         // If true destroy all jewels that has the same type with the other swapped unit
         if (focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
@@ -189,15 +191,78 @@ public class ChainedUnitsScanner : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
         }
+        else if ((focusedUnitInfo._unitEff == UnitInfo.SpecialEff.hLightning || focusedUnitInfo._unitEff == UnitInfo.SpecialEff.vLightning)
+            && (otherUnitInfo._unitEff == UnitInfo.SpecialEff.hLightning || otherUnitInfo._unitEff == UnitInfo.SpecialEff.vLightning))
+        {
+            print("cross lightning");
+
+            //disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+
+            disableUnitEffect(focusedUnitInfo);
+            disableUnitEffect(otherUnitInfo);
+
+            destroyAllUnitsOfColumn(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            destroyAllUnitsOfRow(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+
+            GameController.Instance.reduceMovesCount();
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
+        }
+        else if (((focusedUnitInfo._unitEff == UnitInfo.SpecialEff.hLightning || focusedUnitInfo._unitEff == UnitInfo.SpecialEff.vLightning)
+            && otherUnitInfo._unitEff == UnitInfo.SpecialEff.explode)
+            || ((otherUnitInfo._unitEff == UnitInfo.SpecialEff.hLightning || otherUnitInfo._unitEff == UnitInfo.SpecialEff.vLightning)
+            && focusedUnitInfo._unitEff == UnitInfo.SpecialEff.explode))
+        {
+            print("explode lighting");
+
+            disableUnitEffect(focusedUnitInfo);
+            disableUnitEffect(otherUnitInfo);
+
+            if (focusedUnitInfo._XIndex > 0)
+            {
+                destroyAllUnitsOfColumn(focusedUnitInfo._XIndex - 1, focusedUnitInfo._YIndex);
+            }
+            destroyAllUnitsOfColumn(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            if (focusedUnitInfo._XIndex < PuzzleGenerator.Instance._columns - 1)
+            {
+                destroyAllUnitsOfColumn(focusedUnitInfo._XIndex + 1, focusedUnitInfo._YIndex);
+            }
+
+            if (focusedUnitInfo._YIndex > 0)
+            {
+                destroyAllUnitsOfRow(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex - 1);
+            }
+            destroyAllUnitsOfRow(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            if (focusedUnitInfo._YIndex < PuzzleGenerator.Instance._rows - 1)
+            {
+                destroyAllUnitsOfRow(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex + 1);
+            }
+
+            GameController.Instance.reduceMovesCount();
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
+        }
+        else if (focusedUnitInfo._unitEff == UnitInfo.SpecialEff.explode && otherUnitInfo._unitEff == UnitInfo.SpecialEff.explode)
+        {
+            print("double explode");
+
+            disableUnitEffect(focusedUnitInfo);
+            disableUnitEffect(otherUnitInfo);
+
+            destroyAllLocalUnits(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            destroyAllLocalUnits(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+
+            GameController.Instance.reduceMovesCount();
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
+        }
         else
         {
             chainedUnits = false;
 
             // Scan focused Unit chain
-            bonusPoint = 0;
             scanSwappedUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
             // Scan other Unit chain
-            bonusPoint = 0;
             scanSwappedUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
 
             // If there are chained units
@@ -1933,5 +1998,30 @@ public class ChainedUnitsScanner : MonoBehaviour
                 break;
             }
         }
+    }
+
+    private void disableUnitEffect(UnitInfo unitInfo)
+    {
+        switch (unitInfo._unitEff)
+        {
+            case (UnitInfo.SpecialEff.hLightning):
+                {
+                    unitInfo.HorizontalLightningEff.SetActive(false);
+                    break;
+                }
+            case (UnitInfo.SpecialEff.vLightning):
+                {
+                    unitInfo.VerticalLightningEff.SetActive(false);
+                    break;
+                }
+            case (UnitInfo.SpecialEff.explode):
+                {
+                    unitInfo.ExplosiveSparkEff.SetActive(false);
+                    break;
+                }
+            default: break;
+        }
+
+        unitInfo._unitEff = UnitInfo.SpecialEff.noEff;
     }
 }

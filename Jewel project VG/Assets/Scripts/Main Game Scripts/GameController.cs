@@ -119,10 +119,18 @@ public class GameController : MonoBehaviour {
 
     public void updateScore(int bonusScore)
     {
+        //print("score :" + Score);
+
         //Score += bonusScore;
-        scoreSlider.DOValue(Score += bonusScore, 0.3f, true);
+        scoreSlider.DOValue(Score + bonusScore, 0.3f, true);
         //DOTween.To(() => Score, x => Score = x, Score += bonusScore, 0.3f).OnUpdate(updateScoreText);
+
         scoreTween = DOTween.To(() => Score, x => Score = x, Score += bonusScore, 0.3f).OnUpdate(updateScoreText);
+        //Score = Score + bonusScore;
+
+        //print(bonusScore);
+        //print("score :" + Score);
+
         //scoreTween.ChangeEndValue(Score += bonusScore);
         //scoreText.text = Score.ToString();
     }

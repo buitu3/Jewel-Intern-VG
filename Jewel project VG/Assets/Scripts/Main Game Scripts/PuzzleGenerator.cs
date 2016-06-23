@@ -551,6 +551,19 @@ public class PuzzleGenerator : MonoBehaviour {
                 string specialEff = XIndexJSON.GetField("Special Eff").str;
                 string negativeEff = XIndexJSON.GetField("Negative Eff").str;
 
+                if (specialEff == "vLightning")
+                {
+                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.vLightning, UnitInfo.NegativeEff.noEff);
+                }
+                else if (specialEff == "hLightning")
+                {
+                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.hLightning, UnitInfo.NegativeEff.noEff);
+                }
+                else if (specialEff == "explode")
+                {
+                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+                }
+
                 if (negativeEff == "hollow")
                 {
                     //ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = true;
@@ -2078,5 +2091,20 @@ public class PuzzleGenerator : MonoBehaviour {
             //print("yielding");
             yield return new WaitForEndOfFrame();
         }        
+    }
+
+    public List<UnitInfo> getUnitsOfTypeInfo(int value)
+    {
+        List<UnitInfo> infoList = new List<UnitInfo>();
+
+        for (int YIndex = 0; YIndex < _rows; YIndex++)
+        {
+            for (int XIndex = 0; XIndex < _columns; XIndex++)
+            {
+                //if ()
+            }
+        }
+
+        return infoList;
     }
 }
