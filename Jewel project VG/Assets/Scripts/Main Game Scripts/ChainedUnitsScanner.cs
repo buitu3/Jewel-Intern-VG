@@ -163,9 +163,102 @@ public class ChainedUnitsScanner : MonoBehaviour
 
         bonusPoint = 0;
 
+        if ((focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1 && otherUnitInfo._unitEff != UnitInfo.SpecialEff.noEff)
+           || (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1 && focusedUnitInfo._unitEff != UnitInfo.SpecialEff.noEff))
+        {
+            List<UnitInfo> infoList = new List<UnitInfo>();
+            UnitInfo.SpecialEff specialEff = UnitInfo.SpecialEff.noEff;
+
+            if (focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
+            {
+                infoList = PuzzleGenerator.Instance.getUnitsOfTypeInfo(otherUnitInfo._value);
+                specialEff = otherUnitInfo._unitEff;
+
+                UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+                disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            }
+            else if (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
+            {
+                infoList = PuzzleGenerator.Instance.getUnitsOfTypeInfo(focusedUnitInfo._value);
+                specialEff = focusedUnitInfo._unitEff;
+
+                UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+                disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            }
+
+            // Upgrade all other normal units that have the same color with the special swapped units
+            if(specialEff == UnitInfo.SpecialEff.explode)
+            {
+                for (int i = 0; i < infoList.Count; i++)
+                {
+                    PuzzleGenerator.Instance.upgradeUnit(infoList[i]._XIndex, infoList[i]._YIndex, specialEff, infoList[i]._negativeEff);
+                    yield return new WaitForSeconds(0.05f);
+                }
+            }
+            else if (specialEff == UnitInfo.SpecialEff.vLightning || specialEff == UnitInfo.SpecialEff.hLightning)
+            {
+                for (int i = 0; i < infoList.Count; i++)
+                {
+                    if (infoList[i]._unitEff == UnitInfo.SpecialEff.vLightning || infoList[i]._unitEff == UnitInfo.SpecialEff.hLightning)
+                    {
+                        continue;
+                    }
+
+                    int randomLighting = Random.Range(0, 2);
+                    switch (randomLighting)
+                    {
+                        case 0:
+                            {
+                                PuzzleGenerator.Instance.upgradeUnit(infoList[i]._XIndex, infoList[i]._YIndex, UnitInfo.SpecialEff.vLightning, infoList[i]._negativeEff);
+                                break;
+                            }
+                        case 1:
+                            {
+                                PuzzleGenerator.Instance.upgradeUnit(infoList[i]._XIndex, infoList[i]._YIndex, UnitInfo.SpecialEff.hLightning, infoList[i]._negativeEff);
+                                break;
+                            }
+                    }
+                    yield return new WaitForSeconds(0.05f);
+                }
+            }
+
+            // Trigger all upgraded units
+            for (int i = 0; i < infoList.Count; i++)
+            {
+                if (!_scanUnitARR[infoList[i]._XIndex, infoList[i]._YIndex]._isChained)
+                {
+                    switch (infoList[i]._unitEff)
+                    {
+                        case UnitInfo.SpecialEff.vLightning:
+                            {
+                                disableUnitEffect(infoList[i]);
+                                destroyAllUnitsOfColumn(infoList[i]._XIndex, infoList[i]._YIndex);
+                                break;
+                            }
+                        case UnitInfo.SpecialEff.hLightning:
+                            {
+                                disableUnitEffect(infoList[i]);
+                                destroyAllUnitsOfRow(infoList[i]._XIndex, infoList[i]._YIndex);
+                                break;
+                            }
+                        case UnitInfo.SpecialEff.explode:
+                            {
+                                disableUnitEffect(infoList[i]);
+                                destroyAllLocalUnits(infoList[i]._XIndex, infoList[i]._YIndex);
+                                break;
+                            }
+                    }           
+                }
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            GameController.Instance.reduceMovesCount();
+            yield return new WaitForSeconds(0.2f);
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
+        }
         // Check if swapped unit is the special "Destroy all" type
         // If true destroy all jewels that has the same type with the other swapped unit
-        if (focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
+        else if (focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
         {
             // Disable the UnitBG that in the same position as the current destroyAll Unit
             UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);

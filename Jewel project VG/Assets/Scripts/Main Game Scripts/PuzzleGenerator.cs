@@ -178,6 +178,14 @@ public class PuzzleGenerator : MonoBehaviour {
             _valueARR[1, 0] = 5;
             _valueARR[2, 1] = 5;
             _valueARR[3, 0] = 5;
+            //_valueARR[4, 0] = 5;
+        }
+        else if (LevelsManager.Instance.selectedLevel == 1)
+        {
+            _valueARR[2, 3] = 7;
+
+            _valueARR[3, 3] = 5;
+            _valueARR[2, 6] = 5;
         }
 
         // --------------------------------------------
@@ -231,6 +239,12 @@ public class PuzzleGenerator : MonoBehaviour {
         else if (LevelsManager.Instance.selectedLevel == 6)
         {
             upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        }
+        else if (LevelsManager.Instance.selectedLevel == 1)
+        {
+            upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.frozen);
+
+            upgradeUnit(2, 6, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.frozen);
         }
 
         // --------------------------------------------
@@ -551,19 +565,6 @@ public class PuzzleGenerator : MonoBehaviour {
                 string specialEff = XIndexJSON.GetField("Special Eff").str;
                 string negativeEff = XIndexJSON.GetField("Negative Eff").str;
 
-                if (specialEff == "vLightning")
-                {
-                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.vLightning, UnitInfo.NegativeEff.noEff);
-                }
-                else if (specialEff == "hLightning")
-                {
-                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.hLightning, UnitInfo.NegativeEff.noEff);
-                }
-                else if (specialEff == "explode")
-                {
-                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-                }
-
                 if (negativeEff == "hollow")
                 {
                     //ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = true;
@@ -587,6 +588,21 @@ public class PuzzleGenerator : MonoBehaviour {
                 {
                     upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
                 }
+
+
+                if (specialEff == "vLightning")
+                {
+                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.vLightning, UnitInfo.NegativeEff.noEff);
+                }
+                else if (specialEff == "hLightning")
+                {
+                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.hLightning, UnitInfo.NegativeEff.noEff);
+                }
+                else if (specialEff == "explode")
+                {
+                    upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+                }
+
             }
         }
         yield return null;
@@ -1032,7 +1048,7 @@ public class PuzzleGenerator : MonoBehaviour {
                                 getDropableUnitIndexList(XIndex, YIndex);
                             }
                             else if (checkIfCanPush(XIndex + 1, YIndex - 1) != unitPushType.None ||
-                                (ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 2]._isChained &&
+                                (YIndex - 2 > 0 && ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 2]._isChained &&
                                 _unitARR[XIndex + 1, YIndex - 2].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow))
                             {
                                 //print("unbounce");
@@ -2101,9 +2117,18 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             for (int XIndex = 0; XIndex < _columns; XIndex++)
             {
-                //if ()
+                UnitInfo unitInfo = _unitARR[XIndex, YIndex].GetComponent<UnitInfo>();
+                if (unitInfo._value == value
+                    && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained 
+                    && unitInfo._negativeEff != UnitInfo.NegativeEff.hollow
+                    && unitInfo._negativeEff != UnitInfo.NegativeEff.empty)
+                {
+                    infoList.Add(unitInfo);
+                }
             }
         }
+
+        print(infoList.Count);
 
         return infoList;
     }
