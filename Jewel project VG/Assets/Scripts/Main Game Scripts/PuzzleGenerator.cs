@@ -246,6 +246,11 @@ public class PuzzleGenerator : MonoBehaviour {
 
             //upgradeUnit(2, 6, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.frozen);
         }
+        else if (LevelsManager.Instance.selectedLevel == 10)
+        {
+            upgradeUnit(3, 8, UnitInfo.SpecialEff.vLightning, UnitInfo.NegativeEff.noEff);
+            upgradeUnit(3, 9, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        }
 
         // --------------------------------------------
 
@@ -569,15 +574,20 @@ public class PuzzleGenerator : MonoBehaviour {
                 {
                     //ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained = true;
 
-                    _unitARR[XIndex, YIndex].GetComponent<SpriteRenderer>().enabled = false;
-                    _unitARR[XIndex, YIndex].GetComponent<BoxCollider2D>().enabled = false;
+                    //_unitARR[XIndex, YIndex].GetComponent<SpriteRenderer>().enabled = false;
+                    //_unitARR[XIndex, YIndex].GetComponent<BoxCollider2D>().enabled = false;
                     _unitBGARR[XIndex, YIndex].SetActive(false);
                     upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.hollow);
+                    _unitARR[XIndex, YIndex].GetComponent<SpriteRenderer>().enabled = false;
+                    _unitARR[XIndex, YIndex].GetComponent<BoxCollider2D>().enabled = false;
                 }
                 else if (negativeEff == "empty")
                 {
                     upgradeUnit(XIndex, YIndex, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.empty);
-                    _unitARR[XIndex, YIndex].SetActive(false);
+                    //_unitARR[XIndex, YIndex].SetActive(false);
+                    _unitARR[XIndex, YIndex].GetComponent<SpriteRenderer>().enabled = false;
+                    _unitARR[XIndex, YIndex].GetComponent<BoxCollider2D>().enabled = false;
+                    //print(_unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value);
 
                 }
                 else if (negativeEff == "frozen")
@@ -1137,7 +1147,7 @@ public class PuzzleGenerator : MonoBehaviour {
                                 getDropableUnitIndexList(XIndex, YIndex);
                                 //print(XIndex + "~~~~~~~" + YIndex + "~~~~~~~~~~~" + unbounceList.Count);
                             }
-                            else if (XIndex < _rows - 1 && ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained
+                            else if (YIndex < _rows - 1 && ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained
                                 && _unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow
                                 && _unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
                             {
