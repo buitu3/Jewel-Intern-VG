@@ -182,10 +182,10 @@ public class PuzzleGenerator : MonoBehaviour {
         }
         else if (LevelsManager.Instance.selectedLevel == 1)
         {
-            _valueARR[2, 3] = 7;
+            //_valueARR[2, 3] = 7;
 
-            _valueARR[3, 3] = 5;
-            _valueARR[2, 6] = 5;
+            //_valueARR[3, 3] = 5;
+            //_valueARR[2, 6] = 5;
         }
 
         // --------------------------------------------
@@ -242,9 +242,9 @@ public class PuzzleGenerator : MonoBehaviour {
         }
         else if (LevelsManager.Instance.selectedLevel == 1)
         {
-            upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.frozen);
+            //upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.frozen);
 
-            upgradeUnit(2, 6, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.frozen);
+            //upgradeUnit(2, 6, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.frozen);
         }
 
         // --------------------------------------------
