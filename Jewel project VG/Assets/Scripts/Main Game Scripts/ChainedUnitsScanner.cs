@@ -163,7 +163,23 @@ public class ChainedUnitsScanner : MonoBehaviour
 
         bonusPoint = 0;
 
-        if ((focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1 && otherUnitInfo._unitEff != UnitInfo.SpecialEff.noEff)
+        if(focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1 
+            && otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
+        {
+            print("destroy all");
+            // Disable the UnitBG that in the same position as the two destroyAll Unit
+            UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+
+            disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            destroyAllUnitsInPuzzle();
+
+            GameController.Instance.reduceMovesCount();
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
+        }
+        else if ((focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1 && otherUnitInfo._unitEff != UnitInfo.SpecialEff.noEff)
            || (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1 && focusedUnitInfo._unitEff != UnitInfo.SpecialEff.noEff))
         {
             List<UnitInfo> infoList = new List<UnitInfo>();
@@ -513,6 +529,28 @@ public class ChainedUnitsScanner : MonoBehaviour
     }
 
     #region Destroy Special Effect Units Method
+
+    void destroyAllUnitsInPuzzle()
+    {
+        List<int> unitsXIndex = new List<int>();
+        List<int> unitsYIndex = new List<int>();
+
+        for (int YIndex = 0; YIndex < PuzzleGenerator.Instance._rows; YIndex++)
+        {
+            for (int XIndex = 0; XIndex < PuzzleGenerator.Instance._columns; XIndex++)
+            {
+                if (!_scanUnitARR[XIndex, YIndex]._isChained)
+                {
+                    unitsXIndex.Add(XIndex);
+                    unitsYIndex.Add(YIndex);
+                }                
+            }
+        }
+
+        destroyUnits(unitsXIndex, unitsYIndex);
+        SoundController.Instance.playOneShotClip(destroyAllUnitSound);
+    }
+
     IEnumerator destroyAllUnitsOfType(int type)
     {
         List<int> unitsXIndex = new List<int>();
