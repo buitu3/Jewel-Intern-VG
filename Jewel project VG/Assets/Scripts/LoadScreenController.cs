@@ -7,7 +7,7 @@ using DG.Tweening;
 public class LoadScreenController : MonoBehaviour {
 
     public Text loadText;
-
+    
 	// Use this for initialization
 	void Start ()
     {       

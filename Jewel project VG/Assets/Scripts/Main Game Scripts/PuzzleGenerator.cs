@@ -616,6 +616,9 @@ public class PuzzleGenerator : MonoBehaviour {
 
             }
         }
+
+        //BorderGenerator.Instance.initBorder();
+
         yield return null;
     }
 

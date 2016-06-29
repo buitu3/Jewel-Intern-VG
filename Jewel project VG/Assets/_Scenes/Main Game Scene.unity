@@ -902,8 +902,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 316.75}
-  m_SizeDelta: {x: 0, y: -633.5}
+  m_AnchoredPosition: {x: 0, y: 319.5}
+  m_SizeDelta: {x: 0, y: -639}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &340372533
 MonoBehaviour:
@@ -4172,6 +4172,7 @@ GameObject:
   - 114: {fileID: 1254704531}
   - 114: {fileID: 1254704528}
   - 114: {fileID: 1254704532}
+  - 114: {fileID: 1254704533}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: Untagged
@@ -4350,6 +4351,20 @@ MonoBehaviour:
   - {fileID: 171696, guid: d0fbb8038460a5e49a6be71074e7f5a2, type: 2}
   - {fileID: 169724, guid: ce3de740d3be7084d902f71b2ccac420, type: 2}
   - {fileID: 155342, guid: dc877f177aacb0246bc9f22d844a28e3, type: 2}
+--- !u!114 &1254704533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1254704525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6677d9947fd18340acb011d1564f34a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharpCornerPref: {fileID: 188758, guid: 7530f0fe4bc76a24fa173e8b417547d5, type: 2}
+  roundCornerPref: {fileID: 184806, guid: bf6661b8b9bdd4b4bbcb73bd301f16f9, type: 2}
+  borderLinePref: {fileID: 174920, guid: c131e369c5576d1468f8a7ecece507b4, type: 2}
 --- !u!1 &1306697532
 GameObject:
   m_ObjectHideFlags: 0

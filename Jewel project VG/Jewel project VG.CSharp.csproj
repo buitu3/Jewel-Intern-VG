@@ -88,6 +88,7 @@
     <Compile Include="Assets\JSON\VectorTemplates.cs" />
     <Compile Include="Assets\Scripts\LevelsManager.cs" />
     <Compile Include="Assets\Scripts\LoadScreenController.cs" />
+    <Compile Include="Assets\Scripts\Main Game Scripts\BorderGenerator.cs" />
     <Compile Include="Assets\Scripts\Main Game Scripts\ChainedUnitsScanner.cs" />
     <Compile Include="Assets\Scripts\Main Game Scripts\DestroyEffController.cs" />
     <Compile Include="Assets\Scripts\Main Game Scripts\GameController.cs" />
