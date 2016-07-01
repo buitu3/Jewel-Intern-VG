@@ -136,7 +136,8 @@ public class ChainedUnitsScanner : MonoBehaviour
             int XIndex = unitList[i].GetComponent<UnitInfo>()._XIndex;
             int YIndex = unitList[i].GetComponent<UnitInfo>()._YIndex;
 
-            if (PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow)
+            if (PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.empty)
             {
                 _scanUnitARR[XIndex, YIndex]._value = PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value;
                 _scanUnitARR[XIndex, YIndex].pointMultiplier = 0;
