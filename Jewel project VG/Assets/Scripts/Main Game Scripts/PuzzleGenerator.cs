@@ -47,6 +47,7 @@ public class PuzzleGenerator : MonoBehaviour {
     private bool canPushUnit;
     private bool hasUnitToRegen;
     private bool hasBouncingUnit;
+    private bool pushingDelay;
 
     //private float XStartPos = -2.6f;
     //private float YStartPos = -3.7f;
@@ -80,6 +81,7 @@ public class PuzzleGenerator : MonoBehaviour {
 
     void Awake()
     {
+
         Instance = this;
         //Time.timeScale = 0.5f;
     }
@@ -959,6 +961,7 @@ public class PuzzleGenerator : MonoBehaviour {
         bool hasUnitToPush = false;
         hasUnitToRegen = false;
         hasBouncingUnit = false;
+        pushingDelay = false;
 
         //List<int> pushColList = new List<int
         int pushCol = -1;
@@ -992,11 +995,14 @@ public class PuzzleGenerator : MonoBehaviour {
             //print("regen");
             yield return new WaitForSeconds(baseUnitDropTime);
         }
-
         if (hasBouncingUnit)
         {
             //print("bounce");
             yield return new WaitForSeconds(unitBounceTime);
+        }
+        if (pushingDelay)
+        {
+            yield return new WaitForSeconds(unitPushTime);
         }
 
         if (hasUnitToPush)
@@ -1019,7 +1025,7 @@ public class PuzzleGenerator : MonoBehaviour {
                     {
                         // The push Unit must not be floating,the position this Unit is pushed into must
                         // below the highest frozen unit in the same column
-                        if (hasFrozenUnitInCol(XIndex + 1) && !isAboveHighestFrozenUnitInCol(XIndex + 1, YIndex - 1)
+                        if (hasFrozenUnitInCol(XIndex + 1) && !noFrozenUnitAbove(XIndex + 1, YIndex - 1)
                             //&& !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained
                             )
                         {
@@ -1080,6 +1086,13 @@ public class PuzzleGenerator : MonoBehaviour {
                             {
                                 hasBouncingUnit = true;
                             }
+                            else if (noFrozenUnitAbove(XIndex, YIndex))
+                            {
+                                print(hasBouncingUnit);
+                                hasBouncingUnit = true;
+                                pushingDelay = true;
+                                print("has bounce");
+                            }
 
                             if(YIndex == _rows - 1)
                             {
@@ -1097,7 +1110,7 @@ public class PuzzleGenerator : MonoBehaviour {
                     {
                         // The push Unit must not be floating,the position this Unit is pushed into must
                         // below the highest frozen unit in the same column
-                        if (hasFrozenUnitInCol(XIndex - 1) && !isAboveHighestFrozenUnitInCol(XIndex - 1, YIndex - 1)
+                        if (hasFrozenUnitInCol(XIndex - 1) && !noFrozenUnitAbove(XIndex - 1, YIndex - 1)
                             //&& !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained
                             )
                         {
@@ -1162,6 +1175,13 @@ public class PuzzleGenerator : MonoBehaviour {
                             {
                                 hasBouncingUnit = true;
                             }
+                            else if (noFrozenUnitAbove(XIndex, YIndex))
+                            {
+                                print(hasBouncingUnit);
+                                hasBouncingUnit = true;
+                                pushingDelay = true;
+                                print("has bounce");
+                            }
 
                             if (YIndex == _rows - 1)
                             {
@@ -1192,14 +1212,14 @@ public class PuzzleGenerator : MonoBehaviour {
                 // The push Unit must not be floating,the position this Unit is pushed into must
                 // below the highest frozen unit in the same column
                 if (pushType == unitPushType.Right && hasFrozenUnitInCol(col + 1)
-                    && !isAboveHighestFrozenUnitInCol(col + 1, YIndex - 1)
+                    && !noFrozenUnitAbove(col + 1, YIndex - 1)
                     //&& !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained
                     )
                 {
                     if (YIndex < _rows - 1)
                     {
                         // Ignore if the push unit is not the highest among all units that below the highest frozen unit in the same col
-                        if (!isAboveHighestFrozenUnitInCol(col, YIndex)
+                        if (!noFrozenUnitAbove(col, YIndex)
                         && (!ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex + 1]._isChained)
                         && _unitARR[col, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
                         || _unitARR[col + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow)
@@ -1272,14 +1292,14 @@ public class PuzzleGenerator : MonoBehaviour {
                 // The push Unit must not be floating,the position this Unit is pushed into must
                 // below the highest frozen unit in the same column
                 if (pushType == unitPushType.Left && hasFrozenUnitInCol(col - 1)
-                    && !isAboveHighestFrozenUnitInCol(col - 1, YIndex - 1)
+                    && !noFrozenUnitAbove(col - 1, YIndex - 1)
                     //&& !ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex - 1]._isChained
                     )
                 {
                     // Ignore if the push unit is not the highest among units that below frozen unit in the col
                     if (YIndex < _rows - 1)
                     {
-                        if (!isAboveHighestFrozenUnitInCol(col, YIndex)
+                        if (!noFrozenUnitAbove(col, YIndex)
                         && (!ChainedUnitsScanner.Instance._scanUnitARR[col, YIndex + 1]._isChained)
                         && _unitARR[col, YIndex + 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen
                         || _unitARR[col - 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.hollow
@@ -2083,9 +2103,9 @@ public class PuzzleGenerator : MonoBehaviour {
         }
         return false;
     }
-
+    
     // Check if this Unit is above the highest frozen unit in the same column
-    private bool isAboveHighestFrozenUnitInCol(int XIndex, int YIndex)
+    private bool noFrozenUnitAbove(int XIndex, int YIndex)
     {
         for (int i = YIndex + 1; i < _rows; i++)
         {
