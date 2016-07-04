@@ -21,7 +21,7 @@ public class PossibleChainedDetector : MonoBehaviour {
 
     private bool suggesting = false;
 
-    private Tween[] suggestTween = new Tween[3];
+    private Tween[] suggestTween = new Tween[5];
 
     private Vector2 zoomOutScale = new Vector2(1.4f, 1.4f);
 
@@ -38,7 +38,7 @@ public class PossibleChainedDetector : MonoBehaviour {
 
     IEnumerator Start()
     {
-        suggestCoroutine = suggestMove();
+        //suggestCoroutine = suggestMove();
 
         _valueARR = new int[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
         yield return new WaitForEndOfFrame();
@@ -64,7 +64,7 @@ public class PossibleChainedDetector : MonoBehaviour {
             {
                 suggesting = true;
                 //StartCoroutine(suggestCoroutine);
-                StartCoroutine(suggestMove());
+                StartCoroutine(suggestMove(suggestList));
             }
             else
             {
@@ -100,7 +100,7 @@ public class PossibleChainedDetector : MonoBehaviour {
 
     void blowUnits(List<GameObject> unitList)
     {
-        for (int i = 0; i < suggestTween.Length; i++)
+        for (int i = 0; i < unitList.Count; i++)
         {
             //suggestTween[i] = unitList[i].transform.DOPunchScale(punchScale, 3f, 0, 1f).SetLoops(-1).SetEase(Ease.Linear);
             suggestTween[i] = unitList[i].transform.DOScale(zoomOutScale, 1.2f).SetLoops(-1, LoopType.Yoyo);
@@ -116,10 +116,12 @@ public class PossibleChainedDetector : MonoBehaviour {
         }
     }
 
-    public IEnumerator suggestMove()
+    public IEnumerator suggestMove(List<GameObject> suggestList)
     {
         //suggesting = true;
-        List<GameObject> suggestList = scanPossibleChained();
+
+        //List<GameObject> suggestList = scanPossibleChained();
+
         //if (suggestList.Count > 0)
         //{
         //    blowUnits(suggestList);
@@ -151,12 +153,106 @@ public class PossibleChainedDetector : MonoBehaviour {
             for (int XIndex = 0; XIndex < PuzzleGenerator.Instance._columns; XIndex++)
             {
                 int value = _valueARR[XIndex, YIndex];
+                UnitInfo unitInfo = PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>();
+
+                if (ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex]._isChained 
+                    || unitInfo._negativeEff != UnitInfo.NegativeEff.noEff)
+                {
+                    continue;
+                }
+
+                #region Special Units check
+                if (value == PuzzleGenerator.Instance.Unit.Length - 1)
+                {
+                    if (YIndex > 0 
+                        && PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff 
+                        && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex - 1]._isChained)
+                    {
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1]);
+                        return suggestList;
+                    }
+
+                    if (YIndex < PuzzleGenerator.Instance._rows - 1
+                        && PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                        && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex + 1]._isChained)
+                    {
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
+                        return suggestList;
+                    }
+
+                    if (XIndex > 0
+                        && PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                        && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex]._isChained)
+                    {
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
+                        return suggestList;
+                    }
+
+                    if (XIndex < PuzzleGenerator.Instance._columns - 1
+                        && PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                        && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex]._isChained)
+                    {
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex]);
+                        return suggestList;
+                    }
+                }
+
+                if (unitInfo._unitEff != UnitInfo.SpecialEff.noEff)
+                {
+                    if (YIndex > 0
+                        && PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].GetComponent<UnitInfo>()._unitEff != UnitInfo.SpecialEff.noEff
+                        && PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                        && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex - 1]._isChained)
+                    {
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 1]);
+                        return suggestList;
+                    }
+
+                    if (YIndex < PuzzleGenerator.Instance._rows - 1
+                        && PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].GetComponent<UnitInfo>()._unitEff != UnitInfo.SpecialEff.noEff
+                        && PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                        && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex, YIndex + 1]._isChained)
+                    {
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
+                        return suggestList;
+                    }
+
+                    if (XIndex > 0
+                        && PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].GetComponent<UnitInfo>()._unitEff != UnitInfo.SpecialEff.noEff
+                        && PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                        && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex - 1, YIndex]._isChained)
+                    {
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
+                        return suggestList;
+                    }
+
+                    if (XIndex < PuzzleGenerator.Instance._columns - 1
+                        && PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].GetComponent<UnitInfo>()._unitEff != UnitInfo.SpecialEff.noEff
+                        && PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex].GetComponent<UnitInfo>()._negativeEff == UnitInfo.NegativeEff.noEff
+                        && !ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex]._isChained)
+                    {
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
+                        suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex]);
+                        return suggestList;
+                    }
+                }
+
+                #endregion
+
                 #region vertical check
                 if (isNearLeftUpMatch(XIndex, YIndex, value))
                 {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex + 2]);
+                    return suggestList;
                 }
 
                 if (isNearMiddleUpMatch(XIndex, YIndex, value))
@@ -164,6 +260,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 3]);
+                    return suggestList;
                 }
 
                 if (isNearRightUpMatch(XIndex, YIndex, value))
@@ -171,6 +268,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex + 2]);
+                    return suggestList;
                 }
 
                 if (isNearLeftDownMatch(XIndex, YIndex, value))
@@ -178,6 +276,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex - 1]);
+                    return suggestList;
                 }
 
                 if (isNearMiddleDownMatch(XIndex, YIndex, value))
@@ -185,6 +284,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex - 2]);
+                    return suggestList;
                 }
 
                 if (isNearRightDownMatch(XIndex, YIndex, value))
@@ -192,6 +292,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 1]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex - 1]);
+                    return suggestList;
                 }
 
                 if (isFarLeftMatch(XIndex, YIndex, value))
@@ -199,6 +300,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex + 1]);
+                    return suggestList;
                 }
 
                 if (isFarRightMatch(XIndex, YIndex, value))
@@ -206,6 +308,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex + 2]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex + 1]);
+                    return suggestList;
                 }
                 #endregion
 
@@ -215,6 +318,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex - 1]);
+                    return suggestList;
                 }
 
                 if (isNearMiddleLeftMatch(XIndex, YIndex, value))
@@ -222,6 +326,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 3, YIndex]);
+                    return suggestList;
                 }
 
                 if (isNearUpLeftMatch(XIndex, YIndex, value))
@@ -229,6 +334,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex + 1]);
+                    return suggestList;
                 }
 
                 if (isNearDownRightMatch(XIndex, YIndex, value))
@@ -236,6 +342,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex - 1]);
+                    return suggestList;
                 }
 
                 if (isNearMiddleRightMatch(XIndex, YIndex, value))
@@ -243,6 +350,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 2, YIndex]);
+                    return suggestList;
                 }
 
                 if (isNearUpRightMatch(XIndex, YIndex, value))
@@ -250,6 +358,7 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex + 1, YIndex + 1]);
+                    return suggestList;
                 }
 
                 if (isFarDownMatch(XIndex, YIndex, value))
@@ -257,13 +366,15 @@ public class PossibleChainedDetector : MonoBehaviour {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex    ]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex    ]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex - 1]);
+                    return suggestList;
                 }
 
-                if(isFarUpMatch(XIndex, YIndex, value))
+                if (isFarUpMatch(XIndex, YIndex, value))
                 {
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex    , YIndex    ]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 2, YIndex    ]);
                     suggestList.Add(PuzzleGenerator.Instance._unitARR[XIndex - 1, YIndex + 1]);
+                    return suggestList;
                 }
 
                 #endregion

@@ -59,7 +59,7 @@ public class UnitBGGenerator : MonoBehaviour {
             {
                 JSONObject XIndexJSON = YIndexJSON.GetField("Col " + XIndex);
                 int unitBGLevel = (int)XIndexJSON.GetField("Unit Level").i;
-                string negativeEff = XIndexJSON.GetField("Negative Eff").str;
+                //string negativeEff = XIndexJSON.GetField("Negative Eff").str;
 
                 if (unitBGLevel > 0 && unitBGLevel <= unitBGPreb.Length)
                 {

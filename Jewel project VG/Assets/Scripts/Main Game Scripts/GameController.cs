@@ -48,6 +48,7 @@ public class GameController : MonoBehaviour {
     public enum GameState
     {
         idle = 0,
+        initPuzzle,
         focusUnit,
         scanningUnit,
         destroyingUnit,
@@ -95,7 +96,7 @@ public class GameController : MonoBehaviour {
 
     void Start()
     {
-        currentState = GameState.idle;
+        //currentState = GameState.idle;
 
         //scoreTween = DOTween.To(() => Score, x => Score = x, 0, 0.3f).OnUpdate(updateScoreText);
         hiScoreText.text = hiScore.ToString();

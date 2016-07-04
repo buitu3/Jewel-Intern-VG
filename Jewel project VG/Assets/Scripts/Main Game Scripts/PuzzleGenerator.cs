@@ -88,6 +88,8 @@ public class PuzzleGenerator : MonoBehaviour {
 
     IEnumerator Start()
     {
+        GameController.Instance.currentState = GameController.GameState.initPuzzle;
+
         unitHolder = new GameObject("Units Holder").transform;
         unitBGHolder = new GameObject("Units BG Holder").transform;
         poolObjectHolder = new GameObject("Pool Object Holder").transform;
@@ -220,40 +222,33 @@ public class PuzzleGenerator : MonoBehaviour {
 
         // ----------Fake unit value for testing ------------------      
 
-        //upgradeUnit(0, 8, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.frozen);
-        //upgradeUnit(5, 7, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
-        //upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-        //upgradeUnit(4, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        //if (LevelsManager.Instance.selectedLevel == 7)
+        //{
+        //    upgradeUnit(0, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        //    upgradeUnit(0, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
 
-        //upgradeUnit(1, 2, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.locked);
+        //    //upgradeUnit(2, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.empty);
 
-        if (LevelsManager.Instance.selectedLevel == 7)
-        {
-            upgradeUnit(0, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-            upgradeUnit(0, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        //    //upgradeUnit(7, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        //    //upgradeUnit(7, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
 
-            //upgradeUnit(2, 5, UnitInfo.SpecialEff.noEff, UnitInfo.NegativeEff.empty);
+        //    //upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        //}
+        //else if (LevelsManager.Instance.selectedLevel == 6)
+        //{
+        //    upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        //}
+        //else if (LevelsManager.Instance.selectedLevel == 1)
+        //{
+        //    //upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.frozen);
 
-            //upgradeUnit(7, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-            //upgradeUnit(7, 2, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-
-            //upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-        }
-        else if (LevelsManager.Instance.selectedLevel == 6)
-        {
-            upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-        }
-        else if (LevelsManager.Instance.selectedLevel == 1)
-        {
-            //upgradeUnit(4, 1, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.frozen);
-
-            //upgradeUnit(2, 6, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.frozen);
-        }
-        else if (LevelsManager.Instance.selectedLevel == 10)
-        {
-            upgradeUnit(3, 8, UnitInfo.SpecialEff.vLightning, UnitInfo.NegativeEff.noEff);
-            upgradeUnit(3, 9, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
-        }
+        //    //upgradeUnit(2, 6, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.frozen);
+        //}
+        //else if (LevelsManager.Instance.selectedLevel == 10)
+        //{
+        //    upgradeUnit(3, 8, UnitInfo.SpecialEff.vLightning, UnitInfo.NegativeEff.noEff);
+        //    upgradeUnit(3, 9, UnitInfo.SpecialEff.explode, UnitInfo.NegativeEff.noEff);
+        //}
 
         // --------------------------------------------
 
