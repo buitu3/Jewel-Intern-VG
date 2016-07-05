@@ -21,7 +21,6 @@ public class GameController : MonoBehaviour {
     public Text scoreText;
     public Text hiScoreText;
     public Text movesCountText;
-    public Text unitBGCountText;
 
     public Text gameOverScoreText;
     public Text gameOverHiScoreText;
@@ -57,6 +56,8 @@ public class GameController : MonoBehaviour {
         _statesCount
     }
 
+    public bool isGameCompleted;
+
     private Tweener scoreTween;
 
     private int Score;
@@ -66,7 +67,8 @@ public class GameController : MonoBehaviour {
     private int star3Score;
     private int hiScore;
     private int moves;
-    private int bgCount = 0;
+
+    private int gameMode;
 
     //==============================================
     // Unity Methods
@@ -92,6 +94,23 @@ public class GameController : MonoBehaviour {
         {
             hiScore = 0;
         }
+
+        string gameModeString = LevelsManager.Instance.selectedLevelInfoJSON.GetField("Game Mode").str;
+        switch (gameModeString)
+        {
+            case "Fill Order":
+                {
+                    gameMode = 1;
+                    break;
+                }
+            case "Destroy BG":
+                {
+                    gameMode = 0;
+                    break;
+                }
+        }
+
+        print(gameMode);
     }
 
     void Start()
@@ -101,10 +120,10 @@ public class GameController : MonoBehaviour {
         //scoreTween = DOTween.To(() => Score, x => Score = x, 0, 0.3f).OnUpdate(updateScoreText);
         hiScoreText.text = hiScore.ToString();
         movesCountText.text = moves.ToString();
-        bgCount = UnitBGGenerator.Instance.UnitBGCount;
-        unitBGCountText.text = bgCount.ToString();
 
         scoreSlider.maxValue = star3Score;
+
+        isGameCompleted = false;
     }
 
     //void Update()
@@ -141,11 +160,6 @@ public class GameController : MonoBehaviour {
         scoreText.text = Score.ToString();
     }
 
-    public void updateUnitBGCountText(int unitBGCount)
-    {
-        unitBGCountText.text = unitBGCount.ToString();
-    }
-
     public void reduceMovesCount()
     {
         if(moves > 0)
@@ -160,18 +174,6 @@ public class GameController : MonoBehaviour {
         if (moves == 0)
         {
             gameOver();
-        }
-    }
-
-    public bool isGameCompleted()
-    {
-        if (UnitBGGenerator.Instance.UnitBGCount <= 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
@@ -202,7 +204,8 @@ public class GameController : MonoBehaviour {
         SoundController.Instance.playOneShotClip(clickSound);
 
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Main Game Scene");
+        //SceneManager.LoadScene("Main Game Scene");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void loadNextLevel()
@@ -214,12 +217,26 @@ public class GameController : MonoBehaviour {
             LevelsManager.Instance.selectedLevel++;
             LevelsManager.Instance.selectedLevelInfoJSON = LevelsManager.Instance.levelsInfoJSON.GetField("Level " + LevelsManager.Instance.selectedLevel);
             Time.timeScale = 1f;
-            SceneManager.LoadScene("Main Game Scene");
+
+            switch (gameMode)
+            {
+                case 0:
+                    {
+                        SceneManager.LoadScene("Main Game Scene");
+                        break;
+                    }
+                case 1:
+                    {
+                        SceneManager.LoadScene("Fill Order Game Scene");
+                        break;
+                    }
+            }
         }
         else
         {
             Time.timeScale = 1f;
-            SceneManager.LoadScene("Main Game Scene");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            //SceneManager.LoadScene("Main Game Scene");
         }
     }
 
@@ -287,7 +304,7 @@ public class GameController : MonoBehaviour {
         if (PlayerPrefs.HasKey(levelHiScoreKey))
         {
             // Save new hi-score if current score is higher than previous hi-score
-            if (Score > PlayerPrefs.GetInt(levelHiScoreKey) && isGameCompleted())
+            if (Score > PlayerPrefs.GetInt(levelHiScoreKey) && isGameCompleted)
             {
                 PlayerPrefs.SetInt(levelHiScoreKey, Score);
 

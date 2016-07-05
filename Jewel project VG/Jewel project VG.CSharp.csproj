@@ -94,6 +94,7 @@
     <Compile Include="Assets\Scripts\Main Game Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\Main Game Scripts\InputHandler.cs" />
     <Compile Include="Assets\Scripts\Main Game Scripts\NegativeEffController.cs" />
+    <Compile Include="Assets\Scripts\Main Game Scripts\OrderManager.cs" />
     <Compile Include="Assets\Scripts\Main Game Scripts\PointTextController.cs" />
     <Compile Include="Assets\Scripts\Main Game Scripts\PossibleChainedDetector.cs" />
     <Compile Include="Assets\Scripts\Main Game Scripts\PuzzleGenerator.cs" />

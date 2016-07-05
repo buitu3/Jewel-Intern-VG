@@ -19,15 +19,42 @@ public class LoadScreenController : MonoBehaviour {
         }
         else
         {
-            StartCoroutine(loadMainGameScene());
+            string gameModeString = LevelsManager.Instance.selectedLevelInfoJSON.GetField("Game Mode").str;
+
+            switch (gameModeString)
+            {
+                case "Destroy BG":
+                    {
+                        StartCoroutine(loadDestroyBGGameScene());
+                        break;
+                    }
+                case "Fill Order":
+                    {
+                        StartCoroutine(loadFillOrderGameScene());
+                        break;
+                    }
+            }
+
         }
     }
 	
-    IEnumerator loadMainGameScene()
+    IEnumerator loadDestroyBGGameScene()
     {
         yield return new WaitForSeconds(1f);
 
         AsyncOperation async = SceneManager.LoadSceneAsync("Main Game Scene");
+
+        while (!async.isDone)
+        {
+            yield return null;
+        }
+    }
+
+    IEnumerator loadFillOrderGameScene()
+    {
+        yield return new WaitForSeconds(1f);
+
+        AsyncOperation async = SceneManager.LoadSceneAsync("Fill Order Game Scene");
 
         while (!async.isDone)
         {

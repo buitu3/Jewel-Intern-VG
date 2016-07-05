@@ -126,6 +126,7 @@
 ,
 "Level 2":
 	{
+	"Game Mode":"Destroy BG",
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":50,
 	"Row 0":
 		{
@@ -250,6 +251,7 @@
 ,
 "Level 3":
 	{
+	"Game Mode":"Destroy BG",
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":50,
 	"Row 0":
 		{
@@ -374,6 +376,7 @@
 ,
 "Level 4":
 	{
+	"Game Mode":"Destroy BG",
 	"1 Star Score":500,"2 Star Score":1500,"3 Star Score":3000,"Moves":35,
 	"Row 0":
 		{
@@ -498,6 +501,7 @@
 ,
 "Level 5":
 	{
+	"Game Mode":"Destroy BG",
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":40,
 	"Row 0":
 		{
@@ -622,6 +626,7 @@
 ,
 "Level 6":
 	{
+	"Game Mode":"Destroy BG",
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":35,
 	"Row 0":
 		{
@@ -746,6 +751,7 @@
 ,
 "Level 7":
 	{
+	"Game Mode":"Destroy BG",
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":40,
 	"Row 0":
 		{
@@ -870,6 +876,7 @@
 ,
 "Level 8":
 	{
+	"Game Mode":"Destroy BG",
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
 	"Row 0":
 		{
@@ -994,6 +1001,7 @@
 ,
 "Level 9":
 	{
+	"Game Mode":"Destroy BG",
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
 	"Row 0":
 		{
@@ -1118,6 +1126,7 @@
 ,
 "Level 10":
 	{
+	"Game Mode":"Destroy BG",
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":40,
 	"Row 0":
 		{
