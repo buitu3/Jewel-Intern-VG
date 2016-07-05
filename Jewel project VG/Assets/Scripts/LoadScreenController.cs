@@ -10,7 +10,8 @@ public class LoadScreenController : MonoBehaviour {
     
 	// Use this for initialization
 	void Start ()
-    {       
+    {        
+
         loadText.DOFade(0f, 0.7f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.Linear);
 
         if (LevelsManager.Instance == null)
