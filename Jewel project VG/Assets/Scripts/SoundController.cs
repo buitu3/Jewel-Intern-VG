@@ -16,8 +16,8 @@ public class SoundController : MonoBehaviour {
     public AudioSource sfxSource;
     public AudioSource musicSource;
 
-    public float lowPitchRange = 0.95f;
-    public float highPitchRange = 1.05f;
+    public float lowPitchRange = 1f;
+    public float highPitchRange = 1f;
 
     //==============================================
     // Unity Methods

@@ -272,11 +272,11 @@ public class ChainedUnitsScanner : MonoBehaviour
                             }
                     }           
                 }
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.05f);
             }
 
             GameController.Instance.reduceMovesCount();
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
             StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
         }
         // Check if swapped unit is the special "Destroy all" type
@@ -607,7 +607,8 @@ public class ChainedUnitsScanner : MonoBehaviour
 
         destroyUnits(unitsXIndex, unitsYIndex);
 
-        SoundController.Instance.playOneShotClip(destroyAllUnitSound);
+        //SoundController.Instance.playOneShotClip(destroyAllUnitSound);
+        SoundController.Instance.playSingleClip(destroyAllUnitSound);
 
         for (int i = 0; i < unitsXIndex.Count; i++)
         {
@@ -637,6 +638,9 @@ public class ChainedUnitsScanner : MonoBehaviour
         destroyUnits(col, YTarget, unitsXIndex, unitsYIndex, _scanUnitARR[col, YTarget]._value, UnitInfo.SpecialEff.noEff);
 
         Instantiate(VLightningDestroyEff, new Vector2(PuzzleGenerator.Instance._unitPosARR[col, 0].x, 0f), VLightningDestroyEff.transform.rotation);
+
+        //SoundController.Instance.playSingleClip(lightingDestroySound);
+        SoundController.Instance.playOneShotClip(lightingDestroySound);
     }
 
     void destroyAllUnitsOfRow(int XTarget, int row)
@@ -659,6 +663,9 @@ public class ChainedUnitsScanner : MonoBehaviour
         destroyUnits(XTarget, row, unitsXIndex, unitsYIndex, _scanUnitARR[XTarget, row]._value, UnitInfo.SpecialEff.noEff);
 
         Instantiate(HLightningDestroyEff, new Vector2(0f, PuzzleGenerator.Instance._unitPosARR[0, row].y), HLightningDestroyEff.transform.rotation);
+
+        //SoundController.Instance.playSingleClip(lightingDestroySound);
+        SoundController.Instance.playOneShotClip(lightingDestroySound);
     }
 
     void destroyAllLocalUnits(int XTarget, int YTarget)
@@ -740,6 +747,9 @@ public class ChainedUnitsScanner : MonoBehaviour
         destroyUnits(XTarget, YTarget, unitsXIndex, unitsYIndex, _scanUnitARR[XTarget, YTarget]._value, UnitInfo.SpecialEff.noEff);
 
         Instantiate(ExplodeDestroyEff, PuzzleGenerator.Instance._unitPosARR[XTarget, YTarget], Quaternion.identity);
+
+        //SoundController.Instance.playSingleClip(explosionDestroySound);
+        SoundController.Instance.playOneShotClip(explosionDestroySound);
     }
 
     #endregion
@@ -790,7 +800,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
 
-                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+                        //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                         break;
                     }
@@ -799,7 +809,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
 
-                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+                        //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                         break;
                     }
@@ -808,7 +818,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
 
-                        SoundController.Instance.playOneShotClip(explosionDestroySound);
+                        //SoundController.Instance.playOneShotClip(explosionDestroySound);
 
                         break;
                     }
@@ -880,7 +890,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllUnitsOfColumn(Xtarget, Ytarget);
 
-                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+                        //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                         break;
                     }
@@ -889,7 +899,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllUnitsOfRow(Xtarget, Ytarget);
 
-                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+                        //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                         break;
                     }
@@ -898,7 +908,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllLocalUnits(Xtarget, Ytarget);
 
-                        SoundController.Instance.playOneShotClip(explosionDestroySound);
+                        //SoundController.Instance.playOneShotClip(explosionDestroySound);
 
                         break;
                     }
@@ -920,7 +930,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                         {
                             destroyAllUnitsOfColumn(Xtarget, Ytarget);
 
-                            SoundController.Instance.playOneShotClip(lightingDestroySound);
+                            //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                             break;
                         }
@@ -929,7 +939,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                         {
                             destroyAllUnitsOfRow(Xtarget, Ytarget);
 
-                            SoundController.Instance.playOneShotClip(lightingDestroySound);
+                            //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                             break;
                         }
@@ -938,7 +948,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                         {
                             destroyAllLocalUnits(Xtarget, Ytarget);
 
-                            SoundController.Instance.playOneShotClip(explosionDestroySound);
+                            //SoundController.Instance.playOneShotClip(explosionDestroySound);
 
                             break;
                         }
@@ -994,7 +1004,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+                                //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                                 break;
                             }
@@ -1003,7 +1013,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+                                //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                                 break;
                             }
@@ -1012,7 +1022,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(explosionDestroySound);
+                                //SoundController.Instance.playOneShotClip(explosionDestroySound);
 
                                 break;
                             }
@@ -1117,7 +1127,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+                                //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                                 break;
                             }
@@ -1126,7 +1136,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+                                //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                                 break;
                             }
@@ -1135,7 +1145,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(explosionDestroySound);
+                                //SoundController.Instance.playOneShotClip(explosionDestroySound);
 
                                 break;
                             }

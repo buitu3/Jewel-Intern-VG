@@ -80,7 +80,7 @@ public class GameController : MonoBehaviour {
     {
         Instance = this;
 
-        DOTween.SetTweensCapacity(100, 10);
+        DOTween.SetTweensCapacity(200, 20);
 
         star1Score = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("1 Star Score").i;
         star2Score = (int)LevelsManager.Instance.selectedLevelInfoJSON.GetField("2 Star Score").i;

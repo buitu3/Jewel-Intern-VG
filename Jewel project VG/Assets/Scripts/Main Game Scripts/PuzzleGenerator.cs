@@ -184,10 +184,10 @@ public class PuzzleGenerator : MonoBehaviour {
             _valueARR[3, 0] = 5;
             //_valueARR[4, 0] = 5;
         }
-        else if (LevelsManager.Instance.selectedLevel == 1)
+        else if (LevelsManager.Instance.selectedLevel == 2)
         {
-            _valueARR[3, 3] = 7;
-            _valueARR[3, 4] = 7;
+            _valueARR[1, 1] = 7;
+            _valueARR[6, 7] = 7;
 
             //_valueARR[3, 3] = 5;
             //_valueARR[2, 6] = 5;
