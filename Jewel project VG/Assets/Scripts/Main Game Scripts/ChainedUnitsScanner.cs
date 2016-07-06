@@ -167,13 +167,15 @@ public class ChainedUnitsScanner : MonoBehaviour
         if(focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1 
             && otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
         {
-            print("destroy all");
+            //print("destroy all");
             // Disable the UnitBG that in the same position as the two destroyAll Unit
-            UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
-            UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            //UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            //UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            //disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            //disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
 
-            disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
-            disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            removeUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            removeUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
             destroyAllUnitsInPuzzle();
 
             GameController.Instance.reduceMovesCount();
@@ -191,16 +193,20 @@ public class ChainedUnitsScanner : MonoBehaviour
                 infoList = PuzzleGenerator.Instance.getUnitsOfTypeInfo(otherUnitInfo._value);
                 specialEff = otherUnitInfo._unitEff;
 
-                UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
-                disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+                //UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+                //disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+
+                removeUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
             }
             else if (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
             {
                 infoList = PuzzleGenerator.Instance.getUnitsOfTypeInfo(focusedUnitInfo._value);
                 specialEff = focusedUnitInfo._unitEff;
 
-                UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
-                disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+                //UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+                //disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+
+                removeUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
             }
 
             // Upgrade all other normal units that have the same color with the special swapped units
@@ -278,11 +284,12 @@ public class ChainedUnitsScanner : MonoBehaviour
         else if (focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
         {
             // Disable the UnitBG that in the same position as the current destroyAll Unit
-            UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            //UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            //disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            removeUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
 
             //destroyAllUnitsOfType(otherUnitInfo._value);
             StartCoroutine(destroyAllUnitsOfType(otherUnitInfo._value));
-            disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
             GameController.Instance.reduceMovesCount();
 
             yield return new WaitForSeconds(0.5f);
@@ -291,11 +298,13 @@ public class ChainedUnitsScanner : MonoBehaviour
         else if (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
         {
             // Disable the UnitBG that in the same position as the current destroyAll Unit
-            UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            //UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            //disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            removeUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
 
             //destroyAllUnitsOfType(focusedUnitInfo._value);
             StartCoroutine(destroyAllUnitsOfType(focusedUnitInfo._value));
-            disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            
             GameController.Instance.reduceMovesCount();
 
             yield return new WaitForSeconds(0.5f);
@@ -529,6 +538,25 @@ public class ChainedUnitsScanner : MonoBehaviour
         }        
     }
 
+    private void removeUnit(int XIndex, int YIndex)
+    {
+        switch (GameController.Instance.gameMode)
+        {
+            case 0:
+                {
+                    UnitBGGenerator.Instance.removeBG(XIndex, YIndex);
+                    break;
+                }
+            case 1:
+                {
+                    OrderManager.Instance.recalculateOrder(PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value);
+                    break;
+                }
+        }
+
+        disableUnit(XIndex, YIndex);
+    }
+
     #region Destroy Special Effect Units Method
 
     void destroyAllUnitsInPuzzle()
@@ -752,9 +780,9 @@ public class ChainedUnitsScanner : MonoBehaviour
             }
 
             // Disable the UnitBG that in the same position as the current chained Unit
-            UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
-
-            disableUnit(unitsXIndex[i], unitsYIndex[i]);
+            //UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+            //disableUnit(unitsXIndex[i], unitsYIndex[i]);
+            removeUnit(unitsXIndex[i], unitsYIndex[i]);
 
             switch (unitInfo._unitEff)
             {
@@ -836,9 +864,10 @@ public class ChainedUnitsScanner : MonoBehaviour
         else
         {
             // Disable the UnitBG that in the same position as the targeted Unit
-            UnitBGGenerator.Instance.removeBG(Xtarget, Ytarget);
+            //UnitBGGenerator.Instance.removeBG(Xtarget, Ytarget);
+            //disableUnit(Xtarget, Ytarget);
 
-            disableUnit(Xtarget, Ytarget);
+            removeUnit(Xtarget, Ytarget);
         }
 
         #region Target Unit has special effect
@@ -947,9 +976,10 @@ public class ChainedUnitsScanner : MonoBehaviour
                 }
 
                 // Disable the UnitBG that in the same position as the current chained Unit
-                UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+                //UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+                //disableUnit(unitsXIndex[i], unitsYIndex[i]);
 
-                disableUnit(unitsXIndex[i], unitsYIndex[i]);
+                removeUnit(unitsXIndex[i], unitsYIndex[i]);
 
                 if (unitInfo._value
                     == PuzzleGenerator.Instance.Unit.Length - 1)
@@ -1069,9 +1099,10 @@ public class ChainedUnitsScanner : MonoBehaviour
                 }
 
                 // Disable the UnitBG that in the same position as the current chained Unit
-                UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+                //UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+                //disableUnit(unitsXIndex[i], unitsYIndex[i]);
 
-                disableUnit(unitsXIndex[i], unitsYIndex[i]);
+                removeUnit(unitsXIndex[i], unitsYIndex[i]);
 
                 if (unitInfo._value
                     == PuzzleGenerator.Instance.Unit.Length - 1)

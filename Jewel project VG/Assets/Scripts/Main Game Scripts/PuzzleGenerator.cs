@@ -1083,10 +1083,10 @@ public class PuzzleGenerator : MonoBehaviour {
                             }
                             else if (noFrozenUnitAbove(XIndex, YIndex))
                             {
-                                print(hasBouncingUnit);
+                                //print(hasBouncingUnit);
                                 hasBouncingUnit = true;
                                 pushingDelay = true;
-                                print("has bounce");
+                                //print("has bounce");
                             }
 
                             if(YIndex == _rows - 1)

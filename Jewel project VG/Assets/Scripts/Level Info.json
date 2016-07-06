@@ -1,7 +1,7 @@
 {
 "Level 1":
 	{
-	"Game Mode":"Fill Order","Order":[[1,4],[0,5],[3,6]],
+	"Game Mode":"Fill Order","Order":[[1,20],[0,20],[3,20],[5,15],[4,15]],
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":50,
 	"Row 0":
 		{
@@ -251,7 +251,7 @@
 ,
 "Level 3":
 	{
-	"Game Mode":"Destroy BG",
+	"Game Mode":"Fill Order","Order":[[1,10],[0,15],[3,10]],
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":50,
 	"Row 0":
 		{

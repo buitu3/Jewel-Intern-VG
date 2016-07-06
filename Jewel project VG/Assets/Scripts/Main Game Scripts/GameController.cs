@@ -56,7 +56,11 @@ public class GameController : MonoBehaviour {
         _statesCount
     }
 
+    [HideInInspector]
     public bool isGameCompleted;
+
+    [HideInInspector]
+    public int gameMode;
 
     private Tweener scoreTween;
 
@@ -67,8 +71,6 @@ public class GameController : MonoBehaviour {
     private int star3Score;
     private int hiScore;
     private int moves;
-
-    private int gameMode;
 
     //==============================================
     // Unity Methods
@@ -110,7 +112,7 @@ public class GameController : MonoBehaviour {
                 }
         }
 
-        print(gameMode);
+        //print(gameMode);
     }
 
     void Start()
