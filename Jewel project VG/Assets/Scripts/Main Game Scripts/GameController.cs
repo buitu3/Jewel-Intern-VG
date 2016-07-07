@@ -220,14 +220,16 @@ public class GameController : MonoBehaviour {
             LevelsManager.Instance.selectedLevelInfoJSON = LevelsManager.Instance.levelsInfoJSON.GetField("Level " + LevelsManager.Instance.selectedLevel);
             Time.timeScale = 1f;
 
-            switch (gameMode)
+            string gameModeString = LevelsManager.Instance.selectedLevelInfoJSON.GetField("Game Mode").str;
+
+            switch (gameModeString)
             {
-                case 0:
+                case "Destroy BG":
                     {
                         SceneManager.LoadScene("Main Game Scene");
                         break;
                     }
-                case 1:
+                case "Fill Order":
                     {
                         SceneManager.LoadScene("Fill Order Game Scene");
                         break;

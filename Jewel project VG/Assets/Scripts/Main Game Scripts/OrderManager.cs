@@ -40,7 +40,7 @@ public class OrderManager : MonoBehaviour {
         orderLeft = totalOrder;
         orderCountText.text = orderList.Count.ToString();
 
-        print(totalOrder);
+        //print(totalOrder);
     }
 
 	void Start ()
@@ -82,7 +82,7 @@ public class OrderManager : MonoBehaviour {
                     if (activeOrder[i][1] == 0)
                     {
                         StartCoroutine(completeOrder(i));
-                        print("order complete");
+                        //print("order complete");
                     }
                 }
             }
