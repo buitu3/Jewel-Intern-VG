@@ -41,6 +41,7 @@ public class PuzzleGenerator : MonoBehaviour {
     private List<int[]> unbounceList;
 
     private Transform unitHolder;
+    [HideInInspector]
     public Transform unitBGHolder;
     private Transform poolObjectHolder;
 
@@ -168,9 +169,9 @@ public class PuzzleGenerator : MonoBehaviour {
         }
         else if (LevelsManager.Instance.selectedLevel == 6)
         {
-            _valueARR[3, 0] = 5;
-            _valueARR[4, 1] = 5;
-            _valueARR[3, 2] = 5;
+            //_valueARR[3, 0] = 5;
+            //_valueARR[4, 1] = 5;
+            //_valueARR[3, 2] = 5;
         }
         else if (LevelsManager.Instance.selectedLevel == 8)
         {
@@ -178,16 +179,20 @@ public class PuzzleGenerator : MonoBehaviour {
             //_valueARR[1, 6] = 5;
             //_valueARR[1, 8] = 5;
 
-            _valueARR[0, 0] = 5;
-            _valueARR[1, 0] = 5;
-            _valueARR[2, 1] = 5;
-            _valueARR[3, 0] = 5;
+            //_valueARR[0, 0] = 5;
+            //_valueARR[1, 0] = 5;
+            //_valueARR[2, 1] = 5;
+            //_valueARR[3, 0] = 5;
             //_valueARR[4, 0] = 5;
         }
         else if (LevelsManager.Instance.selectedLevel == 2)
         {
-            _valueARR[1, 1] = 7;
-            _valueARR[6, 7] = 7;
+            //_valueARR[1, 1] = 7;
+            //_valueARR[6, 7] = 7;
+
+            _valueARR[1, 0] = 4;
+            _valueARR[1, 1] = 4;
+            _valueARR[1, 3] = 4;
 
             //_valueARR[3, 3] = 5;
             //_valueARR[2, 6] = 5;

@@ -39,6 +39,12 @@ public class GameController : MonoBehaviour {
     public GameObject levelText;
     public Text levelNumber;
 
+    public Image starOneSlider;
+    public Image starTwoSlider;
+    public Image starThreeSlider;
+
+    public Sprite starUnlockImage; 
+
     public AudioClip clickSound;
 
     [HideInInspector]
@@ -71,6 +77,8 @@ public class GameController : MonoBehaviour {
     private int star3Score;
     private int hiScore;
     private int moves;
+
+    private int unlockedStars = 0;
 
     //==============================================
     // Unity Methods
@@ -123,7 +131,15 @@ public class GameController : MonoBehaviour {
         hiScoreText.text = hiScore.ToString();
         movesCountText.text = moves.ToString();
 
-        scoreSlider.maxValue = star3Score;
+        scoreSlider.maxValue = star3Score + 3000;
+       
+        scoreSlider.value = star1Score;
+        starOneSlider.transform.position = scoreSlider.handleRect.transform.position;
+        scoreSlider.value = star2Score;
+        starTwoSlider.transform.position = scoreSlider.handleRect.transform.position;
+        scoreSlider.value = star3Score;
+        starThreeSlider.transform.position = scoreSlider.handleRect.transform.position;
+        scoreSlider.value = 0;
 
         isGameCompleted = false;
     }
@@ -155,6 +171,22 @@ public class GameController : MonoBehaviour {
 
         //scoreTween.ChangeEndValue(Score += bonusScore);
         //scoreText.text = Score.ToString();
+
+        if (unlockedStars < 3)
+        {
+            if (unlockedStars < 1 && Score >= star1Score)
+            {
+                starOneSlider.sprite = starUnlockImage;
+            }
+            if (unlockedStars < 2 && Score >= star2Score)
+            {
+                starTwoSlider.sprite = starUnlockImage;
+            }
+            if (unlockedStars < 3 && Score >= star3Score)
+            {
+                starThreeSlider.sprite = starUnlockImage;
+            }
+        }
     }
 
     void updateScoreText()
