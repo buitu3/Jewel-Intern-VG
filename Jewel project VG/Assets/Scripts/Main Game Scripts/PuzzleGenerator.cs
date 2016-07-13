@@ -52,8 +52,8 @@ public class PuzzleGenerator : MonoBehaviour {
 
     //private float XStartPos = -2.6f;
     //private float YStartPos = -3.7f;
-    private float XPadding = 0.73f;
-    private float YPadding = 0.73f;
+    private float XPadding = 0.65f;
+    private float YPadding = 0.65f;
     private float regenYpos;
 
     private float unitDropTime = 0.3f;
@@ -187,12 +187,12 @@ public class PuzzleGenerator : MonoBehaviour {
         }
         else if (LevelsManager.Instance.selectedLevel == 2)
         {
-            //_valueARR[1, 1] = 7;
-            //_valueARR[6, 7] = 7;
+            _valueARR[1, 1] = 7;
+            _valueARR[6, 8] = 7;
 
-            _valueARR[1, 0] = 4;
-            _valueARR[1, 1] = 4;
-            _valueARR[1, 3] = 4;
+            //_valueARR[1, 0] = 4;
+            //_valueARR[1, 1] = 4;
+            //_valueARR[1, 3] = 4;
 
             //_valueARR[3, 3] = 5;
             //_valueARR[2, 6] = 5;
