@@ -175,15 +175,12 @@ public class PuzzleGenerator : MonoBehaviour {
         }
         else if (LevelsManager.Instance.selectedLevel == 8)
         {
-            //_valueARR[0, 7] = 5;
-            //_valueARR[1, 6] = 5;
-            //_valueARR[1, 8] = 5;
+            _valueARR[0, 6] = 5;
+            _valueARR[1, 6] = 5;
+            _valueARR[2, 5] = 5;
+            _valueARR[3, 6] = 5;
 
-            //_valueARR[0, 0] = 5;
-            //_valueARR[1, 0] = 5;
-            //_valueARR[2, 1] = 5;
-            //_valueARR[3, 0] = 5;
-            //_valueARR[4, 0] = 5;
+
         }
         else if (LevelsManager.Instance.selectedLevel == 2)
         {
@@ -787,6 +784,7 @@ public class PuzzleGenerator : MonoBehaviour {
 
     public IEnumerator scanEmptyUnits(bool hasChained)
     {
+        //print("scan" + hasChained);
         //unitsList = new List<GameObject>();
 
         canPushUnit = false;
