@@ -1251,6 +1251,7 @@
 ,
 "Level 11":
 	{
+	"Game Mode":"Fill Order","Order":[[1,10],[0,10],[3,10]],
 	"1 Star Score":500,"2 Star Score":4000,"3 Star Score":8000,"Moves":20,
 	"Row 0":
 		{
@@ -1269,8 +1270,8 @@
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"explode","Negative Eff":"noEff"},
+			"Col 4":{"Unit Level":0,"Special Eff":"explode","Negative Eff":"noEff"},
 			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
@@ -1341,8 +1342,8 @@
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"empty"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"empty"},
 			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
@@ -1352,10 +1353,10 @@
 		{
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"empty"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"empty"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"empty"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"empty"},
 			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
 			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
 		}		
@@ -1363,12 +1364,12 @@
 	"Row 9":
 		{
 			"Col 0":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
-			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"},
+			"Col 1":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
+			"Col 2":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
+			"Col 3":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
+			"Col 4":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
+			"Col 5":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
+			"Col 6":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"frozen"},
 			"Col 7":{"Unit Level":0,"Special Eff":"noEff","Negative Eff":"noEff"}
 		}		
 	}
