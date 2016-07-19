@@ -50,7 +50,7 @@ public class LevelsManager : MonoBehaviour {
         // -------------------------------------
 
         //PlayerPrefs.DeleteAll();
-        PlayerPrefs.SetInt("Unlocked Level", 10);
+        PlayerPrefs.SetInt("Unlocked Level", 11);
         // -------------------------------------
         // -------------------------------------
     }

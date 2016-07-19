@@ -175,7 +175,7 @@ QualitySettings:
     Standalone: 0
     Tizen: 2
     WP8: 5
-    Web: 5
+    Web: 0
     WebGL: 3
     WiiU: 5
     Windows Store Apps: 5

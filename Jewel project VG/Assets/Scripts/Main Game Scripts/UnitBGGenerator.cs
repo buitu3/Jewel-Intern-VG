@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class UnitBGGenerator : MonoBehaviour {
@@ -12,6 +13,8 @@ public class UnitBGGenerator : MonoBehaviour {
     //==============================================
     // Fields
     //==============================================
+
+    public Text unitBGCountText;
 
     private int unitBGCount;
     public int UnitBGCount
@@ -43,6 +46,8 @@ public class UnitBGGenerator : MonoBehaviour {
         _valueBGARR = new int[PuzzleGenerator.Instance._columns, PuzzleGenerator.Instance._rows];
 
         initBlueBG();
+
+        unitBGCountText.text = unitBGCount.ToString();
     }
 
     //==============================================
@@ -59,7 +64,7 @@ public class UnitBGGenerator : MonoBehaviour {
             {
                 JSONObject XIndexJSON = YIndexJSON.GetField("Col " + XIndex);
                 int unitBGLevel = (int)XIndexJSON.GetField("Unit Level").i;
-                string negativeEff = XIndexJSON.GetField("Negative Eff").str;
+                //string negativeEff = XIndexJSON.GetField("Negative Eff").str;
 
                 if (unitBGLevel > 0 && unitBGLevel <= unitBGPreb.Length)
                 {
@@ -92,12 +97,18 @@ public class UnitBGGenerator : MonoBehaviour {
 
                 Destroy(_unitBGARR[XIndex, YIndex]);
 
-                GameController.Instance.updateUnitBGCountText(unitBGCount);
+                updateUnitBGCountText(unitBGCount);
                 if (unitBGCount == 0)
                 {
+                    GameController.Instance.isGameCompleted = true;
                     print("Game completed");
                 }
             }
         }
+    }
+
+    public void updateUnitBGCountText(int unitBGCount)
+    {
+        unitBGCountText.text = unitBGCount.ToString();
     }
 }

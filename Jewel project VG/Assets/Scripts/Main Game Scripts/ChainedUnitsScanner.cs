@@ -136,7 +136,8 @@ public class ChainedUnitsScanner : MonoBehaviour
             int XIndex = unitList[i].GetComponent<UnitInfo>()._XIndex;
             int YIndex = unitList[i].GetComponent<UnitInfo>()._YIndex;
 
-            if (PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow)
+            if (PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow
+                && PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.empty)
             {
                 _scanUnitARR[XIndex, YIndex]._value = PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value;
                 _scanUnitARR[XIndex, YIndex].pointMultiplier = 0;
@@ -163,16 +164,132 @@ public class ChainedUnitsScanner : MonoBehaviour
 
         bonusPoint = 0;
 
+        if(focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1 
+            && otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
+        {
+            //print("destroy all");
+            // Disable the UnitBG that in the same position as the two destroyAll Unit
+            //UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            //UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            //disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            //disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+
+            removeUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            removeUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            destroyAllUnitsInPuzzle();
+
+            GameController.Instance.reduceMovesCount();
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
+        }
+        else if ((focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1 && otherUnitInfo._unitEff != UnitInfo.SpecialEff.noEff)
+           || (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1 && focusedUnitInfo._unitEff != UnitInfo.SpecialEff.noEff))
+        {
+            List<UnitInfo> infoList = new List<UnitInfo>();
+            UnitInfo.SpecialEff specialEff = UnitInfo.SpecialEff.noEff;
+
+            if (focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
+            {
+                infoList = PuzzleGenerator.Instance.getUnitsOfTypeInfo(otherUnitInfo._value);
+                specialEff = otherUnitInfo._unitEff;
+
+                //UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+                //disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+
+                removeUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            }
+            else if (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
+            {
+                infoList = PuzzleGenerator.Instance.getUnitsOfTypeInfo(focusedUnitInfo._value);
+                specialEff = focusedUnitInfo._unitEff;
+
+                //UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+                //disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+
+                removeUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            }
+
+            // Upgrade all other normal units that have the same color with the special swapped units
+            if(specialEff == UnitInfo.SpecialEff.explode)
+            {
+                for (int i = 0; i < infoList.Count; i++)
+                {
+                    PuzzleGenerator.Instance.upgradeUnit(infoList[i]._XIndex, infoList[i]._YIndex, specialEff, infoList[i]._negativeEff);
+                    yield return new WaitForSeconds(0.05f);
+                }
+            }
+            else if (specialEff == UnitInfo.SpecialEff.vLightning || specialEff == UnitInfo.SpecialEff.hLightning)
+            {
+                for (int i = 0; i < infoList.Count; i++)
+                {
+                    if (infoList[i]._unitEff == UnitInfo.SpecialEff.vLightning || infoList[i]._unitEff == UnitInfo.SpecialEff.hLightning)
+                    {
+                        continue;
+                    }
+
+                    int randomLighting = Random.Range(0, 2);
+                    switch (randomLighting)
+                    {
+                        case 0:
+                            {
+                                PuzzleGenerator.Instance.upgradeUnit(infoList[i]._XIndex, infoList[i]._YIndex, UnitInfo.SpecialEff.vLightning, infoList[i]._negativeEff);
+                                break;
+                            }
+                        case 1:
+                            {
+                                PuzzleGenerator.Instance.upgradeUnit(infoList[i]._XIndex, infoList[i]._YIndex, UnitInfo.SpecialEff.hLightning, infoList[i]._negativeEff);
+                                break;
+                            }
+                    }
+                    yield return new WaitForSeconds(0.05f);
+                }
+            }
+
+            // Trigger all upgraded units
+            for (int i = 0; i < infoList.Count; i++)
+            {
+                if (!_scanUnitARR[infoList[i]._XIndex, infoList[i]._YIndex]._isChained)
+                {
+                    switch (infoList[i]._unitEff)
+                    {
+                        case UnitInfo.SpecialEff.vLightning:
+                            {
+                                disableUnitEffect(infoList[i]);
+                                destroyAllUnitsOfColumn(infoList[i]._XIndex, infoList[i]._YIndex);
+                                break;
+                            }
+                        case UnitInfo.SpecialEff.hLightning:
+                            {
+                                disableUnitEffect(infoList[i]);
+                                destroyAllUnitsOfRow(infoList[i]._XIndex, infoList[i]._YIndex);
+                                break;
+                            }
+                        case UnitInfo.SpecialEff.explode:
+                            {
+                                disableUnitEffect(infoList[i]);
+                                destroyAllLocalUnits(infoList[i]._XIndex, infoList[i]._YIndex);
+                                break;
+                            }
+                    }           
+                }
+                yield return new WaitForSeconds(0.05f);
+            }
+
+            GameController.Instance.reduceMovesCount();
+            yield return new WaitForSeconds(0.1f);
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
+        }
         // Check if swapped unit is the special "Destroy all" type
         // If true destroy all jewels that has the same type with the other swapped unit
-        if (focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
+        else if (focusedUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
         {
             // Disable the UnitBG that in the same position as the current destroyAll Unit
-            UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            //UnitBGGenerator.Instance.removeBG(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            //disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            removeUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
 
             //destroyAllUnitsOfType(otherUnitInfo._value);
             StartCoroutine(destroyAllUnitsOfType(otherUnitInfo._value));
-            disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
             GameController.Instance.reduceMovesCount();
 
             yield return new WaitForSeconds(0.5f);
@@ -181,13 +298,80 @@ public class ChainedUnitsScanner : MonoBehaviour
         else if (otherUnitInfo._value == PuzzleGenerator.Instance.Unit.Length - 1)
         {
             // Disable the UnitBG that in the same position as the current destroyAll Unit
-            UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            //UnitBGGenerator.Instance.removeBG(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            //disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            removeUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
 
             //destroyAllUnitsOfType(focusedUnitInfo._value);
             StartCoroutine(destroyAllUnitsOfType(focusedUnitInfo._value));
-            disableUnit(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+            
             GameController.Instance.reduceMovesCount();
 
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
+        }
+        else if ((focusedUnitInfo._unitEff == UnitInfo.SpecialEff.hLightning || focusedUnitInfo._unitEff == UnitInfo.SpecialEff.vLightning)
+            && (otherUnitInfo._unitEff == UnitInfo.SpecialEff.hLightning || otherUnitInfo._unitEff == UnitInfo.SpecialEff.vLightning))
+        {
+            print("cross lightning");
+
+            //disableUnit(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+
+            disableUnitEffect(focusedUnitInfo);
+            disableUnitEffect(otherUnitInfo);
+
+            destroyAllUnitsOfColumn(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            destroyAllUnitsOfRow(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+
+            GameController.Instance.reduceMovesCount();
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
+        }
+        else if (((focusedUnitInfo._unitEff == UnitInfo.SpecialEff.hLightning || focusedUnitInfo._unitEff == UnitInfo.SpecialEff.vLightning)
+            && otherUnitInfo._unitEff == UnitInfo.SpecialEff.explode)
+            || ((otherUnitInfo._unitEff == UnitInfo.SpecialEff.hLightning || otherUnitInfo._unitEff == UnitInfo.SpecialEff.vLightning)
+            && focusedUnitInfo._unitEff == UnitInfo.SpecialEff.explode))
+        {
+            print("explode lighting");
+
+            disableUnitEffect(focusedUnitInfo);
+            disableUnitEffect(otherUnitInfo);
+
+            if (focusedUnitInfo._XIndex > 0)
+            {
+                destroyAllUnitsOfColumn(focusedUnitInfo._XIndex - 1, focusedUnitInfo._YIndex);
+            }
+            destroyAllUnitsOfColumn(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            if (focusedUnitInfo._XIndex < PuzzleGenerator.Instance._columns - 1)
+            {
+                destroyAllUnitsOfColumn(focusedUnitInfo._XIndex + 1, focusedUnitInfo._YIndex);
+            }
+
+            if (focusedUnitInfo._YIndex > 0)
+            {
+                destroyAllUnitsOfRow(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex - 1);
+            }
+            destroyAllUnitsOfRow(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            if (focusedUnitInfo._YIndex < PuzzleGenerator.Instance._rows - 1)
+            {
+                destroyAllUnitsOfRow(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex + 1);
+            }
+
+            GameController.Instance.reduceMovesCount();
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
+        }
+        else if (focusedUnitInfo._unitEff == UnitInfo.SpecialEff.explode && otherUnitInfo._unitEff == UnitInfo.SpecialEff.explode)
+        {
+            print("double explode");
+
+            disableUnitEffect(focusedUnitInfo);
+            disableUnitEffect(otherUnitInfo);
+
+            destroyAllLocalUnits(focusedUnitInfo._XIndex, focusedUnitInfo._YIndex);
+            destroyAllLocalUnits(otherUnitInfo._XIndex, otherUnitInfo._YIndex);
+
+            GameController.Instance.reduceMovesCount();
             yield return new WaitForSeconds(0.5f);
             StartCoroutine(PuzzleGenerator.Instance.reOrganizePuzzle(true));
         }
@@ -354,7 +538,48 @@ public class ChainedUnitsScanner : MonoBehaviour
         }        
     }
 
+    private void removeUnit(int XIndex, int YIndex)
+    {
+        switch (GameController.Instance.gameMode)
+        {
+            case 0:
+                {
+                    UnitBGGenerator.Instance.removeBG(XIndex, YIndex);
+                    break;
+                }
+            case 1:
+                {
+                    OrderManager.Instance.recalculateOrder(PuzzleGenerator.Instance._unitARR[XIndex, YIndex].GetComponent<UnitInfo>()._value);
+                    break;
+                }
+        }
+
+        disableUnit(XIndex, YIndex);
+    }
+
     #region Destroy Special Effect Units Method
+
+    void destroyAllUnitsInPuzzle()
+    {
+        List<int> unitsXIndex = new List<int>();
+        List<int> unitsYIndex = new List<int>();
+
+        for (int YIndex = 0; YIndex < PuzzleGenerator.Instance._rows; YIndex++)
+        {
+            for (int XIndex = 0; XIndex < PuzzleGenerator.Instance._columns; XIndex++)
+            {
+                if (!_scanUnitARR[XIndex, YIndex]._isChained)
+                {
+                    unitsXIndex.Add(XIndex);
+                    unitsYIndex.Add(YIndex);
+                }                
+            }
+        }
+
+        destroyUnits(unitsXIndex, unitsYIndex);
+        SoundController.Instance.playOneShotClip(destroyAllUnitSound);
+    }
+
     IEnumerator destroyAllUnitsOfType(int type)
     {
         List<int> unitsXIndex = new List<int>();
@@ -382,7 +607,8 @@ public class ChainedUnitsScanner : MonoBehaviour
 
         destroyUnits(unitsXIndex, unitsYIndex);
 
-        SoundController.Instance.playOneShotClip(destroyAllUnitSound);
+        //SoundController.Instance.playOneShotClip(destroyAllUnitSound);
+        SoundController.Instance.playSingleClip(destroyAllUnitSound);
 
         for (int i = 0; i < unitsXIndex.Count; i++)
         {
@@ -412,6 +638,9 @@ public class ChainedUnitsScanner : MonoBehaviour
         destroyUnits(col, YTarget, unitsXIndex, unitsYIndex, _scanUnitARR[col, YTarget]._value, UnitInfo.SpecialEff.noEff);
 
         Instantiate(VLightningDestroyEff, new Vector2(PuzzleGenerator.Instance._unitPosARR[col, 0].x, 0f), VLightningDestroyEff.transform.rotation);
+
+        //SoundController.Instance.playSingleClip(lightingDestroySound);
+        SoundController.Instance.playOneShotClip(lightingDestroySound);
     }
 
     void destroyAllUnitsOfRow(int XTarget, int row)
@@ -434,6 +663,9 @@ public class ChainedUnitsScanner : MonoBehaviour
         destroyUnits(XTarget, row, unitsXIndex, unitsYIndex, _scanUnitARR[XTarget, row]._value, UnitInfo.SpecialEff.noEff);
 
         Instantiate(HLightningDestroyEff, new Vector2(0f, PuzzleGenerator.Instance._unitPosARR[0, row].y), HLightningDestroyEff.transform.rotation);
+
+        //SoundController.Instance.playSingleClip(lightingDestroySound);
+        SoundController.Instance.playOneShotClip(lightingDestroySound);
     }
 
     void destroyAllLocalUnits(int XTarget, int YTarget)
@@ -515,6 +747,9 @@ public class ChainedUnitsScanner : MonoBehaviour
         destroyUnits(XTarget, YTarget, unitsXIndex, unitsYIndex, _scanUnitARR[XTarget, YTarget]._value, UnitInfo.SpecialEff.noEff);
 
         Instantiate(ExplodeDestroyEff, PuzzleGenerator.Instance._unitPosARR[XTarget, YTarget], Quaternion.identity);
+
+        //SoundController.Instance.playSingleClip(explosionDestroySound);
+        SoundController.Instance.playOneShotClip(explosionDestroySound);
     }
 
     #endregion
@@ -555,9 +790,9 @@ public class ChainedUnitsScanner : MonoBehaviour
             }
 
             // Disable the UnitBG that in the same position as the current chained Unit
-            UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
-
-            disableUnit(unitsXIndex[i], unitsYIndex[i]);
+            //UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+            //disableUnit(unitsXIndex[i], unitsYIndex[i]);
+            removeUnit(unitsXIndex[i], unitsYIndex[i]);
 
             switch (unitInfo._unitEff)
             {
@@ -565,7 +800,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
 
-                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+                        //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                         break;
                     }
@@ -574,7 +809,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
 
-                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+                        //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                         break;
                     }
@@ -583,7 +818,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
 
-                        SoundController.Instance.playOneShotClip(explosionDestroySound);
+                        //SoundController.Instance.playOneShotClip(explosionDestroySound);
 
                         break;
                     }
@@ -639,9 +874,10 @@ public class ChainedUnitsScanner : MonoBehaviour
         else
         {
             // Disable the UnitBG that in the same position as the targeted Unit
-            UnitBGGenerator.Instance.removeBG(Xtarget, Ytarget);
+            //UnitBGGenerator.Instance.removeBG(Xtarget, Ytarget);
+            //disableUnit(Xtarget, Ytarget);
 
-            disableUnit(Xtarget, Ytarget);
+            removeUnit(Xtarget, Ytarget);
         }
 
         #region Target Unit has special effect
@@ -654,7 +890,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllUnitsOfColumn(Xtarget, Ytarget);
 
-                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+                        //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                         break;
                     }
@@ -663,7 +899,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllUnitsOfRow(Xtarget, Ytarget);
 
-                        SoundController.Instance.playOneShotClip(lightingDestroySound);
+                        //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                         break;
                     }
@@ -672,7 +908,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                     {
                         destroyAllLocalUnits(Xtarget, Ytarget);
 
-                        SoundController.Instance.playOneShotClip(explosionDestroySound);
+                        //SoundController.Instance.playOneShotClip(explosionDestroySound);
 
                         break;
                     }
@@ -694,7 +930,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                         {
                             destroyAllUnitsOfColumn(Xtarget, Ytarget);
 
-                            SoundController.Instance.playOneShotClip(lightingDestroySound);
+                            //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                             break;
                         }
@@ -703,7 +939,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                         {
                             destroyAllUnitsOfRow(Xtarget, Ytarget);
 
-                            SoundController.Instance.playOneShotClip(lightingDestroySound);
+                            //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                             break;
                         }
@@ -712,7 +948,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                         {
                             destroyAllLocalUnits(Xtarget, Ytarget);
 
-                            SoundController.Instance.playOneShotClip(explosionDestroySound);
+                            //SoundController.Instance.playOneShotClip(explosionDestroySound);
 
                             break;
                         }
@@ -741,7 +977,6 @@ public class ChainedUnitsScanner : MonoBehaviour
                 }
                 else if (unitInfo._negativeEff == UnitInfo.NegativeEff.locked)
                 {
-                    print("break lock");
                     unitInfo._negativeEff = UnitInfo.NegativeEff.noEff;
                     unitInfo.LockEff.GetComponent<NegativeEffController>().selfBreak();
 
@@ -751,9 +986,10 @@ public class ChainedUnitsScanner : MonoBehaviour
                 }
 
                 // Disable the UnitBG that in the same position as the current chained Unit
-                UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+                //UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+                //disableUnit(unitsXIndex[i], unitsYIndex[i]);
 
-                disableUnit(unitsXIndex[i], unitsYIndex[i]);
+                removeUnit(unitsXIndex[i], unitsYIndex[i]);
 
                 if (unitInfo._value
                     == PuzzleGenerator.Instance.Unit.Length - 1)
@@ -768,7 +1004,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+                                //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                                 break;
                             }
@@ -777,7 +1013,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+                                //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                                 break;
                             }
@@ -786,7 +1022,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(explosionDestroySound);
+                                //SoundController.Instance.playOneShotClip(explosionDestroySound);
 
                                 break;
                             }
@@ -873,9 +1109,10 @@ public class ChainedUnitsScanner : MonoBehaviour
                 }
 
                 // Disable the UnitBG that in the same position as the current chained Unit
-                UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+                //UnitBGGenerator.Instance.removeBG(unitsXIndex[i], unitsYIndex[i]);
+                //disableUnit(unitsXIndex[i], unitsYIndex[i]);
 
-                disableUnit(unitsXIndex[i], unitsYIndex[i]);
+                removeUnit(unitsXIndex[i], unitsYIndex[i]);
 
                 if (unitInfo._value
                     == PuzzleGenerator.Instance.Unit.Length - 1)
@@ -890,7 +1127,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllUnitsOfColumn(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+                                //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                                 break;
                             }
@@ -899,7 +1136,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllUnitsOfRow(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(lightingDestroySound);
+                                //SoundController.Instance.playOneShotClip(lightingDestroySound);
 
                                 break;
                             }
@@ -908,7 +1145,7 @@ public class ChainedUnitsScanner : MonoBehaviour
                             {
                                 destroyAllLocalUnits(unitsXIndex[i], unitsYIndex[i]);
 
-                                SoundController.Instance.playOneShotClip(explosionDestroySound);
+                                //SoundController.Instance.playOneShotClip(explosionDestroySound);
 
                                 break;
                             }
@@ -1934,5 +2171,30 @@ public class ChainedUnitsScanner : MonoBehaviour
                 break;
             }
         }
+    }
+
+    private void disableUnitEffect(UnitInfo unitInfo)
+    {
+        switch (unitInfo._unitEff)
+        {
+            case (UnitInfo.SpecialEff.hLightning):
+                {
+                    unitInfo.HorizontalLightningEff.SetActive(false);
+                    break;
+                }
+            case (UnitInfo.SpecialEff.vLightning):
+                {
+                    unitInfo.VerticalLightningEff.SetActive(false);
+                    break;
+                }
+            case (UnitInfo.SpecialEff.explode):
+                {
+                    unitInfo.ExplosiveSparkEff.SetActive(false);
+                    break;
+                }
+            default: break;
+        }
+
+        unitInfo._unitEff = UnitInfo.SpecialEff.noEff;
     }
 }
