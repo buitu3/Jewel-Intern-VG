@@ -39,13 +39,14 @@ public class PuzzleGenerator : MonoBehaviour {
     private List<GameObject> temporaryPushRightUnitList;
     private List<Tween> waitTweenList;
     private List<int[]> unbounceList;
+    private List<int> pushColList;
 
     private Transform unitHolder;
     [HideInInspector]
     public Transform unitBGHolder;
     private Transform poolObjectHolder;
 
-    private bool canPushUnit;
+    private bool hasUnitToPush;
     private bool hasUnitToRegen;
     private bool hasBouncingUnit;
     private bool pushingDelay;
@@ -96,6 +97,7 @@ public class PuzzleGenerator : MonoBehaviour {
         poolObjectHolder = new GameObject("Pool Object Holder").transform;
 
         unbounceList = new List<int[]>();
+        pushColList = new List<int>();
 
         regenYpos = startingSpawnPos.transform.position.y + (_rows - 1) * YPadding;
 
@@ -657,6 +659,10 @@ public class PuzzleGenerator : MonoBehaviour {
         //GameController.Instance.currentState = GameController.GameState.idle;
     }
 
+    /// <summary>
+    /// Reorganize all Units in a column
+    /// </summary>
+    /// <param name="XIndex">Index of column that need to be organized</param>
     private void reOrganizePuzzleCol(int XIndex)
     {
         int nullObjectCount = 0;
@@ -787,7 +793,7 @@ public class PuzzleGenerator : MonoBehaviour {
         //print("scan" + hasChained);
         //unitsList = new List<GameObject>();
 
-        canPushUnit = false;
+        hasUnitToPush = false;
         if (hasChained)
         {
             //yield return new WaitForSeconds(unitDropTime);
@@ -798,7 +804,7 @@ public class PuzzleGenerator : MonoBehaviour {
         yield return StartCoroutine(findPushUnitsInPuzzle());
         //findPushUnitsInPuzzle();
 
-        if (!canPushUnit)
+        if (!hasUnitToPush)
         {
             // If there are regenUnits,scan them
             if (hasChained)
@@ -956,12 +962,14 @@ public class PuzzleGenerator : MonoBehaviour {
     {
         //unbounceList.Clear();
 
-        bool hasUnitToPush = false;
+        bool canPushUnit = false;
+        bool hasPushableUnitInRow = false;
         hasUnitToRegen = false;
         hasBouncingUnit = false;
         pushingDelay = false;
 
-        //List<int> pushColList = new List<int
+        pushColList.Clear();
+
         int pushCol = -1;
         temporaryPushRightUnitList = new List<GameObject>();
 
@@ -969,23 +977,33 @@ public class PuzzleGenerator : MonoBehaviour {
         {
             for (int XIndex = 0; XIndex < _columns; XIndex++)
             {
-                hasUnitToPush = findUnitPushTypeAndPush(XIndex, YIndex);
+                canPushUnit = findUnitPushTypeAndPush(XIndex, YIndex);
 
-                if (hasUnitToPush)
+                if (canPushUnit)
                 {
-                    pushCol = XIndex;
-                    break;
+                    hasPushableUnitInRow = true;
+                    //pushCol = XIndex;
+                    //break;
+                    if (!pushColList.Contains(XIndex))
+                    {
+                        pushColList.Add(XIndex);
+                    }
                 }
             }
-            if (hasUnitToPush)
+
+            if (hasPushableUnitInRow)
             {
                 break;
             }
         }
 
-        if (hasUnitToPush && pushCol >= 0)
+        // Reorganize all column that has pushed units
+        if (hasPushableUnitInRow && pushColList.Count > 0)
         {
-            reOrganizePuzzleCol(pushCol);
+            for (int i = 0; i < pushColList.Count; i++)
+            {              
+                reOrganizePuzzleCol(pushColList[i]);
+            }
         }
 
         if (hasUnitToRegen)
@@ -1003,7 +1021,7 @@ public class PuzzleGenerator : MonoBehaviour {
             yield return new WaitForSeconds(unitPushTime);
         }
 
-        if (hasUnitToPush)
+        if (hasPushableUnitInRow)
         {
             yield return StartCoroutine(findPushUnitsInPuzzle());
         }
@@ -1058,7 +1076,7 @@ public class PuzzleGenerator : MonoBehaviour {
                             //    temporaryPushRightUnitList.Add(_unitARR[XIndex, YIndex]);
                             //}
 
-                            canPushUnit = true;
+                            hasUnitToPush = true;
                             pushUnit(XIndex, YIndex, pushType);
 
                             if(getItemIndexFromUnbounceList(XIndex + 1, YIndex - 1) != -1)
@@ -1145,7 +1163,7 @@ public class PuzzleGenerator : MonoBehaviour {
                             //    temporaryPushRightUnitList.Add(_unitARR[XIndex, YIndex]);
                             //}
 
-                            canPushUnit = true;
+                            hasUnitToPush = true;
                             //StartCoroutine(pushUnit(col, YIndex, pushType));
                             pushUnit(XIndex, YIndex, pushType);
 
@@ -1162,7 +1180,7 @@ public class PuzzleGenerator : MonoBehaviour {
                                 getDropableUnitIndexList(XIndex, YIndex);
                                 //print(XIndex + "~~~~~~~" + YIndex + "~~~~~~~~~~~" + unbounceList.Count);
                             }
-                            else if (YIndex < _rows - 1 && ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained
+                            else if (YIndex < _rows - 1 && YIndex > 0 && XIndex < _columns - 1 && ChainedUnitsScanner.Instance._scanUnitARR[XIndex + 1, YIndex - 1]._isChained
                                 && _unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.hollow
                                 && _unitARR[XIndex + 1, YIndex - 1].GetComponent<UnitInfo>()._negativeEff != UnitInfo.NegativeEff.frozen)
                             {
@@ -1233,7 +1251,7 @@ public class PuzzleGenerator : MonoBehaviour {
                         temporaryPushRightUnitList.Add(_unitARR[col, YIndex]);
                     }
 
-                    canPushUnit = true;
+                    hasUnitToPush = true;
                     //StartCoroutine(pushUnit(col, YIndex, pushType));
                     pushUnit(col, YIndex, pushType);
 
@@ -1327,7 +1345,7 @@ public class PuzzleGenerator : MonoBehaviour {
                         temporaryPushRightUnitList.Add(_unitARR[col, YIndex]);
                     }
 
-                    canPushUnit = true;
+                    hasUnitToPush = true;
                     //StartCoroutine(pushUnit(col, YIndex, pushType));
                     pushUnit(col, YIndex, pushType);
 
